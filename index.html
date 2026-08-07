@@ -3,236 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tropical Flow Radio TV - Player</title>
+  <title>Tropical Flow Radio TV - Premium Dashboard</title>
 </head>
 <body>
 
-<!-- Contenedor Principal del Reproductor Profesional -->
-<div class="tropical-player-card">
-  <!-- Encabezado con Info de la Estación -->
-  <div class="player-header">
-    <div class="station-logo">🥭</div>
-    <div class="station-info">
-      <h3>Tropical Flow Radio TV</h3>
-      <p class="status-tag"><span class="live-dot" id="liveDot"></span> <span id="statusText">EN VIVO</span></p>
+<!-- Contenedor Principal del Reproductor Premium -->
+<div class="premium-player-dashboard">
+  
+  <!-- Fila Superior: Reloj del Sistema -->
+  <div class="dashboard-top-bar">
+    <div class="system-clock-container">
+      <span class="clock-label">ESTUDIO HORA:</span>
+      <span id="studioClock" class="clock-display">00:00:00</span>
+    </div>
+    <div class="live-badge-wrapper">
+      <span class="live-dot" id="liveDot"></span>
+      <span id="statusText" class="status-text">OFFLINE</span>
     </div>
   </div>
 
-  <!-- Ecualizador Animado Visual -->
-  <div class="equalizer-container" id="eqContainer">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
+  <!-- Tarjeta Central de la Estación -->
+  <div class="station-hero-card">
+    <div class="brand-avatar">🥭</div>
+    <div class="brand-details">
+      <h2>Tropical Flow Radio TV</h2>
+      <p class="sub-freq">Señal Digital desde Puerto Rico</p>
+    </div>
   </div>
 
-  <!-- Controles de Audio -->
-  <div class="player-controls">
-    <button id="playBtn" class="play-button" aria-label="Reproducir">
-      <!-- Icono de Play SVG dinámico -->
-      <svg id="playIcon" viewBox="0 0 24 24" width="28" height="28" fill="white">
+  <!-- Panel de Métricas / Track Counter -->
+  <div class="metrics-grid">
+    <div class="metric-box">
+      <span class="metric-title">TIEMPO DE ESCUCHA</span>
+      <span id="trackCounter" class="metric-value">00:00</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-title">CALIDAD DE AUDIO</span>
+      <span class="metric-value">96 KBPS</span>
+    </div>
+  </div>
+
+  <!-- Ecualizador Avanzado Pro -->
+  <div class="pro-equalizer" id="eqContainer">
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+    <div class="eq-bar"></div>
+  </div>
+
+  <!-- Seccion de Control Principal -->
+  <div class="master-audio-controls">
+    <button id="playBtn" class="master-play-btn" aria-label="Reproducir Transmisión">
+      <svg id="playIcon" viewBox="0 0 24 24">
         <path d="M8 5v14l11-7z"/>
       </svg>
     </button>
     
-    <!-- Control de Volumen Deslizante -->
-    <div class="volume-container">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="#a855f7">
+    <div class="master-volume-box">
+      <svg class="vol-icon" viewBox="0 0 24 24">
         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
       </svg>
-      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" class="volume-slider">
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" class="premium-slider">
     </div>
   </div>
 
-  <!-- ENLACE DE AUDIO DIRECTO CORREGIDO Y CONFIGURADO CON HTTPS -->
+  <!-- Datos del Servidor Caster.fm -->
   <audio id="radioStream" src="https://caster.fm" preload="none" crossorigin="anonymous"></audio>
 </div>
 
-<!-- Estilos Visuales del Reproductor (CSS) -->
+<!-- Estilos Avanzados CSS -->
 <style>
+  * { box-sizing: border-box; }
+  
   body {
-    background-color: #0b0713;
+    background-color: #05020a;
+    background-image: radial-gradient(circle at center, #160b2e 0%, #05020a 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
 
-  .tropical-player-card {
-    background: linear-gradient(135deg, #120c1f 0%, #1a103c 100%);
-    border: 2px solid #6c2bdd;
-    border-radius: 20px;
-    padding: 25px;
+  .premium-player-dashboard {
+    background: #0d081b;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 24px;
     width: 100%;
-    max-width: 380px;
-    box-shadow: 0 15px 35px rgba(108, 43, 221, 0.3);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #ffffff;
-    box-sizing: border-box;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(108, 43, 221, 0.15);
   }
 
-  .player-header {
+  .dashboard-top-bar {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     margin-bottom: 20px;
   }
 
-  .station-logo {
-    background: #6c2bdd;
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
+  .system-clock-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 0 15px rgba(108, 43, 221, 0.6);
+    flex-direction: column;
   }
 
-  .station-info h3 {
-    margin: 0;
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    background: linear-gradient(to right, #ffffff, #d8b4fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .status-tag {
-    margin: 4px 0 0 0;
-    font-size: 0.75rem;
+  .clock-label {
+    font-size: 0.6rem;
     color: #a855f7;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-weight: 800;
     letter-spacing: 1px;
   }
 
+  .clock-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .live-badge-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
   .live-dot {
-    width: 7px;
-    height: 7px;
-    background-color: #6b7280;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
     border-radius: 50%;
-    display: inline-block;
     transition: all 0.3s ease;
+  }
+
+  .live-dot.connecting {
+    background-color: #f59e0b;
+    box-shadow: 0 0 10px #f59e0b;
+    animation: pulse 1s infinite alternate;
   }
 
   .live-dot.active {
     background-color: #22c55e;
-    box-shadow: 0 0 8px #22c55e;
+    box-shadow: 0 0 12px #22c55e;
   }
 
-  .equalizer-container {
+  .status-text {
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #9ca3af;
+  }
+
+  .station-hero-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .brand-avatar {
+    background: linear-gradient(135deg, #6c2bdd 0%, #ec4899 100%);
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 20px rgba(108, 43, 221, 0.4);
+  }
+
+  .brand-details h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .sub-freq {
+    margin: 4px 0 0 0;
+    font-size: 0.8rem;
+    color: #a855f7;
+    font-weight: 500;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .metric-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 12px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .metric-title {
+    font-size: 0.6rem;
+    color: #6b7280;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .metric-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e5e7eb;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .pro-equalizer {
     display: flex;
     align-items: flex-end;
-    justify-content: center;
-    gap: 4px;
-    height: 40px;
-    margin-bottom: 25px;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 10px;
+    margin-bottom: 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border-bottom: 2px solid rgba(168, 85, 247, 0.2);
   }
 
-  .bar {
+  .eq-bar {
     width: 6px;
-    height: 15%;
-    background-color: #374151;
-    border-radius: 3px;
+    height: 10%;
+    background-color: #272136;
+    border-radius: 3px 3px 0 0;
     transition: all 0.3s ease;
   }
 
-  .equalizer-container.playing .bar {
-    animation: bounce 1.2s ease-in-out infinite alternate;
+  .pro-equalizer.playing .eq-bar {
+    animation: bouncePro 1s ease-in-out infinite alternate;
   }
 
-  .equalizer-container.playing .bar:nth-child(1) { animation-delay: 0.1s; background-color: #6c2bdd; }
-  .equalizer-container.playing .bar:nth-child(2) { animation-delay: 0.4s; background-color: #a855f7; }
-  .equalizer-container.playing .bar:nth-child(3) { animation-delay: 0.2s; background-color: #ec4899; }
-  .equalizer-container.playing .bar:nth-child(4) { animation-delay: 0.6s; background-color: #f43f5e; }
-  .equalizer-container.playing .bar:nth-child(5) { animation-delay: 0.3s; background-color: #ec4899; }
-  .equalizer-container.playing .bar:nth-child(6) { animation-delay: 0.5s; background-color: #a855f7; }
-  .equalizer-container.playing .bar:nth-child(7) { animation-delay: 0.1s; background-color: #6c2bdd; }
-  .equalizer-container.playing .bar:nth-child(8) { animation-delay: 0.7s; background-color: #a855f7; }
+  .pro-equalizer.playing .eq-bar:nth-child(2n) { animation-delay: 0.2s; background-color: #a855f7; }
+  .pro-equalizer.playing .eq-bar:nth-child(3n) { animation-delay: 0.5s; background-color: #ec4899; }
+  .pro-equalizer.playing .eq-bar:nth-child(4n) { animation-delay: 0.1s; background-color: #6c2bdd; }
+  .pro-equalizer.playing .eq-bar:nth-child(5n) { animation-delay: 0.7s; background-color: #f43f5e; }
 
-  @keyframes bounce {
-    0% { height: 15%; }
-    10% { height: 35%; }
-    30% { height: 100%; }
-    60% { height: 50%; }
-    80% { height: 85%; }
-    100% { height: 20%; }
+  @keyframes bouncePro {
+    0% { height: 10%; }
+    50% { height: 95%; }
+    100% { height: 25%; }
   }
 
-  .player-controls {
+  @keyframes pulse {
+    from { opacity: 0.5; } to { opacity: 1; }
+  }
+
+  .master-audio-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
   }
 
-  .play-button {
-    background: #6c2bdd;
+  .master-play-btn {
+    background: linear-gradient(135deg, #6c2bdd 0%, #a855f7 100%);
     border: none;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(108, 43, 221, 0.4);
+    box-shadow: 0 6px 20px rgba(108, 43, 221, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .play-button:hover {
-    background: #a855f7;
+  .master-play-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: #ffffff;
+  }
+
+  .master-play-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
   }
 
-  .volume-container {
+  .master-volume-box {
+    flex-grow: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-grow: 1;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px 15px;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 16px;
     border-radius: 30px;
   }
 
-  .volume-slider {
+  .vol-icon {
+    width: 18px;
+    height: 18px;
+    fill: #a855f7;
+  }
+
+  .premium-slider {
     -webkit-appearance: none;
     width: 100%;
     height: 6px;
-    background: #374151;
-    border-radius: 5px;
+    background: #221a35;
+    border-radius: 6px;
     outline: none;
   }
 
-  .volume-slider::-webkit-slider-thumb {
+  .premium-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     width: 14px;
     height: 14px;
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transition: background 0.15s;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
   }
 
-  .volume-slider::-webkit-slider-thumb:hover {
-    background: #a855f7;
-  }
+  .premium-slider::-webkit-slider-thumb:hover { background: #ec4899; }
 </style>
-
-<!-- Lógica del Reproductor (JavaScript) -->
+<!-- Lógica del Reproductor JS -->
 <script>
   const audio = document.getElementById('radioStream');
   const playBtn = document.getElementById('playBtn');
@@ -241,36 +353,64 @@
   const eqContainer = document.getElementById('eqContainer');
   const liveDot = document.getElementById('liveDot');
   const statusText = document.getElementById('statusText');
+  const clockElement = document.getElementById('studioClock');
+  const counterElement = document.getElementById('trackCounter');
 
   const playSVG = '<path d="M8 5v14l11-7z"/>';
   const pauseSVG = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
 
-  audio.volume = volumeSlider.value;
+  let countInterval = null;
+  let secondsListened = 0;
 
+  // 1. Reloj de Estudio en Vivo
+  setInterval(() => {
+    const now = new Date();
+    clockElement.textContent = now.toTimeString().split(' ')[0];
+  }, 1000);
+
+  // 2. Lógica del Contador de Escucha (Track Counter)
+  function startCounter() {
+    stopCounter();
+    countInterval = setInterval(() => {
+      secondsListened++;
+      const mins = String(Math.floor(secondsListened / 60)).padStart(2, '0');
+      const secs = String(secondsListened % 60).padStart(2, '0');
+      counterElement.textContent = `${mins}:${secs}`;
+    }, 1000);
+  }
+
+  function stopCounter() {
+    clearInterval(countInterval);
+  }
+
+  // 3. Control de Reproducción
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      // Forzar recarga anti-delay para streaming en vivo
       const currentSrc = audio.src;
       audio.src = '';
       audio.src = currentSrc;
       
-      statusText.textContent = "CONECTANDO...";
+      statusText.textContent = "CONECTANDO";
+      liveDot.className = "live-dot connecting";
       
       audio.play()
         .then(() => {
           playIcon.innerHTML = pauseSVG;
           eqContainer.classList.add('playing');
-          liveDot.classList.add('active');
+          liveDot.className = "live-dot active";
           statusText.textContent = "EN VIVO";
+          startCounter();
         })
         .catch(err => {
-          console.error("Error al reproducir el streaming:", err);
-          statusText.textContent = "OFFLINE / ERROR";
-          resetPlayerUI();
+          console.error(err);
+          statusText.textContent = "OFFLINE";
+          clearPlayerUI();
         });
     } else {
       audio.pause();
-      resetPlayerUI();
+      statusText.textContent = "PAUSADO";
+      clearPlayerUI();
+      stopCounter();
     }
   });
 
@@ -278,15 +418,15 @@
     audio.volume = e.target.value;
   });
 
-  function resetPlayerUI() {
+  function clearPlayerUI() {
     playIcon.innerHTML = playSVG;
     eqContainer.classList.remove('playing');
-    liveDot.classList.remove('active');
-    if(statusText.textContent !== "OFFLINE / ERROR") {
-      statusText.textContent = "PAUSADO";
+    if (statusText.textContent === "PAUSADO") {
+      liveDot.className = "live-dot";
     }
   }
 </script>
 
 </body>
 </html>
+
