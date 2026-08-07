@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <!-- ENLACE DIRECTO CONFIGURADO CON TUS DATOS EXACTOS -->
+  <!-- ENLACE DE AUDIO DIRECTO CORREGIDO Y CONFIGURADO CON HTTPS -->
   <audio id="radioStream" src="https://caster.fm" preload="none" crossorigin="anonymous"></audio>
 </div>
 
@@ -249,7 +249,7 @@
 
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      // Recarga anti-delay obligatoria para Icecast/Caster.fm
+      // Forzar recarga anti-delay para streaming en vivo
       const currentSrc = audio.src;
       audio.src = '';
       audio.src = currentSrc;
@@ -264,7 +264,7 @@
           statusText.textContent = "EN VIVO";
         })
         .catch(err => {
-          console.error("Error de streaming:", err);
+          console.error("Error al reproducir el streaming:", err);
           statusText.textContent = "OFFLINE / ERROR";
           resetPlayerUI();
         });
