@@ -48,8 +48,8 @@
     </div>
   </div>
 
-  <!-- CAMBIA ESTA URL POR TU URL DE TRANSMISIÓN DIRECTA (Ej: http://caster.fm:XXXX/listen.mp3) -->
-  <audio id="radioStream" src="https://shaincast.caster.fm:XXXX/listen.mp3" preload="none" crossorigin="anonymous"></audio>
+  <!-- ENLACE DIRECTO CONFIGURADO CON TUS DATOS EXACTOS -->
+  <audio id="radioStream" src="https://caster.fm" preload="none" crossorigin="anonymous"></audio>
 </div>
 
 <!-- Estilos Visuales del Reproductor (CSS) -->
@@ -119,14 +119,14 @@
   .live-dot {
     width: 7px;
     height: 7px;
-    background-color: #6b7280; /* Gris apagado por defecto */
+    background-color: #6b7280;
     border-radius: 50%;
     display: inline-block;
     transition: all 0.3s ease;
   }
 
   .live-dot.active {
-    background-color: #22c55e; /* Verde encendido al sonar */
+    background-color: #22c55e;
     box-shadow: 0 0 8px #22c55e;
   }
 
@@ -142,7 +142,7 @@
   .bar {
     width: 6px;
     height: 15%;
-    background-color: #374151; /* Color apagado cuando está en pausa */
+    background-color: #374151;
     border-radius: 3px;
     transition: all 0.3s ease;
   }
@@ -242,17 +242,14 @@
   const liveDot = document.getElementById('liveDot');
   const statusText = document.getElementById('statusText');
 
-  // Guardamos las estructuras SVG exactas para alternar limpiamente
   const playSVG = '<path d="M8 5v14l11-7z"/>';
   const pauseSVG = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
 
-  // Configurar volumen inicial
   audio.volume = volumeSlider.value;
 
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      // Truco vital para Radios en Vivo:
-      // Forzamos la recarga del stream antes de reproducir para asegurar cero retrasos de caché.
+      // Recarga anti-delay obligatoria para Icecast/Caster.fm
       const currentSrc = audio.src;
       audio.src = '';
       audio.src = currentSrc;
@@ -267,8 +264,8 @@
           statusText.textContent = "EN VIVO";
         })
         .catch(err => {
-          console.error("Error al conectar con la transmisión:", err);
-          statusText.textContent = "DESCONECTADO";
+          console.error("Error de streaming:", err);
+          statusText.textContent = "OFFLINE / ERROR";
           resetPlayerUI();
         });
     } else {
@@ -277,17 +274,15 @@
     }
   });
 
-  // Evento para actualizar volumen en tiempo real
   volumeSlider.addEventListener('input', (e) => {
     audio.volume = e.target.value;
   });
 
-  // Función auxiliar para limpiar la interfaz al pausar
   function resetPlayerUI() {
     playIcon.innerHTML = playSVG;
     eqContainer.classList.remove('playing');
     liveDot.classList.remove('active');
-    if(statusText.textContent !== "DESCONECTADO") {
+    if(statusText.textContent !== "OFFLINE / ERROR") {
       statusText.textContent = "PAUSADO";
     }
   }
