@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tropical Flow Radio TV</title>
     <style>
-        /* Configuración base del cuerpo de la página */
         body {
             margin: 0;
             background: linear-gradient(135deg, #00695c, #ff9800);
@@ -16,35 +15,30 @@
             height: 100vh;
         }
 
-        /* Contenedor principal del reproductor */
         .player {
             width: 350px;
             padding: 25px;
             border-radius: 25px;
-            background: rgba(0, 0, 0, .75);
+            background: #111111; /* Fondo sólido oscuro para asegurar contraste total con el widget */
             color: white;
             text-align: center;
-            box-shadow: 0 0 25px #000;
+            box-shadow: 0 0 25px rgba(0,0,0,0.8);
         }
 
-        /* Estilo del título/logotipo */
         .logo {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 5px;
         }
 
-        /* Reloj digital estilizado en color naranja */
         .reloj {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             margin-top: 10px;
             color: #ff9800;
             letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
         }
 
-        /* Etiqueta de transmisión en vivo con efecto intermitente */
         .live {
             margin: 15px 0;
             color: #ff3333;
@@ -54,32 +48,33 @@
             animation: parpadeo 1.5s infinite;
         }
 
-        /* Animación para hacer parpadear el indicador en vivo */
         @keyframes parpadeo {
             0% { opacity: 0.4; }
             50% { opacity: 1; }
             100% { opacity: 0.4; }
         }
 
-        /* Contenedor adaptado para forzar que el botón de Caster sea visible */
+        /* CORRECCIÓN CRÍTICA DE VISIBILIDAD PARA EL REPRODUCTOR CASTER */
         .contenedor-caster {
             margin-top: 20px;
-            min-height: 110px; /* Tamaño mínimo garantizado para el botón y metadatos */
+            width: 100%;
+            height: 140px; /* Espacio exacto requerido por el iframe de Caster */
+            overflow: hidden;
+            background: #222222;
+            border-radius: 15px;
+            border: 1px solid #333333;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Ajuste de ancho completo para el widget inyectado */
-        .cstrEmbed {
-            width: 100%;
+        .cstrEmbed, .cstrEmbed iframe {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
         }
 
-        /* Oculta los enlaces de texto redundantes debajo del botón oficial */
+        /* Oculta los enlaces de texto redundantes del widget */
         .cstrEmbed a {
             display: none !important;
         }
@@ -88,19 +83,17 @@
 <body>
 
     <div class="player">
-        <!-- Logotipo de la Estación -->
         <div class="logo">
             🌴 Tropical Flow<br>
             📻 Radio TV
         </div>
         
-        <!-- Pantalla del Reloj Digital (Actualizado por JavaScript) -->
-        <div class="reloj" id="reloj">00:00:00 AM</div>
+        <!-- Reloj Digital Formato de 12 Horas -->
+        <div class="reloj" id="reloj">--:--:-- --</div>
 
-        <!-- Indicador de señal activa -->
         <div class="live">🔴 EN VIVO</div>
         
-        <!-- Bloque donde se genera el reproductor oficial de Caster.fm -->
+        <!-- Contenedor Forzado para Widget de Caster.fm -->
         <div class="contenedor-caster">
             <div class="cstrEmbed" 
                  data-type="newStreamPlayer" 
@@ -114,33 +107,23 @@
         </div>
     </div>
 
-    <!-- Script Oficial de Caster que dibuja los botones y activa el streaming -->
+    <!-- Script Oficial de Caster -->
     <script src="https://cdn.cloud.caster.fm/widgets/embed.js"></script>
 
     <script>
-        // Lógica para el cálculo del Reloj en formato estándar de 12 Horas (AM/PM)
+        // SOLUCIÓN AL RELOJ MILITAR (Usa el formato regional estándar de 12 horas)
         function actualizarReloj() {
-            const tiempoActual = new Date();
-            let horas = tiempoActual.getHours();
-            const minutos = String(tiempoActual.getMinutes()).padStart(2, '0');
-            const segundos = String(tiempoActual.getSeconds()).padStart(2, '0');
-            
-            // Determina si es AM o PM antes de transformar la hora
-            const indicadorAmPm = horas >= 12 ? 'PM' : 'AM';
-            
-            // Transforma el formato militar (0-23) al formato estándar de 12 horas
-            horas = horas % 12;
-            horas = horas ? horas : 12; // Si la hora es 0 (medianoche), la transforma en 12
-            const horasFormateadas = String(horas).padStart(2, '0');
-            
-            // Inyecta el resultado final en la interfaz gráfica
-            document.getElementById('reloj').innerHTML = `${horasFormateadas}:${minutos}:${segundos} ${indicadorAmPm}`;
+            const fecha = new Date();
+            document.getElementById('reloj').innerHTML = fecha.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
         }
 
-        // Ejecuta el reloj de forma continua cada 1 segundo (1000 milisegundos)
+        // Ejecución en tiempo real
         setInterval(actualizarReloj, 1000);
-        
-        // Ejecución inmediata inicial para evitar el parpadeo de "00:00:00" al cargar la web
         actualizarReloj();
     </script>
 
