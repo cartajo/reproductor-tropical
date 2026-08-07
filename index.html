@@ -1,189 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Tropical Flow Radio TV</title>
-
-<style>
-
-body{
-    margin:0;
-    background:linear-gradient(135deg,#00695c,#ff9800);
-    font-family:Arial, sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-
-.player{
-    width:350px;
-    padding:25px;
-    border-radius:25px;
-    background:rgba(0,0,0,.65);
-    color:white;
-    text-align:center;
-    box-shadow:0 0 25px #000;
-}
-
-
-.logo{
-    font-size:28px;
-    font-weight:bold;
-}
-
-
-.live{
-    margin:15px;
-    color:red;
-    font-weight:bold;
-}
-
-
-button{
-    border:none;
-    border-radius:50%;
-    width:70px;
-    height:70px;
-    font-size:30px;
-    cursor:pointer;
-    background:#ff9800;
-    color:white;
-}
-
-
-.volume{
-    width:100%;
-    margin-top:25px;
-}
-
-
-input[type=range]{
-    width:100%;
-}
-
-
-.status{
-    margin-top:15px;
-    font-size:14px;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Flow Radio TV</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #00695c, #ff9800);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .player {
+            width: 350px;
+            padding: 25px;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, .75);
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 25px #000;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        /* Módulo del reloj estilizado */
+        .reloj {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ff9800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+        .live {
+            margin: 15px 0;
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 1px;
+            animation: parpadeo 1.5s infinite;
+        }
+        /* Animación para el indicador EN VIVO */
+        @keyframes parpadeo {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        /* Contenedor adaptado para el reproductor de Caster */
+        .contenedor-caster {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Oculta enlaces redundantes del widget para mantener estética limpia */
+        .cstrEmbed a {
+            display: none !important;
+        }
+    </style>
 </head>
-
-
 <body>
 
+    <div class="player">
+        <div class="logo">
+            🌴 Tropical Flow<br>
+            📻 Radio TV
+        </div>
+        
+        <!-- Reloj Digital Funcional -->
+        <div class="reloj" id="reloj">00:00:00</div>
 
-<div class="player">
+        <div class="live">🔴 EN VIVO</div>
+        
+        <!-- Widget Oficial de Transmisión de Caster.fm integrado -->
+        <div class="contenedor-caster">
+            <div class="cstrEmbed" 
+                 data-type="newStreamPlayer" 
+                 data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" 
+                 data-theme="dark" 
+                 data-color="ff9800" 
+                 data-channelId="" 
+                 data-rendered="false">
+                 <a href="https://www.caster.fm">Shoutcast Hosting</a>
+            </div>
+        </div>
+    </div>
 
-<div class="logo">
-🌴 Tropical Flow<br>
-📻 Radio TV
-</div>
+    <!-- Script oficial del Widget de Caster.fm -->
+    <script src="https://caster.fm"></script>
 
-
-<div class="live">
-🔴 EN VIVO
-</div>
-
-
-<button onclick="playRadio()" id="play">
-▶
-</button>
-
-
-<br>
-
-
-<input 
-class="volume"
-id="volume"
-type="range"
-min="0"
-max="1"
-step="0.01"
-value="0.8">
-
-
-<div class="status" id="status">
-Desconectado
-</div>
-
-
-<audio id="radio">
-
-<source 
-src="http://sapircast.caster.fm:16693/kidAJ"
-type="audio/mpeg">
-
-</audio>
-
-
-</div>
-
-
-
-<script>
-
-
-let radio=document.getElementById("radio");
-let btn=document.getElementById("play");
-let vol=document.getElementById("volume");
-let status=document.getElementById("status");
-
-
-radio.volume=0.8;
-
-
-function playRadio(){
-
-if(radio.paused){
-
-radio.play();
-
-btn.innerHTML="⏸";
-
-status.innerHTML="Conectado Tropical Flow 📻";
-
-}
-
-else{
-
-radio.pause();
-
-btn.innerHTML="▶";
-
-status.innerHTML="Pausado";
-
-}
-
-}
-
-
-
-vol.oninput=function(){
-
-radio.volume=this.value;
-
-}
-
-
-
-radio.onerror=function(){
-
-status.innerHTML="Error conectando al servidor";
-
-}
-
-
-</script>
-
-
+    <script>
+        // Lógica del Reloj en Tiempo Real (Formato 24 Horas)
+        function actualizarReloj() {
+            const tiempo = new Date();
+            const horas = String(tiempo.getHours()).padStart(2, '0');
+            const minutos = String(tiempo.getMinutes()).padStart(2, '0');
+            const segundos = String(tiempo.getSeconds()).padStart(2, '0');
+            document.getElementById('reloj').innerHTML = `${horas}:${minutos}:${segundos}`;
+        }
+        // Actualiza el contenedor cada segundo
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+    </script>
 </body>
 </html>
-
