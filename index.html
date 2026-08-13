@@ -30,8 +30,12 @@
     .clock-display { font-size: 18px; color: #ffffff; font-weight: bold; font-family: monospace; }
 
     .live-badge-wrapper { display: flex; align-items: center; gap: 8px; background: #000; padding: 6px 12px; border-radius: 20px; }
-    .live-dot { width: 10px; height: 10px; background-color: #22c55e; border-radius: 50%; box-shadow: 0 0 10px #22c55e; }
-    .status-text { font-size: 11px; font-weight: bold; color: #22c55e; }
+    .live-dot { width: 10px; height: 10px; background-color: #ef4444; border-radius: 50%; }
+    .live-dot.connecting { background-color: #f59e0b; animation: pulse 1s infinite alternate; }
+    .live-dot.active { background-color: #22c55e; box-shadow: 0 0 10px #22c55e; animation: pulse 1s infinite alternate; }
+    .status-text { font-size: 11px; font-weight: bold; color: #9ca3af; }
+
+    @keyframes pulse { from { opacity: 0.45; } to { opacity: 1; } }
 
     .station-hero-card { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; text-align: left; }
     .brand-avatar {
@@ -53,55 +57,37 @@
       height: 45px; padding: 0 10px; margin-bottom: 25px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; overflow: hidden;
     }
     .eq-bar { width: 5px; height: 10%; background-color: #272136; border-radius: 3px 3px 0 0; }
-    
-    /* El ecualizador se quedará activo de fondo simulando el ambiente musical */
-    .pro-equalizer .eq-bar { animation: bouncePro 0.8s ease-in-out infinite alternate; }
-    .pro-equalizer .eq-bar:nth-child(2n) { animation-delay: 0.1s; background-color: #a855f7; }
-    .pro-equalizer .eq-bar:nth-child(3n) { animation-delay: 0.3s; background-color: #ec4899; }
-    .pro-equalizer .eq-bar:nth-child(4n) { animation-delay: 0.2s; background-color: #6c2bdd; }
+    .pro-equalizer.playing .eq-bar { animation: bouncePro 0.8s ease-in-out infinite alternate; }
+    .pro-equalizer.playing .eq-bar:nth-child(2n) { animation-delay: 0.1s; background-color: #a855f7; }
+    .pro-equalizer.playing .eq-bar:nth-child(3n) { animation-delay: 0.3s; background-color: #ec4899; }
+    .pro-equalizer.playing .eq-bar:nth-child(4n) { animation-delay: 0.2s; background-color: #6c2bdd; }
     @keyframes bouncePro { 0% { height: 10%; } 100% { height: 95%; } }
 
-    /* CONTENEDOR MAESTRO DEL BOTÓN */
-    .master-audio-controls {
-      display: flex; justify-content: center; align-items: center; margin-top: 10px;
-      position: relative; width: 75px; height: 75px; margin: 0 auto;
-    }
-
-    /* TU BOTÓN EN EL FONDO (VISUAL) */
+    .master-audio-controls { display: flex; justify-content: center; align-items: center; margin-top: 10px; }
     .master-play-btn {
-      position: absolute; top: 0; left: 0; width: 75px; height: 75px; border-radius: 50%; border: none;
+      width: 75px; height: 75px; border-radius: 50%; border: none;
       background: linear-gradient(135deg, #6c2bdd, #a855f7); display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 20px rgba(108, 43, 221, 0.5), 0 0 25px rgba(168, 85, 247, 0.15); z-index: 1; pointer-events: none;
+      box-shadow: 0 6px 20px rgba(108, 43, 221, 0.5), 0 0 25px rgba(168, 85, 247, 0.15); cursor: pointer;
+      transition: transform 0.2s;
     }
+    .master-play-btn:active { transform: scale(0.95); }
     .master-play-btn svg { width: 30px; height: 30px; fill: #ffffff; }
-
-    /* CAPA INVISIBLE DE CASTER (ENCIMA) */
-    .caster-invisible-layer {
-      position: absolute; top: 0; left: 0; width: 75px; height: 75px;
-      z-index: 10; opacity: 0.001; cursor: pointer; overflow: hidden; border-radius: 50%;
-    }
-    /* Estiramos el widget interno para asegurar que cubra todo el botón */
-    .caster-invisible-layer iframe, .caster-invisible-layer div, .caster-invisible-layer script {
-      width: 75px !important; height: 75px !important; min-width: 75px !important; min-height: 75px !important;
-    }
   </style>
 </head>
 <body>
 
   <div class="premium-player-dashboard">
-    <!-- BARRA SUPERIOR -->
     <div class="dashboard-top-bar">
       <div>
         <span class="clock-label">HORA EN VIVO</span>
         <span id="live-clock" class="clock-display">00:00:00</span>
       </div>
       <div class="live-badge-wrapper">
-        <div class="live-dot"></div>
-        <span class="status-text">EN LÍNEA</span>
+        <div id="dot-status" class="live-dot"></div>
+        <span id="text-status" class="status-text">OFFLINE</span>
       </div>
     </div>
 
-    <!-- IDENTIDAD DE LA ESTACIÓN -->
     <div class="station-hero-card">
       <div class="brand-avatar">📻</div>
       <div class="brand-details">
@@ -110,7 +96,6 @@
       </div>
     </div>
 
-    <!-- MÉTRICAS -->
     <div class="metrics-grid">
       <div class="metric-box">
         <span class="metric-title">SERVIDOR</span>
@@ -122,24 +107,21 @@
       </div>
     </div>
 
-    <!-- EQUALIZADOR -->
-    <div class="pro-equalizer">
+    <div id="equalizer" class="pro-equalizer">
       <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
       <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
       <div class="eq-bar"></div><div class="eq-bar"></div>
     </div>
 
-    <!-- ÁREA DE CONTROL CON TRUCO DE CAPA INVISIBLE -->
-    <div class="master-audio-controls">
-      <!-- 1. El botón bonito que ve el usuario (Abajo) -->
-      <div class="master-play-btn">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </div>
+    <!-- ELEMENTO DE AUDIO HTML5 DIRECTO CON HTTPS -->
+    <audio id="stream-audio" preload="none">
+      <source src="https://caster.fm" type="audio/mpeg">
+    </audio>
 
-      <!-- 2. El widget de Caster transparente que recibe el clic (Arriba) -->
-      <div class="caster-invisible-layer">
-        <script type="text/javascript" src="https://caster.fm"></script>
-      </div>
+    <div class="master-audio-controls">
+      <button id="play-trigger" class="master-play-btn" onclick="toggleRadio()">
+        <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
     </div>
   </div>
 
@@ -149,8 +131,44 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    const audio = document.getElementById('stream-audio');
+    const playTrigger = document.getElementById('play-trigger');
+    const playIcon = document.getElementById('play-icon');
+    const dotStatus = document.getElementById('dot-status');
+    const textStatus = document.getElementById('text-status');
+    const equalizer = document.getElementById('equalizer');
+
+    function toggleRadio() {
+      if (audio.paused) {
+        dotStatus.className = "live-dot connecting";
+        textStatus.innerText = "CONECTANDO";
+        
+        // Forzamos la recarga del stream en vivo sin caché
+        audio.src = "https://caster.fm?cb=" + Date.now();
+        
+        audio.play().then(() => {
+          dotStatus.className = "live-dot active";
+          textStatus.innerText = "EN VIVO";
+          equalizer.classList.add("playing");
+          playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; // Pausa
+        }).catch(err => {
+          dotStatus.className = "live-dot";
+          textStatus.innerText = "ERROR";
+          alert("El navegador o Caster.fm detuvieron el flujo. Comprueba que tu emisor esté enviando audio al servidor en este momento.");
+        });
+      } else {
+        audio.pause();
+        audio.src = "";
+        dotStatus.className = "live-dot";
+        textStatus.innerText = "OFFLINE";
+        equalizer.classList.remove("playing");
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play
+      }
+    }
   </script>
 </body>
 </html>
+
 
 
