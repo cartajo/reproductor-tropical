@@ -1,262 +1,59 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tropical Flow Radio TV - Premium Dashboard</title>
-  <style>
-    * { box-sizing: border-box; }
-    
-    body {
-      background-color: #05020a;
-      background-image: radial-gradient(circle at center, #160b2e 0%, #05020a 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    .premium-player-dashboard {
-      background: #0d081b;
-      border: 1px solid rgba(168, 85, 247, 0.3);
-      border-radius: 24px;
-      width: 100%;
-      max-width: 400px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(108, 43, 221, 0.15);
-    }
-
-    .dashboard-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      margin-bottom: 20px;
-    }
-
-    .system-clock-container {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .clock-label {
-      font-size: 0.6rem;
-      color: #a855f7;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .clock-display {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.1rem;
-      color: #ffffff;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .live-badge-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #ef4444;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-
-    .live-dot.connecting {
-      background-color: #f59e0b;
-      box-shadow: 0 0 10px #f59e0b;
-      animation: pulse 1s infinite alternate;
-    }
-
-    .live-dot.active {
-      background-color: #22c55e;
-      box-shadow: 0 0 12px #22c55e;
-      animation: pulse 1s infinite alternate;
-    }
-
-    .status-text {
-      font-size: 0.7rem;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      color: #9ca3af;
-    }
-
-    .station-hero-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .brand-avatar {
-      background: linear-gradient(135deg, #6c2bdd 0%, #ec4899 100%);
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 8px 20px rgba(108, 43, 221, 0.4);
-    }
-
-    .brand-details h2 {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .sub-freq {
-      margin: 4px 0 0 0;
-      font-size: 0.8rem;
-      color: #a855f7;
-      font-weight: 500;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .metric-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      padding: 12px;
-      border-radius: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .metric-title {
-      font-size: 0.6rem;
-      color: #6b7280;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-
-    .metric-value {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #e5e7eb;
-      font-family: 'Courier New', Courier, monospace;
-    }
     .pro-equalizer {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      height: 50px;
+      height: 45px;
       padding: 0 10px;
-      margin-bottom: 28px;
+      margin-bottom: 25px;
       background: rgba(0, 0, 0, 0.2);
       border-radius: 12px;
-      border-bottom: 2px solid rgba(168, 85, 247, 0.2);
     }
-
-    .eq-bar {
-      width: 6px;
-      height: 10%;
-      background-color: #272136;
-      border-radius: 3px 3px 0 0;
-      transition: all 0.3s ease;
-    }
-
-    .pro-equalizer.playing .eq-bar {
-      animation: bouncePro 1s ease-in-out infinite alternate;
-    }
-
-    .pro-equalizer.playing .eq-bar:nth-child(2n) { animation-delay: 0.2s; background-color: #a855f7; }
-    .pro-equalizer.playing .eq-bar:nth-child(3n) { animation-delay: 0.5s; background-color: #ec4899; }
-    .pro-equalizer.playing .eq-bar:nth-child(4n) { animation-delay: 0.1s; background-color: #6c2bdd; }
-    .pro-equalizer.playing .eq-bar:nth-child(5n) { animation-delay: 0.7s; background-color: #f43f5e; }
-
-    @keyframes bouncePro {
-      0% { height: 10%; }
-      50% { height: 95%; }
-      100% { height: 25%; }
-    }
-
-    @keyframes pulse {
-      from { opacity: 0.5; } to { opacity: 1; }
-    }
-
+    .eq-bar { width: 5px; height: 10%; background-color: #272136; border-radius: 3px 3px 0 0; }
+    .pro-equalizer.playing .eq-bar { animation: bouncePro 0.8s ease-in-out infinite alternate; }
+    .pro-equalizer.playing .eq-bar:nth-child(2n) { animation-delay: 0.1s; background-color: #a855f7; }
+    .pro-equalizer.playing .eq-bar:nth-child(3n) { animation-delay: 0.3s; background-color: #ec4899; }
+    .pro-equalizer.playing .eq-bar:nth-child(4n) { animation-delay: 0.2s; background-color: #6c2bdd; }
+    @keyframes bouncePro { 0% { height: 10%; } 100% { height: 95%; } }
+    
     .master-audio-controls {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 16px;
+      align-items: center;
+      margin-top: 10px;
     }
-
     .play-trigger-container {
       position: relative;
-      width: 64px;
-      height: 64px;
+      width: 70px;
+      height: 70px;
     }
-
     .master-play-btn {
       position: absolute;
-      top: 0;
-      left: 0;
-      background: linear-gradient(135deg, #6c2bdd 0%, #a855f7 100%);
+      top: 0; left: 0;
+      background: linear-gradient(135deg, #6c2bdd, #a855f7);
       border: none;
-      width: 64px;
-      height: 64px;
+      width: 70px; height: 70px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(108, 43, 221, 0.4);
+      box-shadow: 0 6px 15px rgba(108, 43, 221, 0.4);
       z-index: 1;
       pointer-events: none;
     }
-
-    .master-play-btn svg {
-      width: 28px;
-      height: 28px;
-      fill: #ffffff;
-    }
-
+    .master-play-btn svg { width: 26px; height: 26px; fill: #ffffff; }
     .hidden-caster-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 64px;
-      height: 64px;
-      opacity: 0.001;
+      top: 0; left: 0;
+      width: 70px; height: 70px;
+      opacity: 0.01;
       z-index: 10;
       cursor: pointer;
-      overflow: hidden;
-    }
-
-    .hidden-caster-layer div, .hidden-caster-layer iframe {
-      width: 100% !important;
-      height: 100% !important;
     }
   </style>
 </head>
 <body>
 
 <div class="premium-player-dashboard">
-  
   <div class="dashboard-top-bar">
     <div class="system-clock-container">
       <span class="clock-label">ESTUDIO HORA:</span>
@@ -288,39 +85,21 @@
   </div>
 
   <div class="pro-equalizer" id="eqContainer">
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
-    <div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
   </div>
 
   <div class="master-audio-controls">
     <div class="play-trigger-container" id="playZone">
-      
-      <button class="master-play-btn" id="playBtn" aria-label="Reproducir Transmisión">
-        <svg id="playIcon" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
+      <button class="master-play-btn">
+        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
-
       <div class="hidden-caster-layer">
-        <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="6C2BDD" data-channelId="" data-rendered="false">
-          <a href="https://caster.fm">Radio Hosting</a>
-        </div>
-        <script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
+        <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="6C2BDD" data-channelId="" data-rendered="false"></div>
+        <script src="https://caster.fm"></script>
       </div>
-
     </div>
   </div>
-
 </div>
 
 <script>
@@ -332,14 +111,11 @@
   const clockElement = document.getElementById('studioClock');
   const counterElement = document.getElementById('trackCounter');
 
-  const playSVG = '<path d="M8 5v14l11-7z"/>';
-  const pauseSVG = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-
   let countInterval = null;
   let secondsListened = 0;
   let isPlaying = false;
 
-  // 1. Reloj de Estudio Real (Formato 12H)
+  // 1. Corrección del Reloj de Estudio en formato 12H
   function updateClock() {
     const now = new Date();
     let h = now.getHours();
@@ -347,19 +123,19 @@
     const s = String(now.getSeconds()).padStart(2, '0');
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
-    clockElement.textContent = `${String(h).padStart(2,'0')}:${m}:${s} ${ampm}`;
+    clockElement.textContent = h.toString().padStart(2, '0') + ":" + m + ":" + s + " " + ampm;
   }
   setInterval(updateClock, 1000);
   updateClock();
 
-  // 2. Contador de Escucha
+  // 2. Contador de Escucha activo
   function startCounter() {
     clearInterval(countInterval);
     countInterval = setInterval(() => {
       secondsListened++;
       const mins = String(Math.floor(secondsListened / 60)).padStart(2, '0');
       const secs = String(secondsListened % 60).padStart(2, '0');
-      counterElement.textContent = `${mins}:${secs}`;
+      counterElement.textContent = mins + ":" + secs;
     }, 1000);
   }
 
@@ -369,27 +145,18 @@
     counterElement.textContent = "00:00";
   }
 
-  // 3. Control Sincronizado al dar Toque
+  // 3. Activador Visual de ONLINE / OFFLINE
   playZone.addEventListener('click', () => {
     isPlaying = !isPlaying;
-    
     if (isPlaying) {
-      statusText.textContent = "CONECTANDO";
-      liveDot.className = "live-dot connecting";
-      
-      setTimeout(() => {
-        if(isPlaying) {
-          playIcon.innerHTML = pauseSVG;
-          eqContainer.classList.add('playing');
-          liveDot.className = "live-dot active";
-          statusText.textContent = "EN VIVO";
-          startCounter();
-        }
-      }, 1500);
-      
+      statusText.textContent = "ONLINE";
+      liveDot.className = "live-dot active";
+      eqContainer.classList.add('playing');
+      playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      startCounter();
     } else {
       stopCounter();
-      playIcon.innerHTML = playSVG;
+      playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
       eqContainer.classList.remove('playing');
       liveDot.className = "live-dot";
       statusText.textContent = "OFFLINE";
