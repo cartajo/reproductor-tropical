@@ -87,21 +87,20 @@
     .metric-title { font-size: 9px; color: #6b7280; font-weight: bold; display: block; }
     .metric-value { font-size: 16px; font-weight: bold; color: #e5e7eb; font-family: monospace; }
 
-    /* CONTENEDOR DE CASTER.FM OFICIAL */
     .caster-embed-box {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px;
       border-radius: 16px;
       margin-top: 10px;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
 <body>
 
   <div class="premium-player-dashboard">
-    <!-- BARRA SUPERIOR -->
     <div class="dashboard-top-bar">
       <div>
         <span class="clock-label">HORA EN VIVO</span>
@@ -113,7 +112,6 @@
       </div>
     </div>
 
-    <!-- IDENTIDAD DE LA ESTACIÓN -->
     <div class="station-hero-card">
       <div class="brand-avatar">📻</div>
       <div class="brand-details">
@@ -122,11 +120,10 @@
       </div>
     </div>
 
-    <!-- MÉTRICAS -->
     <div class="metrics-grid">
       <div class="metric-box">
         <span class="metric-title">SERVIDOR</span>
-        <span class="metric-value" style="font-size: 11px;">sapircast</span>
+        <span class="metric-value" style="font-size: 10px;">sapircast</span>
       </div>
       <div class="metric-box">
         <span class="metric-title">MONTAJE</span>
@@ -134,9 +131,9 @@
       </div>
     </div>
 
-    <!-- REPRODUCTOR OFICIAL EMBEBIDO DE CASTER.FM -->
+    <!-- WIDGET OFICIAL INTEGRADO DE CASTER.FM -->
     <div class="caster-embed-box">
-      <iframe src="https://caster.fm" width="100%" height="60" scrolling="no" frameborder="0"></iframe>
+      <script type="text/javascript" src="https://caster.fm"></script>
     </div>
   </div>
 
@@ -150,5 +147,3 @@
   </script>
 </body>
 </html>
-
-
