@@ -41,13 +41,13 @@
     .brand-avatar { background: linear-gradient(135deg, #6c2bdd, #ec4899); width: 55px; height: 55px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
     .brand-details h2 { margin: 0; font-size: 18px; color: #ffffff; }
     .sub-freq { margin: 2px 0 0 0; font-size: 12px; color: #a855f7; }
-
-         .caster-container-fixed {
+    .caster-container-fixed {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       padding: 15px;
       margin-top: 15px;
+      display: block !important;
     }
   </style>
 </head>
@@ -59,8 +59,8 @@
       <span class="clock-label">ESTUDIO HORA:</span>
       <span id="studioClock" class="clock-display">00:00:00</span>
     </div>
-    <div class="live-badge-wrapper" style="color: #22c55e; font-weight: bold; font-size: 12px; letter-spacing: 1px;">
-      RADIO DIGITAL
+    <div class="live-badge-wrapper" style="color: #22c55e; font-weight: bold; font-size: 11px; letter-spacing: 1px;">
+      ● EN VIVO
     </div>
   </div>
 
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <!-- REPRODUCTOR OFICIAL VISIBLE (Garantiza el paso de las restricciones de audio) -->
+  <!-- REPRODUCTOR OFICIAL VISIBLE (Libera las restricciones de sonido de Caster) -->
   <div class="caster-container-fixed">
     <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="6C2BDD" data-channelId="" data-rendered="false"></div>
     <script src="https://caster.fm"></script>
@@ -82,6 +82,7 @@
 <script>
   const clockElement = document.getElementById('studioClock');
 
+  // Reloj digital activo formato 12H (AM/PM)
   function updateClock() {
     const now = new Date();
     let h = now.getHours();
