@@ -3,131 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tropical Flow Radio TV</title>
+    <title>Tropical Flow Radio Tv - En Vivo</title>
     <style>
+        :root {
+            --primary-color: #6C2BDD; 
+            --bg-color: #121214;
+            --card-bg: #1e1e24;
+            --text-color: #ffffff;
+        }
+
         body {
             margin: 0;
-            background: linear-gradient(135deg, #00695c, #ff9800);
-            font-family: Arial, sans-serif;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        .player {
-            width: 350px;
-            padding: 25px;
-            border-radius: 25px;
-            background: #111111; /* Fondo sólido oscuro para asegurar contraste total con el widget */
-            color: white;
+        .player-container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
-            box-shadow: 0 0 25px rgba(0,0,0,0.8);
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .reloj {
-            font-size: 26px;
-            font-weight: bold;
-            margin-top: 10px;
-            color: #ff9800;
-            letter-spacing: 1px;
-        }
-
-        .live {
-            margin: 15px 0;
-            color: #ff3333;
-            font-weight: bold;
-            font-size: 14px;
-            letter-spacing: 1px;
-            animation: parpadeo 1.5s infinite;
-        }
-
-        @keyframes parpadeo {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
-        }
-
-        /* CORRECCIÓN CRÍTICA DE VISIBILIDAD PARA EL REPRODUCTOR CASTER */
-        .contenedor-caster {
-            margin-top: 20px;
             width: 100%;
-            height: 140px; /* Espacio exacto requerido por el iframe de Caster */
-            overflow: hidden;
-            background: #222222;
-            border-radius: 15px;
-            border: 1px solid #333333;
+            max-width: 360px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .station-logo {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .station-name {
+            color: var(--text-color);
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .station-slogan {
+            color: #a0a0aa;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos del Reloj Digital */
+        .live-clock {
+            background: rgba(108, 43, 221, 0.1);
+            color: #bfa3ff;
+            border: 1px solid rgba(108, 43, 221, 0.3);
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            font-family: monospace;
+        }
+
+        /* Animación de Barras de Sonido */
+        .audio-waves {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: flex-end;
+            height: 30px;
+            gap: 4px;
+            margin-bottom: 25px;
         }
 
-        .cstrEmbed, .cstrEmbed iframe {
-            width: 100% !important;
-            height: 100% !important;
-            display: block !important;
+        .wave-bar {
+            width: 4px;
+            height: 5px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+            transition: height 0.2s ease;
         }
 
-        /* Oculta los enlaces de texto redundantes del widget */
-        .cstrEmbed a {
-            display: none !important;
+        .playing .wave-bar {
+            animation: bounce 0.8s ease infinite alternate;
+        }
+
+        .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+        .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+        .playing .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+        .playing .wave-bar:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes bounce {
+            100% { height: 30px; }
+        }
+
+        /* Botón de reproducción ocultando el widget antiguo */
+        .controls-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .hidden-caster-widget {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.01; 
+            z-index: 10;
+        }
+
+        .custom-play-btn {
+            width: 75px;
+            height: 75px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 43, 221, 0.4);
+            border: none;
+            outline: none;
+            transition: transform 0.2s ease, background-color 0.2s;
+        }
+
+        .custom-play-btn:hover {
+            transform: scale(1.05);
+            background-color: #7d3ff2;
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 20px solid white;
+            margin-left: 5px;
+        }
+
+        .status-text {
+            color: #a0a0aa;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="player">
-        <div class="logo">
-            🌴 Tropical Flow<br>
-            📻 Radio TV
-        </div>
+    <div class="player-container" id="playerCard">
+        <div class="station-logo">🥭🦩</div>
+        <div class="station-name">Tropical Flow Radio Tv</div>
+        <div class="station-slogan">Energía Caribeña 24/7 desde Puerto Rico</div>
         
-        <!-- Reloj Digital Formato de 12 Horas -->
-        <div class="reloj" id="reloj">--:--:-- --</div>
+        <!-- Reloj en vivo -->
+        <div class="live-clock" id="digitalClock">00:00:00 AM</div>
 
-        <div class="live">🔴 EN VIVO</div>
-        
-        <!-- Contenedor Forzado para Widget de Caster.fm -->
-        <div class="contenedor-caster">
-            <div class="cstrEmbed" 
-                 data-type="newStreamPlayer" 
-                 data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" 
-                 data-theme="dark" 
-                 data-color="ff9800" 
-                 data-channelId="" 
-                 data-rendered="false">
-                 <a href="https://www.caster.fm">Shoutcast Hosting</a>
-            </div>
+        <!-- Efecto de ecualizador visual -->
+        <div class="audio-waves">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
         </div>
+
+        <div class="controls-wrapper">
+            <div class="hidden-caster-widget">
+                <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="light" data-color="6C2BDD" data-channelId="" data-rendered="false">
+                    <a href="https://caster.fm">Radio Hosting</a>
+                </div>
+                <script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
+            </div>
+
+            <button class="custom-play-btn" id="visualBtn">
+                <div class="play-icon"></div>
+            </button>
+        </div>
+
+        <div class="status-text" id="statusLabel">Haz clic para escuchar</div>
     </div>
 
-    <!-- Script Oficial de Caster -->
-    <script src="https://cdn.cloud.caster.fm/widgets/embed.js"></script>
-
     <script>
-        // SOLUCIÓN AL RELOJ MILITAR (Usa el formato regional estándar de 12 horas)
-        function actualizarReloj() {
-            const fecha = new Date();
-            document.getElementById('reloj').innerHTML = fecha.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            });
+        const playerCard = document.getElementById('playerCard');
+        const visualBtn = document.getElementById('visualBtn');
+        const statusLabel = document.getElementById('statusLabel');
+
+        // Lógica de animación del reproductor
+        visualBtn.addEventListener('click', () => {
+            playerCard.classList.toggle('playing');
+            if (playerCard.classList.contains('playing')) {
+                statusLabel.innerText = "Transmitiendo en vivo";
+                statusLabel.style.color = "#4cd137";
+            } else {
+                statusLabel.innerText = "Haz clic para escuchar";
+                statusLabel.style.color = "#a0a0aa";
+            }
+        });
+
+        // Función del Reloj Digital (Formato 12 horas)
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // El reloj marca 12 en vez de 0
+            hours = String(hours).padStart(2, '0');
+
+            document.getElementById('digitalClock').innerText = ${hours}:${minutes}:${seconds} ${ampm};
         }
 
-        // Ejecución en tiempo real
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
+        // Ejecutar reloj inmediatamente y actualizar cada segundo
+        updateClock();
+        setInterval(updateClock(), 1000);
     </script>
-
 </body>
 </html>
-
-
