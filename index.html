@@ -169,52 +169,110 @@
     setInterval(initClock, 1000);
     initClock();
 
-        const audioPlayer = document.getElementById('core-audio');
-    const iconSvg = document.getElementById('icon-svg');
-    const signalDot = document.getElementById('signal-dot');
-    const signalText = document.getElementById('signal-text');
+       // Variables de control del sistema de audio
+const audioPlayer = document.getElementById('core-audio');
+const iconSvg = document.getElementById('icon-svg');
+const signalDot = document.getElementById('signal-dot');
+const signalText = document.getElementById('signal-text');
+const trackNameContainer = document.getElementById('current-track-name');
 
-    // Sistema de Triple Ruta Oficial y Premium para Tropical Flow Radio TV
-    const streamRoutes = [
-      "https://sapircast.caster.fm:16693/kidAJ",
-      "https://djoeantonio.ismyradio.com",
-      "http://caster.fm"
-    ];
-    let currentRouteIndex = 0;
+// Configuración de rutas y metadatos
+const streamRoutes = [
+  "https://caster.fm", // Ruta directa corregida para streaming Icecast/Shoutcast
+  "https://sapircast.caster.fm:16693/kidAJ",
+  "https://djoeantonio.ismyradio.com"
+];
+let currentRouteIndex = 0;
+let metadataInterval = null;
 
-    function startCyberStream() {
-      if (audioPlayer.paused) {
-        signalDot.className = "dot-signal connecting";
-        signalText.innerText = "CONECTANDO";
-        currentRouteIndex = 0;
-        tryRoute();
-      } else {
-        stopCyberStream();
-      }
+// Sincronización del reloj local
+function initClock() {
+  document.getElementById('player-clock').innerText = new Date().toLocaleTimeString();
+}
+setInterval(initClock, 1000);
+initClock();
+
+// FUNCIÓN PARA OBTENER EL NOMBRE DE LA CANCIÓN DESDE CASTER.FM
+async function updateTrackName() {
+  const publicToken = "fdc37ef9-203f-4198-b246-17087ecdb02d";
+  // Usamos el proxy oficial de caster o un servicio proxy para evitar problemas de CORS en entornos locales
+  const apiUrl = `https://caster.fm{publicToken}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Error en la respuesta del servidor");
+    
+    const data = await response.json();
+    
+    // Validamos que exista la propiedad del título de la canción en la respuesta de Caster.fm
+    if (data && data.title) {
+      trackNameContainer.innerText = data.title;
+    } else if (data && data.song) {
+      trackNameContainer.innerText = data.song;
+    } else {
+      trackNameContainer.innerText = "Tropical Flow Radio TV";
     }
+  } catch (error) {
+    console.error("Error al obtener los metadatos:", error);
+    // En caso de fallo de red, dejamos el nombre de la emisora por defecto
+    if(trackNameContainer.innerText === "Cargando...") {
+      trackNameContainer.innerText = "Tropical Flow Radio TV";
+    }
+  }
+}
 
-    function tryRoute() {
-      if (currentRouteIndex >= streamRoutes.length) {
-        signalDot.className = "dot-signal";
-        signalText.innerText = "OFFLINE";
-        iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        alert("No se pudo conectar a los servidores de streaming. Verifica si la radio está transmitiendo en vivo.");
-        return;
-      }
+// Controladores del flujo de Audio
+function startCyberStream() {
+  if (audioPlayer.paused) {
+    signalDot.className = "dot-signal connecting";
+    signalText.innerText = "CONECTANDO";
+    trackNameContainer.innerText = "Cargando...";
+    currentRouteIndex = 0;
+    tryRoute();
+  } else {
+    stopCyberStream();
+  }
+}
 
-      // El parámetro ?cb evita que el navegador use audio antiguo guardado en cache
-      audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
+function stopCyberStream() {
+  audioPlayer.pause();
+  audioPlayer.src = ""; // Corta la descarga del stream inmediatamente
+  
+  signalDot.className = "dot-signal";
+  signalText.innerText = "OFFLINE";
+  trackNameContainer.innerText = "Tropical Flow Radio TV";
+  iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Icono de Play
+  
+  // Limpiamos el intervalo para no consumir datos innecesarios si está en pausa
+  clearInterval(metadataInterval);
+}
+
+function tryRoute() {
+  if (currentRouteIndex >= streamRoutes.length) {
+    signalDot.className = "dot-signal";
+    signalText.innerText = "ERROR DE SEÑAL";
+    trackNameContainer.innerText = "Transmisión no disponible";
+    return;
+  }
+
+  audioPlayer.src = streamRoutes[currentRouteIndex];
+  
+  audioPlayer.play()
+    .then(() => {
+      signalDot.className = "dot-signal active";
+      signalText.innerText = "EN VIVO";
+      iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; // Icono de Pause
       
-      audioPlayer.play().then(() => {
-        signalDot.className = "dot-signal active";
-        signalText.innerText = "EN VIVO";
-        iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-      }).catch(err => {
-        console.warn("Ruta " + currentRouteIndex + " fallida. Probando respaldo...");
-        currentRouteIndex++;
-        tryRoute();
-      });
-    }
+      // Iniciamos la actualización de canciones inmediatamente y luego cada 15 segundos
+      updateTrackName();
+      metadataInterval = setInterval(updateTrackName, 15000);
+    })
+    .catch(error => {
+      console.warn(`Ruta ${currentRouteIndex} falló. Probando siguiente...`);
+      currentRouteIndex++;
+      tryRoute();
+    });
+}
 
     function stopCyberStream() {
       audioPlayer.pause();
