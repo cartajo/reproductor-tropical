@@ -51,7 +51,7 @@
       to { transform: translateY(-4px); }
     }
 
-    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL (WIDGET INTEGRADO OFICIAL) */
+    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL (WIDGET COMPACTO) */
     .song-metadata-box {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(168, 85, 247, 0.3);
@@ -61,8 +61,6 @@
       min-height: 65px;
       overflow: hidden;
     }
-    
-    /* Forzado estético para limpiar el widget interno de Caster */
     .song-metadata-box a { color: #ffffff !important; font-size: 13px !important; text-decoration: none !important; font-weight: 600; }
     
     /* ECUALIZADOR VISUAL */
@@ -73,7 +71,6 @@
     }
     .wave-bar { width: 4px; height: 12%; background-color: #2e1a4d; border-radius: 3px 3px 0 0; }
     
-    /* Animación del ecualizador desactivada por defecto */
     .wave-equalizer.playing .wave-bar { animation: proBounce 0.7s ease-in-out infinite alternate; }
     .wave-equalizer.playing .wave-bar:nth-child(even) { background-color: #ec4899; animation-duration: 0.5s; }
     .wave-equalizer.playing .wave-bar:nth-child(3n) { background-color: #a855f7; animation-duration: 0.9s; }
@@ -119,7 +116,7 @@
       </div>
     </div>
 
-    <!-- CAJA METADATOS UTILIZANDO EL EMBED SEGURO DE CASTER.FM -->
+    <!-- CAJA METADATOS COMPATIBLE CON CASTER -->
     <div class="song-metadata-box">
       <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="ec4899" data-channelId="" data-rendered="false">
         <a href="https://www.caster.fm">Sintonizando...</a>
@@ -147,7 +144,6 @@
     <div class="footer-text">AUDIO EN VIVO • CASTER.FM PREMIUM</div>
   </div>
 
-  <!-- SCRIPT EXTERNO SEGURO DE CASTER PARA EL CONTENIDO DE LA CANCIÓN -->
   <script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
   <script>
     // Sincronización del reloj local
@@ -163,10 +159,12 @@
     const signalText = document.getElementById('signal-text');
     const playerEq = document.getElementById('player-eq');
 
-    // Servidores Premium purificados sin puertos bloqueables
+    // Formatos con extensión .mp3 forzada para reproducción HTML5 sin restricciones
     const streamRoutes = [
       "https://caster.fm",
-      "https://ismyradio.com"
+      "https://caster.fm",
+      "https://ismyradio.com",
+      "http://caster.fm"
     ];
     let currentRouteIndex = 0;
 
@@ -187,20 +185,21 @@
         signalText.innerText = "OFFLINE";
         playerEq.classList.remove('playing');
         iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        alert("Transmisión no disponible. Verifica si el software de emisión está encendido.");
+        alert("Enlace multimedia no reconocido o transmisión apagada. Verifica el panel de emisión.");
         return;
       }
 
-      // Parámetro anti-cache para evitar audios viejos pegados
+      // Parámetro anti-cache único por sesión para evitar almacenamiento congelado
       audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
+      audioPlayer.crossOrigin = "anonymous";
       
       audioPlayer.play().then(() => {
         signalDot.className = "dot-signal active";
         signalText.innerText = "EN VIVO";
-        playerEq.classList.add('playing'); // Inicia animación del ecualizador
+        playerEq.classList.add('playing'); // Activa las barras animadas del ecualizador
         iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
       }).catch(err => {
-        console.warn("Fallo ruta " + currentRouteIndex + ". Probando alternativa...");
+        console.warn("Fallo ruta index " + currentRouteIndex + ". Probando extensión alternativa...");
         currentRouteIndex++;
         tryRoute();
       });
@@ -211,7 +210,7 @@
       audioPlayer.src = "";
       signalDot.className = "dot-signal";
       signalText.innerText = "OFFLINE";
-      playerEq.classList.remove('playing'); // Congela animación del ecualizador
+      playerEq.classList.remove('playing'); // Detiene las barras animadas del ecualizador
       iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
   </script>
