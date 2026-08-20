@@ -36,7 +36,7 @@
     @keyframes neonPulse { from { opacity: 0.4; } to { opacity: 1; } }
     
     /* SECCIÓN DE IDENTIDAD CON PALMAS TROPICALES */
-    .brand-section { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; text-align: left; }
+    .brand-section { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; text-align: left; }
     .brand-glow-icon {
       background: linear-gradient(135deg, #a855f7, #ec4899); width: 60px; height: 60px; min-width: 60px;
       border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 32px;
@@ -50,8 +50,38 @@
       from { transform: translateY(0px); }
       to { transform: translateY(-4px); }
     }
+
+    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL */
+    .song-metadata-box {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 15px;
+      padding: 12px;
+      margin-bottom: 20px;
+      min-height: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .song-title-label {
+      font-size: 10px;
+      color: #ec4899;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+    .song-now-playing {
+      font-size: 13px;
+      color: #ffffff;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     
-    /* ECUALIZADOR DINÁMICO IMPRESIONANTE (SIEMPRE ACTIVO) */
+    /* ECUALIZADOR VISUAL */
     .wave-equalizer {
       display: flex; align-items: flex-end; justify-content: space-between;
       height: 50px; padding: 0 15px; margin-bottom: 30px; background: rgba(0, 0, 0, 0.4); border-radius: 15px; overflow: hidden;
@@ -59,15 +89,15 @@
     }
     .wave-bar { width: 4px; height: 12%; background-color: #2e1a4d; border-radius: 3px 3px 0 0; }
     
-    /* Animación constante del ecualizador para dar ambiente musical */
-    .wave-equalizer .wave-bar { animation: proBounce 0.7s ease-in-out infinite alternate; }
-    .wave-equalizer .wave-bar:nth-child(even) { background-color: #ec4899; animation-duration: 0.5s; }
-    .wave-equalizer .wave-bar:nth-child(3n) { background-color: #a855f7; animation-duration: 0.9s; }
-    .wave-equalizer .wave-bar:nth-child(5n) { background-color: #3b82f6; animation-duration: 0.6s; }
+    /* Animación del ecualizador desactivada por defecto */
+    .wave-equalizer.playing .wave-bar { animation: proBounce 0.7s ease-in-out infinite alternate; }
+    .wave-equalizer.playing .wave-bar:nth-child(even) { background-color: #ec4899; animation-duration: 0.5s; }
+    .wave-equalizer.playing .wave-bar:nth-child(3n) { background-color: #a855f7; animation-duration: 0.9s; }
+    .wave-equalizer.playing .wave-bar:nth-child(5n) { background-color: #3b82f6; animation-duration: 0.6s; }
     @keyframes proBounce { 0% { height: 15%; } 100% { height: 95%; } }
     
     /* BOTÓN INTERACTIVO */
-    .control-center { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
+    .control-center { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
     .cyber-play-btn {
       width: 85px; height: 85px; border-radius: 50%; border: none;
       background: linear-gradient(135deg, #a855f7, #6366f1); display: flex; align-items: center; justify-content: center;
@@ -77,6 +107,8 @@
     .cyber-play-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.8); }
     .cyber-play-btn:active { transform: scale(0.95); }
     .cyber-play-btn svg { width: 34px; height: 34px; fill: #ffffff; }
+
+    .footer-text { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
   </style>
 </head>
 <body>
@@ -94,16 +126,22 @@
       </div>
     </div>
 
-    <!-- IDENTIDAD DE LA EMISORA CON LAS PALMAS TROPICALES -->
+    <!-- IDENTIDAD DE LA EMISORA -->
     <div class="brand-section">
       <div class="brand-glow-icon">🌴</div>
       <div class="brand-info">
-        <h2>Tropical Flow Radio </h2>
-        <p>Carter FM • HD MUSIC</p>
+        <h2>Tropical Flow Radio</h2>
+        <p>Señal Digital desde Puerto Rico</p>
       </div>
     </div>
 
-    <!-- ECUALIZADOR VISUAL IMPRESIONANTE -->
+    <!-- CAJA METADATOS: CANCIÓN ACTUAL -->
+    <div class="song-metadata-box">
+      <span class="song-title-label">Sintonizando Ahora</span>
+      <div id="current-track-name" class="song-now-playing">Cargando transmisión...</div>
+    </div>
+
+    <!-- ECUALIZADOR VISUAL -->
     <div id="player-eq" class="wave-equalizer">
       <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
       <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
@@ -120,28 +158,55 @@
         <svg id="icon-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       </button>
     </div>
-  </div>
 
+    <div class="footer-text">AUDIO EN VIVO • CASTER.FM PREMIUM</div>
+  </div>
   <script>
-    // Reloj sincronizado
+    // Sincronización del reloj local
     function initClock() {
       document.getElementById('player-clock').innerText = new Date().toLocaleTimeString();
     }
     setInterval(initClock, 1000);
     initClock();
 
-       const audioPlayer = document.getElementById('core-audio');
+    const audioPlayer = document.getElementById('core-audio');
     const iconSvg = document.getElementById('icon-svg');
     const signalDot = document.getElementById('signal-dot');
     const signalText = document.getElementById('signal-text');
+    const playerEq = document.getElementById('player-eq');
+    const trackDisplay = document.getElementById('current-track-name');
 
-    // Sistema de Triple Ruta Oficial y Premium para Tropical Flow Radio TV
+    // Rutas Premium de Tropical Flow Radio TV
     const streamRoutes = [
-      "https://sapircast.caster.fm:16693/kidAJ",
-      "https://djoeantonio.ismyradio.com",
+      "https://caster.fm",
+      "https://ismyradio.com",
       "http://caster.fm"
     ];
     let currentRouteIndex = 0;
+    
+    // Tu Token Público Premium para extraer el título de la canción
+    const publicToken = "fdc37ef9-203f-4198-b246-17087ecdb02d";
+
+    // Función para obtener metadatos de la API de Caster
+    function updateSongTitle() {
+      fetch(`https://caster.fm{publicToken}`)
+        .then(response => response.json())
+        .then(data => {
+          if(data && data.song) {
+            trackDisplay.innerText = data.song;
+          } else {
+            trackDisplay.innerText = "Tropical Flow Radio TV";
+          }
+        })
+        .catch(err => {
+          console.log("Esperando metadatos activos...");
+          trackDisplay.innerText = "Tropical Flow Radio TV";
+        });
+    }
+
+    // Actualiza el título cada 15 segundos de forma automática
+    setInterval(updateSongTitle, 15000);
+    updateSongTitle();
 
     function startCyberStream() {
       if (audioPlayer.paused) {
@@ -158,20 +223,22 @@
       if (currentRouteIndex >= streamRoutes.length) {
         signalDot.className = "dot-signal";
         signalText.innerText = "OFFLINE";
+        playerEq.classList.remove('playing');
         iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        alert("No se pudo conectar a los servidores de streaming. Verifica si la radio está transmitiendo en vivo.");
+        alert("Transmisión no disponible. Verifica si el software de emisión está encendido.");
         return;
       }
 
-      // El parámetro ?cb evita que el navegador use audio antiguo guardado en cache
       audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
       
       audioPlayer.play().then(() => {
         signalDot.className = "dot-signal active";
         signalText.innerText = "EN VIVO";
+        playerEq.classList.add('playing'); // Activa las barras moradas en movimiento
         iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        updateSongTitle();
       }).catch(err => {
-        console.warn("Ruta " + currentRouteIndex + " fallida. Probando respaldo...");
+        console.warn("Fallo ruta " + currentRouteIndex + ". Probando alternativa...");
         currentRouteIndex++;
         tryRoute();
       });
@@ -182,13 +249,12 @@
       audioPlayer.src = "";
       signalDot.className = "dot-signal";
       signalText.innerText = "OFFLINE";
+      playerEq.classList.remove('playing'); // Pausa el movimiento de las barras
       iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
-
   </script>
 </body>
 </html>
-
 
 
 
