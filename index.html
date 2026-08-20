@@ -51,35 +51,19 @@
       to { transform: translateY(-4px); }
     }
 
-    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL */
+    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL (WIDGET INTEGRADO OFICIAL) */
     .song-metadata-box {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 15px;
       padding: 12px;
       margin-bottom: 20px;
-      min-height: 55px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      min-height: 65px;
       overflow: hidden;
     }
-    .song-title-label {
-      font-size: 10px;
-      color: #ec4899;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 3px;
-    }
-    .song-now-playing {
-      font-size: 13px;
-      color: #ffffff;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    
+    /* Forzado estético para limpiar el widget interno de Caster */
+    .song-metadata-box a { color: #ffffff !important; font-size: 13px !important; text-decoration: none !important; font-weight: 600; }
     
     /* ECUALIZADOR VISUAL */
     .wave-equalizer {
@@ -135,10 +119,11 @@
       </div>
     </div>
 
-    <!-- CAJA METADATOS: CANCIÓN ACTUAL -->
+    <!-- CAJA METADATOS UTILIZANDO EL EMBED SEGURO DE CASTER.FM -->
     <div class="song-metadata-box">
-      <span class="song-title-label">Sintonizando Ahora</span>
-      <div id="current-track-name" class="song-now-playing">Cargando transmisión...</div>
+      <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="ec4899" data-channelId="" data-rendered="false">
+        <a href="https://www.caster.fm">Sintonizando...</a>
+      </div>
     </div>
 
     <!-- ECUALIZADOR VISUAL -->
@@ -161,6 +146,9 @@
 
     <div class="footer-text">AUDIO EN VIVO • CASTER.FM PREMIUM</div>
   </div>
+
+  <!-- SCRIPT EXTERNO SEGURO DE CASTER PARA EL CONTENIDO DE LA CANCIÓN -->
+  <script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
   <script>
     // Sincronización del reloj local
     function initClock() {
@@ -174,39 +162,13 @@
     const signalDot = document.getElementById('signal-dot');
     const signalText = document.getElementById('signal-text');
     const playerEq = document.getElementById('player-eq');
-    const trackDisplay = document.getElementById('current-track-name');
 
-    // Rutas Premium Optimizadas con Proxy SSL (Sin puerto bloqueable)
+    // Servidores Premium purificados sin puertos bloqueables
     const streamRoutes = [
       "https://caster.fm",
-      "https://ismyradio.com",
-      "http://caster.fm"
+      "https://ismyradio.com"
     ];
     let currentRouteIndex = 0;
-    
-    // Tu Token Público Premium para extraer el título de la canción
-    const publicToken = "fdc37ef9-203f-4198-b246-17087ecdb02d";
-
-    // Función para obtener metadatos de la API de Caster
-    function updateSongTitle() {
-      fetch(`https://caster.fm{publicToken}`)
-        .then(response => response.json())
-        .then(data => {
-          if(data && data.song) {
-            trackDisplay.innerText = data.song;
-          } else {
-            trackDisplay.innerText = "Tropical Flow Radio TV";
-          }
-        })
-        .catch(err => {
-          console.log("Esperando metadatos activos...");
-          trackDisplay.innerText = "Tropical Flow Radio TV";
-        });
-    }
-
-    // Actualiza el título cada 15 segundos de forma automática
-    setInterval(updateSongTitle, 15000);
-    updateSongTitle();
 
     function startCyberStream() {
       if (audioPlayer.paused) {
@@ -229,14 +191,14 @@
         return;
       }
 
+      // Parámetro anti-cache para evitar audios viejos pegados
       audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
       
       audioPlayer.play().then(() => {
         signalDot.className = "dot-signal active";
         signalText.innerText = "EN VIVO";
-        playerEq.classList.add('playing'); // Activa las barras moradas en movimiento
+        playerEq.classList.add('playing'); // Inicia animación del ecualizador
         iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-        updateSongTitle();
       }).catch(err => {
         console.warn("Fallo ruta " + currentRouteIndex + ". Probando alternativa...");
         currentRouteIndex++;
@@ -249,13 +211,12 @@
       audioPlayer.src = "";
       signalDot.className = "dot-signal";
       signalText.innerText = "OFFLINE";
-      playerEq.classList.remove('playing'); // Pausa el movimiento de las barras
+      playerEq.classList.remove('playing'); // Congela animación del ecualizador
       iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
   </script>
 </body>
 </html>
-
 
 
 
