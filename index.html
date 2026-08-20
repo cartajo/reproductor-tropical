@@ -153,17 +153,15 @@
     setInterval(initClock, 1000);
     initClock();
 
-    const audioPlayer = document.getElementById('core-audio');
+        const audioPlayer = document.getElementById('core-audio');
     const iconSvg = document.getElementById('icon-svg');
     const signalDot = document.getElementById('signal-dot');
     const signalText = document.getElementById('signal-text');
-    const playerEq = document.getElementById('player-eq');
 
-    // Formatos con extensión .mp3 forzada para reproducción HTML5 sin restricciones
+    // Sistema de Triple Ruta Oficial y Premium para Tropical Flow Radio TV
     const streamRoutes = [
-      "https://caster.fm",
-      "https://caster.fm",
-      "https://ismyradio.com",
+      "https://sapircast.caster.fm:16693/kidAJ",
+      "https://djoeantonio.ismyradio.com",
       "http://caster.fm"
     ];
     let currentRouteIndex = 0;
@@ -183,23 +181,20 @@
       if (currentRouteIndex >= streamRoutes.length) {
         signalDot.className = "dot-signal";
         signalText.innerText = "OFFLINE";
-        playerEq.classList.remove('playing');
         iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        alert("Enlace multimedia no reconocido o transmisión apagada. Verifica el panel de emisión.");
+        alert("No se pudo conectar a los servidores de streaming. Verifica si la radio está transmitiendo en vivo.");
         return;
       }
 
-      // Parámetro anti-cache único por sesión para evitar almacenamiento congelado
+      // El parámetro ?cb evita que el navegador use audio antiguo guardado en cache
       audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
-      audioPlayer.crossOrigin = "anonymous";
       
       audioPlayer.play().then(() => {
         signalDot.className = "dot-signal active";
         signalText.innerText = "EN VIVO";
-        playerEq.classList.add('playing'); // Activa las barras animadas del ecualizador
         iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
       }).catch(err => {
-        console.warn("Fallo ruta index " + currentRouteIndex + ". Probando extensión alternativa...");
+        console.warn("Ruta " + currentRouteIndex + " fallida. Probando respaldo...");
         currentRouteIndex++;
         tryRoute();
       });
@@ -210,9 +205,9 @@
       audioPlayer.src = "";
       signalDot.className = "dot-signal";
       signalText.innerText = "OFFLINE";
-      playerEq.classList.remove('playing'); // Detiene las barras animadas del ecualizador
       iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
+
   </script>
 </body>
 </html>
