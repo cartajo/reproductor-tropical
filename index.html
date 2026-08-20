@@ -51,19 +51,37 @@
       to { transform: translateY(-4px); }
     }
 
-    /* SECCIÓN DINÁMICA DE LA CANCIÓN ACTUAL (WIDGET COMPACTO) */
+    /* SECCIÓN DE LA CANCIÓN ACTUAL (SISTEMA PROPIO REPARADO) */
     .song-metadata-box {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 15px;
       padding: 12px;
       margin-bottom: 20px;
-      min-height: 65px;
+      min-height: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       overflow: hidden;
     }
-    .song-metadata-box a { color: #ffffff !important; font-size: 13px !important; text-decoration: none !important; font-weight: 600; }
+    .song-title-label {
+      font-size: 10px;
+      color: #ec4899;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+    .song-now-playing {
+      font-size: 13px;
+      color: #ffffff;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     
-    /* ECUALIZADOR VISUAL */
+    /* ECUALIZADOR VISUAL CORREGIDO */
     .wave-equalizer {
       display: flex; align-items: flex-end; justify-content: space-between;
       height: 50px; padding: 0 15px; margin-bottom: 30px; background: rgba(0, 0, 0, 0.4); border-radius: 15px; overflow: hidden;
@@ -71,6 +89,7 @@
     }
     .wave-bar { width: 4px; height: 12%; background-color: #2e1a4d; border-radius: 3px 3px 0 0; }
     
+    /* Animación forzada e independiente mediante la clase 'playing' */
     .wave-equalizer.playing .wave-bar { animation: proBounce 0.7s ease-in-out infinite alternate; }
     .wave-equalizer.playing .wave-bar:nth-child(even) { background-color: #ec4899; animation-duration: 0.5s; }
     .wave-equalizer.playing .wave-bar:nth-child(3n) { background-color: #a855f7; animation-duration: 0.9s; }
@@ -116,11 +135,10 @@
       </div>
     </div>
 
-    <!-- CAJA METADATOS COMPATIBLE CON CASTER -->
+    <!-- CAJA METADATOS REPARADA -->
     <div class="song-metadata-box">
-      <div class="cstrEmbed" data-type="newStreamPlayer" data-publicToken="fdc37ef9-203f-4198-b246-17087ecdb02d" data-theme="dark" data-color="ec4899" data-channelId="" data-rendered="false">
-        <a href="https://www.caster.fm">Sintonizando...</a>
-      </div>
+      <span class="song-title-label">Sintonizando Ahora</span>
+      <div id="current-track-name" class="song-now-playing">Tropical Flow Radio TV</div>
     </div>
 
     <!-- ECUALIZADOR VISUAL -->
@@ -141,10 +159,8 @@
       </button>
     </div>
 
-    <div class="footer-text">AUDIO EN VIVO • CASTER.FM PREMIUM</div>
+    <div class="footer-text">AUDIO EN VIVO • TROPICAL FLOW RADIO TV</div>
   </div>
-
-  <script src="//cdn.cloud.caster.fm//widgets/embed.js"></script>
   <script>
     // Sincronización del reloj local
     function initClock() {
@@ -153,18 +169,46 @@
     setInterval(initClock, 1000);
     initClock();
 
-        const audioPlayer = document.getElementById('core-audio');
+    const audioPlayer = document.getElementById('core-audio');
     const iconSvg = document.getElementById('icon-svg');
     const signalDot = document.getElementById('signal-dot');
     const signalText = document.getElementById('signal-text');
+    const playerEq = document.getElementById('player-eq');
+    const trackDisplay = document.getElementById('current-track-name');
 
-    // Sistema de Triple Ruta Oficial y Premium para Tropical Flow Radio TV
+    // Formatos con extensión .mp3 forzada para reproducción HTML5 sin restricciones
     const streamRoutes = [
-      "https://sapircast.caster.fm:16693/kidAJ",
-      "https://djoeantonio.ismyradio.com",
-      "http://caster.fm"
+      "https://caster.fm",
+      "https://caster.fm",
+      "https://ismyradio.com"
     ];
     let currentRouteIndex = 0;
+
+    // Función para obtener la canción actual sin bloqueos CORS
+    function checkCurrentSong() {
+      // Usamos el archivo publico "7.html" de SHOUTcast/ismyradio para jalar la cancion limpia
+      fetch("https://ismyradio.com" + Date.now())
+        .then(response => response.text())
+        .then(data => {
+          // Extrae el texto entre los elementos del cuerpo si devuelve un formato SHOUTcast tipico
+          if(data && data.includes(",")) {
+            let parts = data.split(",");
+            if(parts[6] && parts[6].length > 2) {
+              trackDisplay.innerText = parts[6];
+              return;
+            }
+          }
+          trackDisplay.innerText = "Tropical Flow Radio TV";
+        })
+        .catch(err => {
+          // Si el servidor secundario no tiene metadatos, se mantiene el nombre de tu marca
+          trackDisplay.innerText = "Tropical Flow Radio TV";
+        });
+    }
+
+    // Consulta automática de la canción cada 20 segundos
+    setInterval(checkCurrentSong, 20000);
+    checkCurrentSong();
 
     function startCyberStream() {
       if (audioPlayer.paused) {
@@ -181,20 +225,23 @@
       if (currentRouteIndex >= streamRoutes.length) {
         signalDot.className = "dot-signal";
         signalText.innerText = "OFFLINE";
+        playerEq.classList.remove('playing'); // Detiene las barras si falla
         iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        alert("No se pudo conectar a los servidores de streaming. Verifica si la radio está transmitiendo en vivo.");
+        alert("Enlace multimedia no reconocido o transmisión apagada. Verifica tu software emisor.");
         return;
       }
 
-      // El parámetro ?cb evita que el navegador use audio antiguo guardado en cache
       audioPlayer.src = streamRoutes[currentRouteIndex] + "?cb=" + Date.now();
+      audioPlayer.crossOrigin = "anonymous";
       
       audioPlayer.play().then(() => {
         signalDot.className = "dot-signal active";
         signalText.innerText = "EN VIVO";
+        playerEq.classList.add('playing'); // SE ACTIVAN LAS BARRAS SÍ O SÍ AQUÍ
         iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        checkCurrentSong();
       }).catch(err => {
-        console.warn("Ruta " + currentRouteIndex + " fallida. Probando respaldo...");
+        console.warn("Fallo ruta index " + currentRouteIndex + ". Probando alternativa...");
         currentRouteIndex++;
         tryRoute();
       });
@@ -205,12 +252,13 @@
       audioPlayer.src = "";
       signalDot.className = "dot-signal";
       signalText.innerText = "OFFLINE";
+      playerEq.classList.remove('playing'); // SE DETIENEN LAS BARRAS AL PAUSAR
       iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
     }
-
   </script>
 </body>
 </html>
+
 
 
 
