@@ -15,7 +15,7 @@
             padding: 0;
             background: url('fondo.png') no-repeat center center fixed;
             background-size: cover;
-            background-color: #140126; /* Respaldo si no carga la imagen */
+            background-color: #140126; /* Fondo de respaldo */
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -80,20 +80,22 @@
             box-shadow: 0 0 10px #00ff66;
         }
 
-        /* El recuadro donde carga tu reproductor de Caster */
+        /* El recuadro donde carga tu reproductor nativo */
         .stream-player-area {
             background: rgba(0, 0, 0, 0.6);
             border-radius: 20px;
-            padding: 12px;
+            padding: 20px 12px;
             margin-bottom: 25px;
             border: 1px solid rgba(0, 240, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .stream-player-area iframe {
+        /* Estilizado del reproductor de audio HTML5 */
+        .stream-player-area audio {
             width: 100%;
-            height: 160px; 
-            border: none;
-            border-radius: 14px;
+            outline: none;
         }
 
         .now-playing {
@@ -146,8 +148,11 @@
         </div>
 
         <div class="stream-player-area">
-            <!-- PÓN EL LINK DE TU PANEL DE CASTER AQUÍ ABAJO -->
-            <iframe src="URL_DE_TU_REPRODUCTOR_DE_CASTER_FM" allow="autoplay; encrypted-media"></iframe>
+            <!-- REPRODUCTOR NATIVO INTEGRADO CON TU SEÑAL DE CASTER -->
+            <audio controls preload="none">
+                <source src="https://sapircast.caster.fm:16693/kidAJ" type="audio/mpeg">
+                Tu navegador no soporta este reproductor de audio.
+            </audio>
         </div>
 
         <div class="now-playing">🎵 Sonando Ahora</div>
@@ -182,4 +187,5 @@
     </script>
 </body>
 </html>
+
 
