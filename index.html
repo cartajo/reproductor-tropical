@@ -1,1260 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <meta name="theme-color" content="#06040d">
-  <meta name="description" content="Tropical Flow Radio - Radio Digital desde Puerto Rico">
-
-  <link rel="manifest" href="manifest.json">
-
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-
-  <title>Tropical Flow Radio TV - Pro Player</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: #06040d;
-
-      background-image:
-        radial-gradient(circle at center, #1b0d3a 0%, #06040d 100%);
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      min-height: 100vh;
-
-      margin: 0;
-
-      font-family: 'Segoe UI', Arial, sans-serif;
-
-      padding: 15px;
-    }
-
-    .cyber-player-container {
-      background: rgba(13, 8, 28, 0.95);
-
-      border: 2px solid #a855f7;
-
-      border-radius: 30px;
-
-      width: 100%;
-
-      max-width: 350px;
-
-      padding: 30px;
-
-      box-shadow:
-        0 0 35px rgba(168, 85, 247, 0.5),
-        inset 0 0 20px rgba(168, 85, 247, 0.2);
-
-      text-align: center;
-
-      position: relative;
-
-      overflow: hidden;
-    }
-
-    .top-status-bar {
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      background: rgba(255, 255, 255, 0.04);
-
-      padding: 10px 15px;
-
-      border-radius: 15px;
-
-      margin-bottom: 25px;
-    }
-
-    .clock-title {
-      font-size: 9px;
-
-      color: #a855f7;
-
-      font-weight: 800;
-
-      display: block;
-    }
-
-    .clock-num {
-      font-size: 16px;
-
-      color: #ffffff;
-
-      font-weight: bold;
-
-      font-family: monospace;
-    }
-
-    .badge-live {
-      display: flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      background: #000;
-
-      padding: 6px 12px;
-
-      border-radius: 20px;
-    }
-
-    .dot-signal {
-      width: 8px;
-
-      height: 8px;
-
-      background-color: #ef4444;
-
-      border-radius: 50%;
-    }
-
-    .dot-signal.connecting {
-      background-color: #f59e0b;
-
-      box-shadow: 0 0 10px #f59e0b;
-
-      animation: neonPulse 0.8s infinite alternate;
-    }
-
-    .dot-signal.active {
-      background-color: #10b981;
-
-      box-shadow: 0 0 12px #10b981;
-
-      animation: neonPulse 0.8s infinite alternate;
-    }
-
-    .text-signal {
-      font-size: 10px;
-
-      font-weight: 900;
-
-      color: #9ca3af;
-    }
-
-    @keyframes neonPulse {
-      from {
-        opacity: 0.4;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .brand-section {
-      display: flex;
-
-      align-items: center;
-
-      gap: 15px;
-
-      margin-bottom: 20px;
-
-      text-align: left;
-    }
-
-    .brand-glow-icon {
-      background:
-        linear-gradient(135deg, #a855f7, #ec4899);
-
-      width: 60px;
-
-      height: 60px;
-
-      min-width: 60px;
-
-      border-radius: 18px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      font-size: 32px;
-
-      box-shadow:
-        0 8px 20px rgba(236, 72, 153, 0.4);
-
-      animation:
-        floatIcon 3s ease-in-out infinite alternate;
-    }
-
-    .brand-info h2 {
-      margin: 0;
-
-      font-size: 20px;
-
-      color: #ffffff;
-
-      letter-spacing: 0.5px;
-    }
-
-    .brand-info p {
-      margin: 4px 0 0 0;
-
-      font-size: 12px;
-
-      color: #a855f7;
-
-      font-weight: 600;
-    }
-
-    @keyframes floatIcon {
-      from {
-        transform: translateY(0px);
-      }
-
-      to {
-        transform: translateY(-4px);
-      }
-    }
-
-    .song-metadata-box {
-      background: rgba(0, 0, 0, 0.5);
-
-      border: 1px solid rgba(168, 85, 247, 0.3);
-
-      border-radius: 15px;
-
-      padding: 12px;
-
-      margin-bottom: 20px;
-
-      min-height: 65px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: center;
-
-      overflow: hidden;
-    }
-
-    .song-title-label {
-      font-size: 10px;
-
-      color: #ec4899;
-
-      font-weight: 800;
-
-      text-transform: uppercase;
-
-      letter-spacing: 1px;
-
-      margin-bottom: 5px;
-    }
-
-    .song-now-playing {
-      font-size: 13px;
-
-      color: #ffffff;
-
-      font-weight: 600;
-
-      white-space: nowrap;
-
-      overflow: hidden;
-
-      text-overflow: ellipsis;
-
-      min-height: 18px;
-    }
-
-    .song-now-playing.playing {
-      color: #ffffff;
-
-      text-shadow:
-        0 0 8px rgba(236, 72, 153, 0.8);
-    }
-
-    .wave-equalizer {
-      display: flex;
-
-      align-items: flex-end;
-
-      justify-content: space-between;
-
-      height: 50px;
-
-      padding: 0 15px;
-
-      margin-bottom: 30px;
-
-      background: rgba(0, 0, 0, 0.4);
-
-      border-radius: 15px;
-
-      overflow: hidden;
-
-      box-shadow:
-        inset 0 0 10px rgba(0,0,0,0.5);
-    }
-
-    .wave-bar {
-      width: 4px;
-
-      height: 12%;
-
-      background-color: #2e1a4d;
-
-      border-radius: 3px 3px 0 0;
-    }
-
-    .wave-equalizer .wave-bar {
-      animation:
-        proBounce 0.7s ease-in-out infinite alternate;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(even) {
-      background-color: #ec4899;
-
-      animation-duration: 0.5s;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(3n) {
-      background-color: #a855f7;
-
-      animation-duration: 0.9s;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(5n) {
-      background-color: #3b82f6;
-
-      animation-duration: 0.6s;
-    }
-
-    @keyframes proBounce {
-      0% {
-        height: 15%;
-      }
-
-      100% {
-        height: 95%;
-      }
-    }
-
-    .control-center {
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      margin-bottom: 15px;
-    }
-
-    .cyber-play-btn {
-      width: 85px;
-
-      height: 85px;
-
-      border-radius: 50%;
-
-      border: none;
-
-      background:
-        linear-gradient(135deg, #a855f7, #6366f1);
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      box-shadow:
-        0 8px 25px rgba(168, 85, 247, 0.6),
-        0 0 30px rgba(99, 102, 241, 0.2);
-
-      cursor: pointer;
-
-      transition: all 0.3s ease;
-    }
-
-    .cyber-play-btn:hover {
-      transform: scale(1.05);
-
-      box-shadow:
-        0 10px 30px rgba(168, 85, 247, 0.8);
-    }
-
-    .cyber-play-btn:active {
-      transform: scale(0.95);
-    }
-
-    .cyber-play-btn svg {
-      width: 34px;
-
-      height: 34px;
-
-      fill: #ffffff;
-    }
-
-    /* ================================
-       BOTÓN INSTALAR APP
-    ================================= */
-
-    .install-app-btn {
-      width: 100%;
-
-      border: 1px solid #a855f7;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(168, 85, 247, 0.25),
-          rgba(236, 72, 153, 0.20)
-        );
-
-      color: #ffffff;
-
-      padding: 12px 10px;
-
-      border-radius: 14px;
-
-      font-size: 12px;
-
-      font-weight: 900;
-
-      letter-spacing: 0.5px;
-
-      cursor: pointer;
-
-      margin-top: 5px;
-
-      margin-bottom: 15px;
-
-      box-shadow:
-        0 0 15px rgba(168, 85, 247, 0.25);
-
-      transition: all 0.3s ease;
-    }
-
-    .install-app-btn:hover {
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 0 25px rgba(168, 85, 247, 0.5);
-    }
-
-    .install-app-btn:active {
-      transform: scale(0.98);
-    }
-
-    .footer-text {
-      font-size: 10px;
-
-      color: #6b7280;
-
-      text-transform: uppercase;
-
-      letter-spacing: 0.5px;
-    }
-
-    /* ================================
-       MENSAJE PWA
-    ================================= */
-
-    #install-message {
-      display: none;
-
-      color: #a855f7;
-
-      font-size: 10px;
-
-      line-height: 1.4;
-
-      margin-top: 5px;
-
-      margin-bottom: 10px;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Flow Radio TV - Pro Player</title>
+    
+    <!-- Conexión con el archivo manifest de la App -->
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        /* Fondo con la imagen de tu marca Tropical Flow */
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('fondo.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* La tarjeta del reproductor estilo App */
+        .player-card {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(135deg, rgba(29, 2, 54, 0.95) 0%, rgba(12, 0, 23, 0.95) 100%);
+            border: 2px solid #00f0ff; /* Borde neón azul */
+            border-radius: 28px;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0px 15px 35px rgba(0, 240, 255, 0.3);
+            margin: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            margin: 0 0 5px 0;
+            color: #00f0ff;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        .sub-title {
+            font-size: 14px;
+            color: #e0aaff;
+            margin: 0 0 25px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Botón de Estación Activa */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(58, 12, 163, 0.6);
+            border: 1px solid #7209b7;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #00ff66;
+        }
+
+        /* El recuadro donde carga tu reproductor de Caster */
+        .stream-player-area {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .stream-player-area iframe {
+            width: 100%;
+            height: 160px; /* Tamaño ideal para que cargue tu player de Caster */
+            border: none;
+            border-radius: 14px;
+        }
+
+        .now-playing {
+            font-size: 11px;
+            color: #00f0ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .track-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffffff;
+            margin: 0 0 25px 0;
+        }
+
+        /* Botón dinámico para instalar la App */
+        .install-btn {
+            display: none; /* Solo se activa en celulares compatibles */
+            width: 100%;
+            background: linear-gradient(90deg, #00f0ff, #7b2cbf);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0px 5px 20px rgba(0, 240, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+
+        .install-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
 </head>
-
 <body>
 
-  <div class="cyber-player-container">
+    <div class="player-card">
+        <h1 class="header-title">Tropical Flow</h1>
+        <p class="sub-title">Señal Digital desde Puerto Rico</p>
 
-    <div class="top-status-bar">
-
-      <div>
-
-        <span class="clock-title">
-          ESTACIÓN ACTIVA
-        </span>
-
-        <span
-          id="player-clock"
-          class="clock-num">
-          00:00:00
-        </span>
-
-      </div>
-
-      <div class="badge-live">
-
-        <div
-          id="signal-dot"
-          class="dot-signal">
+        <div class="status-badge">
+            <span class="status-dot"></span>ESTACIÓN ACTIVA
         </div>
 
-        <span
-          id="signal-text"
-          class="text-signal">
-          OFFLINE
-        </span>
+        <div class="stream-player-area">
+            <!-- Aquí corre tu señal real de Caster.fm -->
+            <iframe src="https://github.io" allow="autoplay; encrypted-media"></iframe>
+        </div>
 
-      </div>
+        <div class="now-playing">🎵 Sonando Ahora</div>
+        <p class="track-title">Audio en Vivo • Tropical Flow Radio TV</p>
 
+        <!-- Botón de instalación automática -->
+        <button id="btnInstall" class="install-btn">📲 Instalar App</button>
     </div>
 
-
-    <div class="brand-section">
-
-      <div class="brand-glow-icon">
-        🌴
-      </div>
-
-      <div class="brand-info">
-
-        <h2>
-          Tropical Flow Radio
-        </h2>
-
-        <p>
-          Señal Digital desde Puerto Rico
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="song-metadata-box">
-
-      <span class="song-title-label">
-        🎵 SONANDO AHORA
-      </span>
-
-      <div
-        id="current-track-name"
-        class="song-now-playing">
-        Tropical Flow Radio TV
-      </div>
-
-    </div>
-
-
-    <div
-      id="player-eq"
-      class="wave-equalizer">
-
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-
-    </div>
-
-
-    <audio
-      id="core-audio"
-      preload="none">
-    </audio>
-
-
-    <div class="control-center">
-
-      <button
-        id="master-btn"
-        class="cyber-play-btn"
-        onclick="startCyberStream()"
-        aria-label="Reproducir Tropical Flow Radio">
-
-        <svg
-          id="icon-svg"
-          viewBox="0 0 24 24">
-
-          <path
-            d="M8 5v14l11-7z"/>
-
-        </svg>
-
-      </button>
-
-    </div>
-
-
-    <!-- ================================
-         INSTALAR APP
-    ================================= -->
-
-    <button
-      id="install-app-btn"
-      class="install-app-btn"
-      type="button"
-      style="display:none;">
-
-      📲 INSTALAR APP
-
-    </button>
-
-    <div id="install-message"></div>
-
-
-    <div class="footer-text">
-      AUDIO EN VIVO • TROPICAL FLOW RADIO TV
-    </div>
-
-  </div>
-
-
-  <script>
-
-    /* =========================================
-       RELOJ
-    ========================================= */
-
-    function initClock() {
-
-      document.getElementById(
-        'player-clock'
-      ).innerText =
-        new Date().toLocaleTimeString();
-
-    }
-
-    setInterval(initClock, 1000);
-
-    initClock();
-
-
-    /* =========================================
-       ELEMENTOS
-    ========================================= */
-
-    const audioPlayer =
-      document.getElementById('core-audio');
-
-    const iconSvg =
-      document.getElementById('icon-svg');
-
-    const signalDot =
-      document.getElementById('signal-dot');
-
-    const signalText =
-      document.getElementById('signal-text');
-
-    const trackNameContainer =
-      document.getElementById('current-track-name');
-
-
-    /* =========================================
-       STREAM PRINCIPAL
-
-       NO TOCAMOS TU STREAM
-    ========================================= */
-
-    const STREAM_URL =
-      "https://sapircast.caster.fm:16693/kidAJ";
-
-
-    /* =========================================
-       DATOS CASTER
-    ========================================= */
-
-    const CASTER_HOST =
-      "sapircast.caster.fm";
-
-    const CASTER_PORT =
-      "16693";
-
-    const STREAM_MOUNT =
-      "/kidAJ";
-
-
-    let metadataInterval = null;
-
-
-    /* =========================================
-       METADATA
-    ========================================= */
-
-    async function updateTrackName() {
-
-      try {
-
-        const apiUrl =
-          `https://${CASTER_HOST}:${CASTER_PORT}/admin/publicstats.json?t=${Date.now()}`;
-
-
-        const response =
-          await fetch(
-            apiUrl,
-            {
-              method: "GET",
-              cache: "no-store"
+    <!-- Script inteligente de instalación -->
+    <script>
+        let deferredPrompt;
+        const btnInstall = document.getElementById('btnInstall');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            btnInstall.style.display = 'block'; 
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                btnInstall.style.display = 'none';
             }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "No se pudo consultar Caster.fm"
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        let source = null;
-
-
-        if (
-          Array.isArray(data)
-        ) {
-
-          for (
-            const item of data
-          ) {
-
-            if (
-              item &&
-              item.source
-            ) {
-
-              if (
-                item.source[STREAM_MOUNT]
-              ) {
-
-                source =
-                  item.source[STREAM_MOUNT];
-
-                break;
-
-              }
-
-
-              const mountPoints =
-                Object.keys(item.source);
-
-
-              if (
-                mountPoints.length > 0
-              ) {
-
-                source =
-                  item.source[
-                    mountPoints[0]
-                  ];
-
-                break;
-
-              }
-
-            }
-
-          }
-
-        }
-
-
-        let title = "";
-
-
-        if (
-          source &&
-          source.metadata
-        ) {
-
-          title =
-            source.metadata.x_icy_title ||
-            source.metadata.title ||
-            "";
-
-        }
-
-
-        if (
-          !title &&
-          source &&
-          source.playlist &&
-          source.playlist.playlist &&
-          Array.isArray(
-            source.playlist.playlist.track
-          )
-        ) {
-
-          const tracks =
-            source.playlist.playlist.track;
-
-
-          if (
-            tracks.length > 0
-          ) {
-
-            const lastTrack =
-              tracks[tracks.length - 1];
-
-
-            if (
-              lastTrack &&
-              lastTrack.title
-            ) {
-
-              title =
-                lastTrack.title;
-
-            }
-
-          }
-
-        }
-
-
-        if (
-          title &&
-          title.trim() !== ""
-        ) {
-
-          trackNameContainer.innerText =
-            title.trim();
-
-          trackNameContainer.classList.add(
-            "playing"
-          );
-
-        }
-        else {
-
-          trackNameContainer.innerText =
-            "Tropical Flow Radio TV";
-
-          trackNameContainer.classList.remove(
-            "playing"
-          );
-
-        }
-
-      }
-
-      catch (error) {
-
-        console.warn(
-          "No se pudo obtener el nombre de la canción:",
-          error
-        );
-
-
-        if (
-          !trackNameContainer.innerText ||
-          trackNameContainer.innerText ===
-            "Cargando..."
-        ) {
-
-          trackNameContainer.innerText =
-            "Tropical Flow Radio TV";
-
-        }
-
-      }
-
-    }
-
-
-    /* =========================================
-       PLAY / PAUSE
-    ========================================= */
-
-    function startCyberStream() {
-
-      if (
-        audioPlayer.paused
-      ) {
-
-        signalDot.className =
-          "dot-signal connecting";
-
-        signalText.innerText =
-          "CONECTANDO";
-
-        trackNameContainer.innerText =
-          "Buscando canción...";
-
-
-        audioPlayer.src =
-          STREAM_URL;
-
-
-        audioPlayer.load();
-
-
-        audioPlayer.play()
-
-          .then(() => {
-
-            signalDot.className =
-              "dot-signal active";
-
-            signalText.innerText =
-              "EN VIVO";
-
-
-            iconSvg.innerHTML =
-              '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-
-
-            updateTrackName();
-
-
-            clearInterval(
-              metadataInterval
-            );
-
-
-            metadataInterval =
-              setInterval(
-                updateTrackName,
-                15000
-              );
-
-          })
-
-          .catch(
-            (error) => {
-
-              console.error(
-                "Error reproduciendo Caster.fm:",
-                error
-              );
-
-
-              signalDot.className =
-                "dot-signal";
-
-              signalText.innerText =
-                "ERROR DE SEÑAL";
-
-              trackNameContainer.innerText =
-                "No se pudo conectar";
-
-              iconSvg.innerHTML =
-                '<path d="M8 5v14l11-7z"/>';
-
-            }
-          );
-
-      }
-
-      else {
-
-        stopCyberStream();
-
-      }
-
-    }
-
-
-    /* =========================================
-       STOP
-    ========================================= */
-
-    function stopCyberStream() {
-
-      audioPlayer.pause();
-
-      audioPlayer.removeAttribute(
-        "src"
-      );
-
-      audioPlayer.load();
-
-
-      signalDot.className =
-        "dot-signal";
-
-      signalText.innerText =
-        "OFFLINE";
-
-
-      trackNameContainer.innerText =
-        "Tropical Flow Radio TV";
-
-
-      trackNameContainer.classList.remove(
-        "playing"
-      );
-
-
-      iconSvg.innerHTML =
-        '<path d="M8 5v14l11-7z"/>';
-
-
-      clearInterval(
-        metadataInterval
-      );
-
-    }
-
-
-    /* =========================================
-       EVENTOS AUDIO
-    ========================================= */
-
-    audioPlayer.addEventListener(
-      "playing",
-      () => {
-
-        signalDot.className =
-          "dot-signal active";
-
-        signalText.innerText =
-          "EN VIVO";
-
-      }
-    );
-
-
-    audioPlayer.addEventListener(
-      "waiting",
-      () => {
-
-        signalDot.className =
-          "dot-signal connecting";
-
-        signalText.innerText =
-          "CARGANDO";
-
-      }
-    );
-
-
-    audioPlayer.addEventListener(
-      "error",
-      () => {
-
-        signalDot.className =
-          "dot-signal";
-
-        signalText.innerText =
-          "ERROR";
-
-      }
-    );
-
-
-    /* =========================================
-       PWA
-    ========================================= */
-
-    let deferredInstallPrompt = null;
-
-    const installButton =
-      document.getElementById(
-        "install-app-btn"
-      );
-
-    const installMessage =
-      document.getElementById(
-        "install-message"
-      );
-
-
-    /* =========================================
-       REGISTRAR SERVICE WORKER
-    ========================================= */
-
-    if (
-      "serviceWorker" in navigator
-    ) {
-
-      window.addEventListener(
-        "load",
-        () => {
-
-          navigator.serviceWorker
-            .register(
-              "./service-worker.js"
-            )
-
-            .then(
-              () => {
-
-                console.log(
-                  "Tropical Flow Radio PWA activa"
-                );
-
-              }
-            )
-
-            .catch(
-              (error) => {
-
-                console.error(
-                  "Error Service Worker:",
-                  error
-                );
-
-              }
-            );
-
-        }
-      );
-
-    }
-
-
-    /* =========================================
-       DETECTAR INSTALACIÓN
-    ========================================= */
-
-    window.addEventListener(
-      "beforeinstallprompt",
-      (event) => {
-
-        event.preventDefault();
-
-        deferredInstallPrompt =
-          event;
-
-        installButton.style.display =
-          "block";
-
-      }
-    );
-
-
-    /* =========================================
-       BOTÓN INSTALAR
-    ========================================= */
-
-    installButton.addEventListener(
-      "click",
-      async () => {
-
-        if (
-          !deferredInstallPrompt
-        ) {
-
-          installMessage.style.display =
-            "block";
-
-          installMessage.innerText =
-            "Si estás en iPhone, usa Compartir → Añadir a pantalla de inicio.";
-
-          return;
-
-        }
-
-
-        deferredInstallPrompt.prompt();
-
-
-        const result =
-          await deferredInstallPrompt.userChoice;
-
-
-        console.log(
-          "Instalación:",
-          result.outcome
-        );
-
-
-        deferredInstallPrompt =
-          null;
-
-        installButton.style.display =
-          "none";
-
-      }
-    );
-
-
-    /* =========================================
-       APP YA INSTALADA
-    ========================================= */
-
-    window.addEventListener(
-      "appinstalled",
-      () => {
-
-        installButton.style.display =
-          "none";
-
-        installMessage.style.display =
-          "block";
-
-        installMessage.innerText =
-          "✅ Tropical Flow Radio está instalada.";
-
-      }
-    );
-
-
-    /* =========================================
-       DETECCIÓN IPHONE / IPAD
-    ========================================= */
-
-    const isIOS =
-      /iphone|ipad|ipod/i.test(
-        navigator.userAgent
-      );
-
-
-    const isStandalone =
-      window.navigator.standalone === true ||
-      window.matchMedia(
-        "(display-mode: standalone)"
-      ).matches;
-
-
-    if (
-      isIOS &&
-      !isStandalone
-    ) {
-
-      installButton.style.display =
-        "block";
-
-      installMessage.style.display =
-        "block";
-
-      installMessage.innerText =
-        "En iPhone/iPad: toca Compartir y luego “Añadir a pantalla de inicio”.";
-
-    }
-
-  </script>
-
+        });
+
+        window.addEventListener('appinstalled', () => {
+            btnInstall.style.display = 'none';
+        });
+    </script>
 </body>
 </html>
-
-
 
 
