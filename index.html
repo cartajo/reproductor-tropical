@@ -15,6 +15,7 @@
             padding: 0;
             background: url('fondo.png') no-repeat center center fixed;
             background-size: cover;
+            background-color: #140126; /* Respaldo si no carga la imagen */
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -90,7 +91,7 @@
 
         .stream-player-area iframe {
             width: 100%;
-            height: 160px; /* Tamaño ideal para que cargue tu player de Caster */
+            height: 160px; 
             border: none;
             border-radius: 14px;
         }
@@ -113,7 +114,7 @@
 
         /* Botón dinámico para instalar la App */
         .install-btn {
-            display: none; /* Solo se activa en celulares compatibles */
+            display: none; 
             width: 100%;
             background: linear-gradient(90deg, #00f0ff, #7b2cbf);
             color: white;
@@ -145,8 +146,8 @@
         </div>
 
         <div class="stream-player-area">
-            <!-- Aquí corre tu señal real de Caster.fm -->
-            <iframe src="https://github.io" allow="autoplay; encrypted-media"></iframe>
+            <!-- PÓN EL LINK DE TU PANEL DE CASTER AQUÍ ABAJO -->
+            <iframe src="URL_DE_TU_REPRODUCTOR_DE_CASTER_FM" allow="autoplay; encrypted-media"></iframe>
         </div>
 
         <div class="now-playing">🎵 Sonando Ahora</div>
@@ -156,7 +157,6 @@
         <button id="btnInstall" class="install-btn">📲 Instalar App</button>
     </div>
 
-    <!-- Script inteligente de instalación -->
     <script>
         let deferredPrompt;
         const btnInstall = document.getElementById('btnInstall');
@@ -170,7 +170,7 @@
         btnInstall.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
+                await deferredPrompt.userChoice;
                 deferredPrompt = null;
                 btnInstall.style.display = 'none';
             }
@@ -182,5 +182,4 @@
     </script>
 </body>
 </html>
-
 
