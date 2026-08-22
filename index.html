@@ -1367,30 +1367,20 @@
     ===================================================== */
 
     function initClock() {
+  const clock = document.getElementById("player-clock");
 
-      const clock =
-        document.getElementById(
-          "player-clock"
-        );
+  const now = new Date();
 
-      clock.innerText =
-  new Date().toLocaleTimeString(
-    "es-PR",
-    {
-      hour: "numeric",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true
-    }
-  );
+  clock.innerText = now.toLocaleTimeString("es-PR", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+}
 
-
-    setInterval(
-      initClock,
-      1000
-    );
-
-    initClock();
+setInterval(initClock, 1000);
+initClock();
 
 
     /* =====================================================
