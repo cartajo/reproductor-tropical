@@ -1374,14 +1374,15 @@
         );
 
       clock.innerText =
-        new Date().toLocaleTimeString(
-          "es-PR",
-          {
-            hour12: false
-          }
-        );
-
+  new Date().toLocaleTimeString(
+    "es-PR",
+    {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
     }
+  );
 
 
     setInterval(
