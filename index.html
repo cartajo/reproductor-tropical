@@ -632,20 +632,20 @@ document.getElementById("share-button").addEventListener("click",async()=>{
   }catch(error){if(error.name!=="AbortError") console.warn("No se pudo compartir:",error);}
 });
 
-document.getElementById("request-button").addEventListener("click",function(){
-  const numeroCabina="19393142657";
-  const message=
+document.getElementById("request-button").addEventListener("click", function() {
+  const numeroCabina = "19393142657";
+  const message =
     "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n" +
     "Quiero solicitar una canción.\n\n" +
     "Canción: __________________\n" +
     "Artista: __________________\n\n" +
     "🌴 Tropical Flow Radio TV 🇵🇷\n" +
-    "📱 Cabina: 939-314-2657\n" +
     "https://github.io";
 
-  const waUrl="https://wa.me"+numeroCabina+"?text="+encodeURIComponent(message);
-  window.open(waUrl,"_blank","noopener");
+  const waUrl = "https://whatsapp.com" + numeroCabina + "&text=" + encodeURIComponent(message);
+  window.location.href = waUrl;
 });
+
 
 window.addEventListener("beforeunload",()=>{
   clearInterval(flipTimer);
