@@ -264,13 +264,12 @@
     <div class="footer-text">AUDIO EN VIVO • <span class="footer-brand">TROPICAL FLOW RADIO TV</span></div>
 
   </div>
-  <script>
-    /* CONFIGURACIÓN DE PANTALLA GIRATORIA (EDITA AQUÍ) */
+    <script>
+    /* 1. LISTA DE PANTALLA GIRATORIA (PON AQUÍ EL NOMBRE EXACTO DE TU ARCHIVO) */
     const MEDIA_SLIDES = [
       { type: "image", src: "logo.png", fit: "contain" },
       { type: "image", src: "anuncio1.jpg", fit: "cover" },
-      { type: "video", src: "promo.mp4", fit: "cover" },
-      { type: "image", src: "anuncio2.jpg", fit: "cover" }
+      { type: "video", src: "promo.mp4", fit: "cover" }
     ];
 
     const TIEMPO_ROTACION = 7000;
@@ -296,6 +295,9 @@
         const img = document.createElement("img");
         img.src = slide.src;
         img.alt = "Tropical Flow Radio TV";
+        img.onerror = function() {
+          this.parentElement.innerHTML = '<div style="text-align:center;padding:10px;"><div style="font-size:34px;font-weight:900;background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">TF</div><div style="font-size:14px;font-weight:900;color:#fff;">TROPICAL FLOW RADIO TV</div><div style="font-size:9px;color:#c084fc;margin-top:4px;">🌴 EN VIVO 24/7 DESDE PUERTO RICO 🇵🇷</div></div>';
+        };
         return img;
       }
     }
@@ -310,7 +312,7 @@
 
     function actualizarDots() {
       dotsContainer.innerHTML = "";
-      MEDIA_SLIDES.forEach((_, idx) => {
+      MEDIA_SLIDES.forEach(function(_, idx) {
         const dot = document.createElement("span");
         dot.className = "dot" + (idx === currentSlide ? " active" : "");
         dotsContainer.appendChild(dot);
@@ -319,7 +321,7 @@
 
     function iniciarPantalla() {
       if (MEDIA_SLIDES.length === 0) return;
-      const primerSlide = MEDIA_SLIDES.at(0);
+      const primerSlide = MEDIA_SLIDES.slice(0, 1).pop();
       flipFront.innerHTML = "";
       aplicarAjusteCara(flipFront, primerSlide);
       flipFront.appendChild(crearContenidoMedia(primerSlide));
@@ -332,7 +334,7 @@
       currentSlide = (currentSlide + direccion + MEDIA_SLIDES.length) % MEDIA_SLIDES.length;
       isFlipped = !isFlipped;
 
-      const slideActual = MEDIA_SLIDES.at(currentSlide);
+      const slideActual = MEDIA_SLIDES.slice(currentSlide, currentSlide + 1).pop();
       const caraDestino = isFlipped ? flipBack : flipFront;
       caraDestino.innerHTML = "";
       aplicarAjusteCara(caraDestino, slideActual);
@@ -349,12 +351,12 @@
 
     function reiniciarTemporizador() {
       clearInterval(flipTimer);
-      flipTimer = setInterval(() => cambiarSlide(1), TIEMPO_ROTACION);
+      flipTimer = setInterval(function() { cambiarSlide(1); }, TIEMPO_ROTACION);
     }
 
     iniciarPantalla();
 
-    /* RELOJ */
+    /* 2. RELOJ PUERTO RICO */
     function initClock() {
       const clock = document.getElementById("player-clock");
       const now = new Date();
@@ -365,7 +367,7 @@
     setInterval(initClock, 1000);
     initClock();
 
-    /* ELEMENTOS Y STREAM CASTER.FM */
+    /* 3. STREAM CASTER.FM */
     const audioPlayer = document.getElementById("core-audio");
     const iconSvg = document.getElementById("icon-svg");
     const signalDot = document.getElementById("signal-dot");
@@ -394,20 +396,28 @@
       audioPlayer.volume = value;
       volumeNumber.innerText = Math.round(value * 100) + "%";
     });
-    async function updateTrackName() {
+
+       async function updateTrackName() {
       try {
         const apiUrl = "https://" + CASTER_HOST + ":" + CASTER_PORT + "/admin/publicstats.json?t=" + Date.now();
         const response = await fetch(apiUrl, { method: "GET", cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo consultar Caster.fm");
+        if (!response.ok) throw new Error("Error Caster");
         const data = await response.json();
         let source = null;
 
         if (Array.isArray(data)) {
           for (const item of data) {
             if (item && item.source) {
-              if (item.source[STREAM_MOUNT]) { source = item.source[STREAM_MOUNT]; break; }
+              if (item.source[STREAM_MOUNT]) {
+                source = item.source[STREAM_MOUNT];
+                break;
+              }
               const mountPoints = Object.keys(item.source);
-              if (mountPoints.length > 0) { source = item.source[mountPoints.at(0)]; break; }
+              if (mountPoints.length > 0) {
+                const primerMount = mountPoints.slice(0, 1).pop();
+                source = item.source[primerMount];
+                break;
+              }
             }
           }
         }
@@ -419,7 +429,7 @@
         if (!title && source && source.playlist && source.playlist.playlist && Array.isArray(source.playlist.playlist.track)) {
           const tracks = source.playlist.playlist.track;
           if (tracks.length > 0) {
-            const lastTrack = tracks.at(-1);
+            const lastTrack = tracks.slice(-1).pop();
             if (lastTrack && lastTrack.title) title = lastTrack.title;
           }
         }
@@ -451,7 +461,7 @@
 
     function addToHistory(title) {
       if (!title) return;
-      songHistory = songHistory.filter(item => item !== title);
+      songHistory = songHistory.filter(function(item) { return item !== title; });
       songHistory.unshift(title);
       songHistory = songHistory.slice(0, 5);
       renderHistory();
@@ -463,7 +473,7 @@
         historyList.innerHTML = "<li>Esperando información de la emisora...</li>";
         return;
       }
-      songHistory.forEach(song => {
+      songHistory.forEach(function(song) {
         const li = document.createElement("li");
         li.innerText = "🎵 " + song;
         historyList.appendChild(li);
@@ -478,7 +488,7 @@
         trackNameContainer.innerText = "Buscando canción...";
         audioPlayer.src = STREAM_URL;
         audioPlayer.load();
-        audioPlayer.play().then(() => {
+        audioPlayer.play().then(function() {
           signalDot.className = "dot-signal active";
           signalText.innerText = "EN VIVO";
           statusMessage.innerText = "Estás escuchando Tropical Flow Radio TV";
@@ -487,7 +497,7 @@
           updateTrackName();
           clearInterval(metadataInterval);
           metadataInterval = setInterval(updateTrackName, 15000);
-        }).catch(() => {
+        }).catch(function() {
           signalDot.className = "dot-signal";
           signalText.innerText = "ERROR";
           statusMessage.innerText = "No se pudo conectar con la señal";
@@ -514,18 +524,18 @@
       clearInterval(metadataInterval);
     }
 
-    audioPlayer.addEventListener("playing", () => {
+    audioPlayer.addEventListener("playing", function() {
       signalDot.className = "dot-signal active";
       signalText.innerText = "EN VIVO";
       eq.classList.add("playing");
     });
 
-    audioPlayer.addEventListener("waiting", () => {
+    audioPlayer.addEventListener("waiting", function() {
       signalDot.className = "dot-signal connecting";
       signalText.innerText = "CARGANDO";
     });
 
-    audioPlayer.addEventListener("error", () => {
+    audioPlayer.addEventListener("error", function() {
       signalDot.className = "dot-signal";
       signalText.innerText = "ERROR";
       eq.classList.remove("playing");
@@ -553,5 +563,6 @@
   </script>
 </body>
 </html>
+
 
 
