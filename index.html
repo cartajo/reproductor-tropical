@@ -616,35 +616,25 @@ volumeSlider.addEventListener("input",()=>{
   audioPlayer.volume=value/100;
   volumeNumber.textContent=value+"%";
 });
-
 document.getElementById("share-button").addEventListener("click",async()=>{
-  const shareData={
-    title:"Tropical Flow Radio TV",
-    text:"🌴📻 ¡Escucha Tropical Flow Radio TV En Vivo 24/7! 🇵🇷",
-    url:"https://github.io"
-  };
+  const shareData={title:"Tropical Flow Radio TV",text:"¡Escucha la mejor música en Tropical Flow Radio TV!",url:location.href};
   try{
     if(navigator.share) await navigator.share(shareData);
-    else window.open("https://whatsapp.com"+encodeURIComponent(shareData.text+" "+shareData.url),"_blank","noopener");
-  }catch(e){}
+    else{
+      const wa="https://api.whatsapp.com/send?text="+encodeURIComponent(shareData.text+" "+shareData.url);
+      window.open(wa,"_blank","noopener");
+    }
+  }catch(error){if(error.name!=="AbortError") console.warn("No se pudo compartir:",error);}
 });
-
 document.getElementById("request-button").addEventListener("click",()=>{
-  const numeroCabina = "19393142657";
-  const msg = `🎤 Hola Tropical Flow Radio TV 🌴📻
-
-Quiero solicitar una canción.
-
-Canción: __________________
-Artista: __________________
-
-🌴 Tropical Flow Radio TV 🇵🇷
-https://github.io`;
-
-  const waUrl = `https://wa.me{numeroCabina}?text=${encodeURIComponent(msg)}`;
-  window.open(waUrl, "_blank", "noopener");
+  const msg="¡Hola Tropical Flow Radio TV! Quiero solicitar una canción. 🎶";
+  window.open("https://api.whatsapp.com/send?text="+encodeURIComponent(msg),"_blank","noopener");
 });
+window.addEventListener("beforeunload",()=>{
+  clearInterval(flipTimer);
+  clearInterval(metadataTimer);
+});
+console.log("Tropical Flow Radio TV Pro Player: inicializado.");
 </script>
 </body>
 </html>
-
