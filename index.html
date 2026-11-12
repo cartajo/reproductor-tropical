@@ -22,6 +22,7 @@ body{
   position:relative;
   width:100%;
   max-width:400px;
+
   padding:20px;
   background:linear-gradient(145deg,rgba(20,10,42,.98),rgba(7,4,18,.98));
   border:2px solid rgba(168,85,247,.85);
@@ -611,48 +612,64 @@ audioPlayer.addEventListener("waiting",()=>{
 audioPlayer.volume=.85;
 const volumeSlider=document.getElementById("volume-slider");
 const volumeNumber=document.getElementById("volume-number");
-volumeSlider.addEventListener("input",()=>{
-  const value=Number(volumeSlider.value);
-  audioPlayer.volume=value/100;
-  volumeNumber.textContent=value+"%";
-});
+if(volumeSlider){
+  volumeSlider.addEventListener("input",()=>{
+    const value=Number(volumeSlider.value);
+    audioPlayer.volume=value/100;
+    volumeNumber.textContent=value+"%";
+  });
+}
 
-document.getElementById("share-button").addEventListener("click",async()=>{
-  const shareData={
-    title:"Tropical Flow Radio TV",
-    text:"🌴📻 ¡Escucha Tropical Flow Radio TV En Vivo 24/7! 🇵🇷",
-    url:"https://github.io"
-  };
-  try{
-    if(navigator.share) await navigator.share(shareData);
-    else{
-      const wa="https://api.whatsapp.com/send?text="+encodeURIComponent(shareData.text+" "+shareData.url);
-      window.open(wa,"_blank","noopener");
+/* =====================================================
+   COMPARTIR
+===================================================== */
+async function shareRadio() {
+  const shareUrl = window.location.href;
+  const shareText = "🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Tropical Flow Radio TV",
+        text: shareText,
+        url: shareUrl
+      });
+    } catch (error) {
+      console.log("Compartir cancelado");
     }
-  }catch(error){if(error.name!=="AbortError") console.warn("No se pudo compartir:",error);}
-});
+  } else {
+    const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(shareText + "\n" + shareUrl);
+    window.open(whatsappUrl, "_blank");
+  }
+}
 
-document.getElementById("request-button").addEventListener("click", function() {
-  const numeroCabina = "19393142657";
+/* =====================================================
+   SOLICITAR CANCIÓN
+===================================================== */
+function requestSong() {
+  const shareUrl = window.location.href;
+
   const message =
     "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n" +
     "Quiero solicitar una canción.\n\n" +
     "Canción: __________________\n" +
     "Artista: __________________\n\n" +
     "🌴 Tropical Flow Radio TV 🇵🇷\n" +
-    "https://github.io";
+    "📱 Cabina: 939-314-2657\n" +
+    shareUrl;
 
-  const waUrl = "https://whatsapp.com" + numeroCabina + "&text=" + encodeURIComponent(message);
-  window.location.href = waUrl;
-});
+  const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+  window.open(whatsappUrl, "_blank");
+}
 
+/* Conectar botones nuevos con las funciones originales */
+document.getElementById("share-button").addEventListener("click", shareRadio);
+document.getElementById("request-button").addEventListener("click", requestSong);
 
 window.addEventListener("beforeunload",()=>{
   clearInterval(flipTimer);
   clearInterval(metadataTimer);
 });
-console.log("Tropical Flow Radio TV Pro Player: inicializado.");
 </script>
 </body>
 </html>
-
