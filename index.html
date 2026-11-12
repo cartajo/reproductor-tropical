@@ -138,7 +138,13 @@ body{background:radial-gradient(circle at 50% 20%,#321064 0%,#11051f 35%,#06040d
   <div id="status-message" class="status-message">Pulsa ▶ para escuchar Tropical Flow Radio TV</div>
   <div class="footer-text">AUDIO EN VIVO • <span class="footer-brand">TROPICAL FLOW RADIO TV</span></div>
 </div>
-  const MEDIA_SLIDES = [
+
+<script>
+"use strict";
+  /* PARTE 2: CARRUSEL, RELOJ Y DATOS DE CASTER
+   Verifica que los archivos multimedia estén junto al HTML:
+   logo.png, anuncio1.jpg y promo.mp4. Respeta mayúsculas/minúsculas. */
+const MEDIA_SLIDES = [
   {type:"image",src:"logo.png",fit:"contain"},
   {type:"image",src:"anuncio1.jpg",fit:"cover"},
   {type:"video",src:"promo.mp4",fit:"cover"}
@@ -307,10 +313,8 @@ async function refreshStationInfo(){
 }
 refreshStationInfo();
 metadataTimer=setInterval(refreshStationInfo,15000);
-
-<script>
-"use strict";
-  let audioContext=null;
+  /* PARTE 3: ECUALIZADOR, PLAY/STOP Y ACCIONES */
+let audioContext=null;
 let sourceNode=null;
 let filters=[];
 let audioGraphReady=false;
