@@ -1,1696 +1,473 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090014">
-  <title>Tropical Flow Radio TV - Pro Player</title>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
-
-    body {
-      background: radial-gradient(circle at 50% 20%, #321064 0%, #11051f 35%, #06040d 80%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: white;
-    }
-
-    .cyber-player-container {
-      position: relative;
-      width: 100%;
-      max-width: 390px;
-      padding: 22px;
-      background: linear-gradient(145deg, rgba(20, 10, 42, 0.98), rgba(7, 4, 18, 0.98));
-      border: 2px solid rgba(168, 85, 247, 0.85);
-      border-radius: 30px;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.45),
-                  0 0 60px rgba(168, 85, 247, 0.18),
-                  inset 0 0 30px rgba(168, 85, 247, 0.08);
-      overflow: hidden;
-    }
-
-    .cyber-player-container::before {
-      content: "";
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      top: -90px;
-      right: -70px;
-      background: #a855f7;
-      filter: blur(90px);
-      opacity: 0.25;
-      pointer-events: none;
-    }
-
-    .cyber-player-container::after {
-      content: "";
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      bottom: -80px;
-      left: -70px;
-      background: #ec4899;
-      filter: blur(90px);
-      opacity: 0.18;
-      pointer-events: none;
-    }
-
-    .top-status-bar {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.045);
-      border: 1px solid rgba(255,255,255,0.06);
-      padding: 10px 13px;
-      border-radius: 17px;
-      margin-bottom: 16px;
-    }
-
-    .clock-title {
-      display: block;
-      font-size: 8px;
-      color: #a855f7;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .clock-num {
-      display: block;
-      font-family: monospace;
-      font-size: 15px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .badge-live {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: #030303;
-      padding: 7px 11px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .dot-signal {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ef4444;
-    }
-
-    .dot-signal.connecting {
-      background: #f59e0b;
-      box-shadow: 0 0 12px #f59e0b;
-      animation: neonPulse 0.8s infinite alternate;
-    }
-
-    .dot-signal.active {
-      background: #10b981;
-      box-shadow: 0 0 12px #10b981;
-      animation: neonPulse 0.8s infinite alternate;
-    }
-
-    .text-signal {
-      font-size: 9px;
-      font-weight: 900;
-      color: #d1d5db;
-      letter-spacing: 0.5px;
-    }
-
-    @keyframes neonPulse {
-      from { opacity: 0.35; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1.15); }
-    }
-
-    .flip-screen-container {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 185px;
-      perspective: 1000px;
-      margin-bottom: 16px;
-    }
-
-    .flip-card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
-      transform-style: preserve-3d;
-    }
-
-    .flip-card.is-flipped {
-      transform: rotateY(180deg);
-    }
-
-    .flip-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      border-radius: 17px;
-      overflow: hidden;
-      border: 2px solid rgba(168, 85, 247, 0.85);
-      box-shadow: 0 0 18px rgba(168, 85, 247, 0.45),
-                  inset 0 0 15px rgba(0, 0, 0, 0.6);
-      background: radial-gradient(circle, #1a0836 0%, #070212 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .flip-face img,
-    .flip-face video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .flip-face.banner-cover img,
-    .flip-face.banner-cover video {
-      object-fit: cover;
-    }
-
-    .flip-back {
-      transform: rotateY(180deg);
-    }
-
-    .nav-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(9, 0, 20, 0.78);
-      color: white;
-      border: 1.5px solid rgba(168, 85, 247, 0.8);
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      cursor: pointer;
-      z-index: 10;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .nav-arrow:hover {
-      background: #a855f7;
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .left-arrow { left: 8px; }
-    .right-arrow { right: 8px; }
-
-    .carousel-dots {
-      position: absolute;
-      bottom: 8px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transition: all 0.3s;
-    }
-
-    .dot.active {
-      background: #ec4899;
-      box-shadow: 0 0 8px #ec4899;
-      transform: scale(1.2);
-    }
-
-    .song-metadata-box {
-      position: relative;
-      z-index: 2;
-      background: rgba(0,0,0,0.48);
-      border: 1px solid rgba(168,85,247,0.35);
-      border-radius: 17px;
-      padding: 14px;
-      margin-bottom: 13px;
-      min-height: 72px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .song-title-label {
-      font-size: 9px;
-      color: #ec4899;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1.3px;
-      margin-bottom: 6px;
-    }
-
-    .song-now-playing {
-      font-size: 13px;
-      color: white;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-height: 18px;
-    }
-
-    .song-now-playing.playing {
-      text-shadow: 0 0 10px rgba(236,72,153,0.9);
-      animation: songGlow 2s infinite alternate;
-    }
-
-    @keyframes songGlow {
-      from { opacity: 0.8; }
-      to { opacity: 1; }
-    }
-
-    .stats-row {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-bottom: 13px;
-    }
-
-    .stat-box {
-      background: rgba(255,255,255,0.035);
-      border: 1px solid rgba(168,85,247,0.2);
-      border-radius: 14px;
-      padding: 9px;
-      text-align: center;
-    }
-
-    .stat-label {
-      display: block;
-      color: #8f8a9d;
-      font-size: 8px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-    }
-
-    .stat-value {
-      display: block;
-      margin-top: 3px;
-      color: white;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .live-listener-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: #10b981;
-      border-radius: 50%;
-      margin-right: 4px;
-      box-shadow: 0 0 8px #10b981;
-    }
-
-    .wave-equalizer {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      height: 48px;
-      padding: 0 13px;
-      margin-bottom: 18px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
-    }
-
-    .wave-bar {
-      width: 4px;
-      height: 10%;
-      background: #2e1a4d;
-      border-radius: 4px 4px 0 0;
-    }
-
-    .wave-equalizer.playing .wave-bar {
-      animation: proBounce 0.7s ease-in-out infinite alternate;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(even) {
-      background: #ec4899;
-      animation-duration: 0.5s;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(3n) {
-      background: #a855f7;
-      animation-duration: 0.9s;
-    }
-
-    .wave-equalizer .wave-bar:nth-child(5n) {
-      background: #3b82f6;
-      animation-duration: 0.6s;
-    }
-
-    @keyframes proBounce {
-      0% { height: 15%; }
-      100% { height: 95%; }
-    }
-
-    .control-center {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-
-    .cyber-play-btn {
-      width: 82px;
-      height: 82px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(168,85,247,0.55),
-                  0 0 35px rgba(99,102,241,0.25);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .cyber-play-btn:hover {
-      transform: scale(1.06);
-      box-shadow: 0 10px 35px rgba(168,85,247,0.8),
-                  0 0 45px rgba(99,102,241,0.35);
-    }
-
-    .cyber-play-btn:active {
-      transform: scale(0.94);
-    }
-
-    .cyber-play-btn svg {
-      width: 33px;
-      height: 33px;
-      fill: white;
-    }
-
-    .volume-section {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 16px;
-      padding: 9px 11px;
-      background: rgba(255,255,255,0.035);
-      border-radius: 13px;
-      border: 1px solid rgba(168,85,247,0.18);
-    }
-
-    .volume-icon { font-size: 15px; }
-
-    .volume-slider {
-      flex: 1;
-      height: 4px;
-      accent-color: #a855f7;
-      cursor: pointer;
-    }
-
-    .volume-number {
-      width: 35px;
-      text-align: right;
-      color: #c4b5fd;
-      font-size: 9px;
-      font-weight: 800;
-    }
-
-    /* =====================================
-       ECUALIZADOR REAL DE 5 BANDAS
-       ===================================== */
-
-    .real-eq-panel {
-      position: relative;
-      z-index: 2;
-      background: linear-gradient(145deg, rgba(20, 8, 40, 0.95), rgba(5, 3, 15, 0.95));
-      border: 1px solid rgba(168, 85, 247, 0.45);
-      border-radius: 17px;
-      padding: 13px 11px;
-      margin-bottom: 16px;
-      box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.08),
-                  0 0 12px rgba(168, 85, 247, 0.08);
-    }
-
-    .real-eq-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 13px;
-    }
-
-    .real-eq-title {
-      color: #e9d5ff;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .real-eq-badge {
-      color: #10b981;
-      font-size: 8px;
-      font-weight: 900;
-      letter-spacing: 0.7px;
-      border: 1px solid rgba(16,185,129,0.35);
-      border-radius: 20px;
-      padding: 4px 7px;
-      background: rgba(16,185,129,0.08);
-    }
-
-    .eq-bands {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 5px;
-    }
-
-    .eq-band {
-      min-width: 0;
-      text-align: center;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(168,85,247,0.13);
-      border-radius: 10px;
-      padding: 8px 3px;
-    }
-
-    .eq-band-name {
-      display: block;
-      min-height: 19px;
-      color: #c4b5fd;
-      font-size: 8px;
-      font-weight: 800;
-    }
-
-    .eq-band-frequency {
-      display: block;
-      color: #ec4899;
-      font-size: 9px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .eq-slider {
-      appearance: slider-vertical;
-      -webkit-appearance: slider-vertical;
-      writing-mode: vertical-lr;
-      direction: rtl;
-      width: 22px;
-      height: 88px;
-      accent-color: #c084fc;
-      cursor: pointer;
-      margin: 0 auto;
-      touch-action: pan-x;
-    }
-
-    .eq-band-value {
-      display: block;
-      color: white;
-      font-family: monospace;
-      font-size: 9px;
-      font-weight: 900;
-      margin-top: 7px;
-    }
-
-    .eq-scale {
-      display: flex;
-      justify-content: space-between;
-      color: #777181;
-      font-size: 7px;
-      margin: 9px 3px 0;
-    }
-
-    .eq-reset-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .eq-description {
-      color: #8f8a9d;
-      font-size: 8px;
-    }
-
-    .eq-reset-btn {
-      border: 1px solid rgba(236,72,153,0.55);
-      background: rgba(236,72,153,0.10);
-      color: #f9a8d4;
-      border-radius: 9px;
-      padding: 7px 13px;
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 0.6px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .eq-reset-btn:hover {
-      background: rgba(236,72,153,0.25);
-      box-shadow: 0 0 12px rgba(236,72,153,0.25);
-    }
-
-    .action-grid {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-bottom: 16px;
-    }
-
-    .action-btn {
-      border: 1px solid rgba(168,85,247,0.25);
-      background: rgba(255,255,255,0.035);
-      color: white;
-      border-radius: 13px;
-      padding: 11px 8px;
-      cursor: pointer;
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 0.3px;
-      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .action-btn:hover {
-      background: rgba(168,85,247,0.15);
-      border-color: rgba(168,85,247,0.6);
-      transform: translateY(-2px);
-    }
-
-    .action-btn span {
-      display: block;
-      font-size: 17px;
-      margin-bottom: 4px;
-    }
-
-    .history-panel {
-      position: relative;
-      z-index: 2;
-      margin-top: 3px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(168,85,247,0.2);
-      border-radius: 15px;
-      padding: 11px;
-      text-align: left;
-    }
-
-    .history-title {
-      color: #c084fc;
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      margin-bottom: 7px;
-    }
-
-    .history-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .history-list li {
-      font-size: 9px;
-      color: #aaa4b8;
-      padding: 5px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .history-list li:last-child {
-      border-bottom: none;
-    }
-
-    .footer-text {
-      position: relative;
-      z-index: 2;
-      margin-top: 15px;
-      text-align: center;
-      font-size: 8px;
-      color: #777181;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .footer-brand {
-      color: #a855f7;
-      font-weight: 900;
-    }
-
-    .status-message {
-      position: relative;
-      z-index: 2;
-      min-height: 15px;
-      margin-top: 5px;
-      text-align: center;
-      color: #777181;
-      font-size: 8px;
-    }
-
-    @media (max-width: 380px) {
-      .cyber-player-container {
-        padding: 18px;
-        border-radius: 25px;
-      }
-
-      .flip-screen-container { height: 170px; }
-
-      .cyber-play-btn {
-        width: 76px;
-        height: 76px;
-      }
-
-      .eq-band-name { font-size: 7px; }
-      .eq-band-frequency { font-size: 8px; }
-      .eq-slider { height: 78px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090014">
+<title>Tropical Flow Radio TV - Pro Player</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%}
+body{background:radial-gradient(circle at 50% 20%,#321064 0%,#11051f 35%,#06040d 80%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px;font-family:"Segoe UI",Arial,sans-serif;color:#fff}
+.cyber-player-container{position:relative;width:100%;max-width:390px;padding:22px;background:linear-gradient(145deg,rgba(20,10,42,.98),rgba(7,4,18,.98));border:2px solid rgba(168,85,247,.85);border-radius:30px;box-shadow:0 0 20px rgba(168,85,247,.45),0 0 60px rgba(168,85,247,.18),inset 0 0 30px rgba(168,85,247,.08);overflow:hidden}
+.cyber-player-container:before,.cyber-player-container:after{content:"";position:absolute;pointer-events:none;filter:blur(90px);opacity:.22}
+.cyber-player-container:before{width:180px;height:180px;top:-90px;right:-70px;background:#a855f7}
+.cyber-player-container:after{width:150px;height:150px;bottom:-80px;left:-70px;background:#ec4899}
+.top-status-bar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.06);padding:10px 13px;border-radius:17px;margin-bottom:16px}
+.clock-title{display:block;font-size:8px;color:#a855f7;font-weight:900;letter-spacing:1px}
+.clock-num{display:block;font-family:monospace;font-size:15px;font-weight:bold;color:#fff}
+.badge-live{display:flex;align-items:center;gap:7px;background:#030303;padding:7px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.05)}
+.dot-signal{width:8px;height:8px;border-radius:50%;background:#ef4444}
+.dot-signal.connecting{background:#f59e0b;box-shadow:0 0 12px #f59e0b;animation:neonPulse .8s infinite alternate}
+.dot-signal.active{background:#10b981;box-shadow:0 0 12px #10b981;animation:neonPulse .8s infinite alternate}
+.dot-signal.error{background:#ef4444;box-shadow:0 0 10px #ef4444}
+.text-signal{font-size:9px;font-weight:900;color:#d1d5db;letter-spacing:.5px}
+@keyframes neonPulse{from{opacity:.35;transform:scale(.8)}to{opacity:1;transform:scale(1.15)}}
+.flip-screen-container{position:relative;z-index:2;width:100%;height:185px;perspective:1000px;margin-bottom:16px}
+.flip-card{width:100%;height:100%;position:relative;transition:transform .85s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip-card.is-flipped{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:17px;overflow:hidden;border:2px solid rgba(168,85,247,.85);box-shadow:0 0 18px rgba(168,85,247,.45),inset 0 0 15px rgba(0,0,0,.6);background:radial-gradient(circle,#1a0836 0%,#070212 100%);display:flex;justify-content:center;align-items:center}
+.flip-face img,.flip-face video{width:100%;height:100%;object-fit:contain;display:block}
+.flip-face.banner-cover img,.flip-face.banner-cover video{object-fit:cover}
+.flip-back{transform:rotateY(180deg)}
+.logo-fallback{padding:15px;text-align:center;color:#fff;font-weight:900;letter-spacing:1px;text-shadow:0 0 12px #a855f7}
+.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(9,0,20,.78);color:#fff;border:1.5px solid rgba(168,85,247,.8);border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;font-size:13px;display:flex;align-items:center;justify-content:center}
+.nav-arrow:hover{background:#a855f7}
+.left-arrow{left:8px}.right-arrow{right:8px}
+.carousel-dots{position:absolute;bottom:8px;width:100%;display:flex;justify-content:center;gap:6px;z-index:10}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:all .3s;cursor:pointer}
+.dot.active{background:#ec4899;box-shadow:0 0 8px #ec4899;transform:scale(1.2)}
+.song-metadata-box{position:relative;z-index:2;background:rgba(0,0,0,.48);border:1px solid rgba(168,85,247,.35);border-radius:17px;padding:14px;margin-bottom:13px;min-height:72px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.song-title-label{font-size:9px;color:#ec4899;font-weight:900;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:6px}
+.song-now-playing{font-size:13px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:18px}
+.song-now-playing.playing{text-shadow:0 0 10px rgba(236,72,153,.9);animation:songGlow 2s infinite alternate}
+@keyframes songGlow{from{opacity:.8}to{opacity:1}}
+.stats-row{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.stat-box{background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:9px;text-align:center}
+.stat-label{display:block;color:#8f8a9d;font-size:8px;font-weight:800;letter-spacing:.8px}
+.stat-value{display:block;margin-top:3px;color:#fff;font-size:12px;font-weight:900}
+.wave-equalizer{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;height:48px;padding:0 13px;margin-bottom:18px;background:rgba(0,0,0,.4);border-radius:15px;overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.7)}
+.wave-bar{width:4px;height:10%;background:#2e1a4d;border-radius:4px 4px 0 0}
+.wave-equalizer.playing .wave-bar{animation:proBounce .7s ease-in-out infinite alternate}
+.wave-equalizer .wave-bar:nth-child(even){background:#ec4899;animation-duration:.5s}
+.wave-equalizer .wave-bar:nth-child(3n){background:#a855f7;animation-duration:.9s}
+.wave-equalizer .wave-bar:nth-child(5n){background:#3b82f6;animation-duration:.6s}
+@keyframes proBounce{0%{height:15%}100%{height:95%}}
+.control-center{position:relative;z-index:2;display:flex;justify-content:center;margin-bottom:15px}
+.cyber-play-btn{width:82px;height:82px;border-radius:50%;border:0;background:linear-gradient(135deg,#a855f7,#6366f1);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 25px rgba(168,85,247,.55),0 0 35px rgba(99,102,241,.25);color:#fff;font-size:30px}
+.cyber-play-btn:hover{transform:scale(1.05)}
+.volume-section{position:relative;z-index:2;display:flex;align-items:center;gap:9px;margin-bottom:16px;padding:9px 11px;background:rgba(255,255,255,.035);border-radius:13px;border:1px solid rgba(168,85,247,.18)}
+.volume-icon{font-size:15px}.volume-slider{flex:1;height:4px;accent-color:#a855f7;cursor:pointer}.volume-number{width:35px;text-align:right;color:#c4b5fd;font-size:9px;font-weight:800}
+.real-eq-panel{position:relative;z-index:2;background:linear-gradient(145deg,rgba(20,8,40,.95),rgba(5,3,15,.95));border:1px solid rgba(168,85,247,.45);border-radius:17px;padding:13px 11px;margin-bottom:16px;box-shadow:inset 0 0 15px rgba(168,85,247,.08)}
+.real-eq-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
+.real-eq-title{color:#e9d5ff;font-size:10px;font-weight:900;letter-spacing:1px}
+.real-eq-badge{color:#10b981;font-size:8px;font-weight:900;border:1px solid rgba(16,185,129,.35);border-radius:20px;padding:4px 7px;background:rgba(16,185,129,.08)}
+.eq-bands{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.eq-band{min-width:0;text-align:center;background:rgba(255,255,255,.025);border:1px solid rgba(168,85,247,.13);border-radius:10px;padding:8px 3px}
+.eq-band-name{display:block;min-height:19px;color:#c4b5fd;font-size:8px;font-weight:800}
+.eq-band-frequency{display:block;color:#ec4899;font-size:9px;font-weight:900;margin-bottom:8px}
+.eq-slider{appearance:slider-vertical;-webkit-appearance:slider-vertical;writing-mode:vertical-lr;direction:rtl;width:22px;height:88px;accent-color:#c084fc;cursor:pointer;margin:0 auto;touch-action:pan-x}
+.eq-band-value{display:block;color:#fff;font-family:monospace;font-size:9px;font-weight:900;margin-top:7px}
+.eq-scale{display:flex;justify-content:space-between;color:#777181;font-size:7px;margin:9px 3px 0}
+.eq-reset-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+.eq-description{color:#8f8a9d;font-size:8px}
+.eq-reset-btn{border:1px solid rgba(236,72,153,.55);background:rgba(236,72,153,.1);color:#f9a8d4;border-radius:9px;padding:7px 13px;font-size:9px;font-weight:900;cursor:pointer}
+.action-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
+.action-btn{border:1px solid rgba(168,85,247,.25);background:rgba(255,255,255,.035);color:#fff;border-radius:13px;padding:11px 8px;cursor:pointer;font-size:9px;font-weight:900}
+.action-btn span{display:block;font-size:17px;margin-bottom:4px}
+.history-panel{position:relative;z-index:2;margin-top:3px;background:rgba(0,0,0,.35);border:1px solid rgba(168,85,247,.2);border-radius:15px;padding:11px;text-align:left}
+.history-title{color:#c084fc;font-size:9px;font-weight:900;letter-spacing:1px;margin-bottom:7px}
+.history-list{list-style:none;margin:0;padding:0}
+.history-list li{font-size:9px;color:#aaa4b8;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.footer-text{position:relative;z-index:2;margin-top:15px;text-align:center;font-size:8px;color:#777181;letter-spacing:1px}
+.footer-brand{color:#a855f7;font-weight:900}
+.status-message{position:relative;z-index:2;min-height:15px;margin-top:5px;text-align:center;color:#aaa4b8;font-size:8px}
+@media(max-width:380px){.cyber-player-container{padding:18px;border-radius:25px}.flip-screen-container{height:170px}.cyber-play-btn{width:76px;height:76px}.eq-band-name{font-size:7px}.eq-band-frequency{font-size:8px}.eq-slider{height:78px}}
+</style>
 </head>
-
 <body>
-
-  <div class="cyber-player-container">
-
-    <div class="top-status-bar">
-      <div>
-        <span class="clock-title">ESTACIÓN ACTIVA</span>
-        <span id="player-clock" class="clock-num">00:00:00</span>
-      </div>
-
-      <div class="badge-live">
-        <div id="signal-dot" class="dot-signal"></div>
-        <span id="signal-text" class="text-signal">OFFLINE</span>
-      </div>
-    </div>
-
-    <div class="flip-screen-container">
-      <div class="flip-card" id="promoFlipCard">
-        <div class="flip-face flip-front" id="flipFront"></div>
-        <div class="flip-face flip-back" id="flipBack"></div>
-      </div>
-
-      <button class="nav-arrow left-arrow"
-              onclick="cambiarSlide(-1)"
-              aria-label="Anterior">&#10094;</button>
-
-      <button class="nav-arrow right-arrow"
-              onclick="cambiarSlide(1)"
-              aria-label="Siguiente">&#10095;</button>
-
-      <div class="carousel-dots" id="carouselDots"></div>
-    </div>
-
-    <div class="song-metadata-box">
-      <span class="song-title-label">🎵 SONANDO AHORA</span>
-      <div id="current-track-name" class="song-now-playing">
-        Tropical Flow Radio TV
-      </div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-box">
-        <span class="stat-label">AUDIENCIA</span>
-        <span id="listener-count" class="stat-value">
-          <span class="live-listener-dot"></span>En vivo
-        </span>
-      </div>
-
-      <div class="stat-box">
-        <span class="stat-label">CALIDAD</span>
-        <span id="quality-status" class="stat-value">HD AUDIO</span>
-      </div>
-    </div>
-
-    <div id="player-eq" class="wave-equalizer">
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div><div class="wave-bar"></div>
-      <div class="wave-bar"></div>
-    </div>
-
-    <audio id="core-audio" preload="none"></audio>
-
-    <div class="control-center">
-      <button id="master-btn"
-              class="cyber-play-btn"
-              onclick="startCyberStream()"
-              aria-label="Reproducir Tropical Flow Radio">
-
-        <svg id="icon-svg" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-
-      </button>
-    </div>
-
-    <div class="volume-section">
-      <span class="volume-icon">🔊</span>
-
-      <input id="volume-slider"
-             class="volume-slider"
-             type="range"
-             min="0"
-             max="1"
-             step="0.01"
-             value="0.85">
-
-      <span id="volume-number" class="volume-number">85%</span>
-    </div>
-
-    <!-- ECUALIZADOR REAL DE 5 BANDAS -->
-
-    <div class="real-eq-panel">
-
-      <div class="real-eq-heading">
-        <span class="real-eq-title">🎚️ PRO AUDIO EQUALIZER</span>
-        <span class="real-eq-badge">5 BANDAS</span>
-      </div>
-
-      <div class="eq-bands">
-
-        <div class="eq-band">
-          <span class="eq-band-name">GRAVES</span>
-          <span class="eq-band-frequency">60 Hz</span>
-          <input class="eq-slider"
-                 id="eq-60"
-                 type="range"
-                 min="-12"
-                 max="12"
-                 step="0.5"
-                 value="0">
-          <span class="eq-band-value" id="eq-value-60">0 dB</span>
-        </div>
-
-        <div class="eq-band">
-          <span class="eq-band-name">CUERPO</span>
-          <span class="eq-band-frequency">250 Hz</span>
-          <input class="eq-slider"
-                 id="eq-250"
-                 type="range"
-                 min="-12"
-                 max="12"
-                 step="0.5"
-                 value="0">
-          <span class="eq-band-value" id="eq-value-250">0 dB</span>
-        </div>
-
-        <div class="eq-band">
-          <span class="eq-band-name">MEDIOS</span>
-          <span class="eq-band-frequency">1 kHz</span>
-          <input class="eq-slider"
-                 id="eq-1000"
-                 type="range"
-                 min="-12"
-                 max="12"
-                 step="0.5"
-                 value="0">
-          <span class="eq-band-value" id="eq-value-1000">0 dB</span>
-        </div>
-
-        <div class="eq-band">
-          <span class="eq-band-name">VOCES</span>
-          <span class="eq-band-frequency">4 kHz</span>
-          <input class="eq-slider"
-                 id="eq-4000"
-                 type="range"
-                 min="-12"
-                 max="12"
-                 step="0.5"
-                 value="0">
-          <span class="eq-band-value" id="eq-value-4000">0 dB</span>
-        </div>
-
-        <div class="eq-band">
-          <span class="eq-band-name">BRILLO</span>
-          <span class="eq-band-frequency">12 kHz</span>
-          <input class="eq-slider"
-                 id="eq-12000"
-                 type="range"
-                 min="-12"
-                 max="12"
-                 step="0.5"
-                 value="0">
-          <span class="eq-band-value" id="eq-value-12000">0 dB</span>
-        </div>
-
-      </div>
-
-      <div class="eq-scale">
-        <span>+12 dB</span>
-        <span>0 dB</span>
-        <span>-12 dB</span>
-      </div>
-
-      <div class="eq-reset-row">
-        <span class="eq-description">Ajuste independiente de cada banda</span>
-        <button class="eq-reset-btn"
-                id="eq-reset"
-                type="button">
-          ↺ RESET
-        </button>
-      </div>
-
-    </div>
-        <div class="action-grid">
-      <button class="action-btn" onclick="shareRadio()">
-        <span>📲</span> COMPARTIR
-      </button>
-      <button class="action-btn" onclick="requestSong()">
-        <span>🎤</span> SOLICITA TU CANCIÓN
-      </button>
-    </div>
-
-    <div class="history-panel">
-      <div class="history-title">⏮️ ÚLTIMAS CANCIONES</div>
-      <ul id="history-list" class="history-list">
-        <li>Esperando información de la emisora...</li>
-      </ul>
-    </div>
-
-    <div id="status-message" class="status-message">
-      Pulsa ▶ para escuchar Tropical Flow Radio TV
-    </div>
-
-    <div class="footer-text">
-      AUDIO EN VIVO •
-      <span class="footer-brand">TROPICAL FLOW RADIO TV</span>
-    </div>
+<div class="cyber-player-container">
+  <div class="top-status-bar">
+    <div><span class="clock-title">ESTACIÓN ACTIVA · HORA DE PUERTO RICO</span><span id="player-clock" class="clock-num">00:00:00</span></div>
+    <div class="badge-live"><div id="signal-dot" class="dot-signal"></div><span id="signal-text" class="text-signal">OFFLINE</span></div>
   </div>
 
-  <script>
-    /* ==========================================
-       CARRUSEL GIRATORIO
-    ========================================== */
-
-    const MEDIA_SLIDES = [
-      { type: "image", src: "logo.png", fit: "contain" },
-      { type: "image", src: "anuncio1.jpg", fit: "cover" },
-      { type: "video", src: "promo.mp4", fit: "cover" }
-    ];
-
-    const TIEMPO_ROTACION = 7000;
-
-    let currentSlide = 0;
-    let isFlipped = false;
-    let flipTimer = null;
-
-    const flipCard = document.getElementById("promoFlipCard");
-    const flipFront = document.getElementById("flipFront");
-    const flipBack = document.getElementById("flipBack");
-    const dotsContainer = document.getElementById("carouselDots");
-
-    function crearContenidoMedia(item) {
-      if (!item) return "";
-
-      if (item.type === "video") {
-        return `
-          <video
-            src="${item.src}"
-            autoplay
-            muted
-            loop
-            playsinline
-            style="width:100%;height:100%;object-fit:${item.fit || "cover"};"
-          ></video>
-        `;
-      }
-
-      return `
-        <img
-          src="${item.src}"
-          alt="Tropical Flow Radio TV"
-          style="width:100%;height:100%;object-fit:${item.fit || "cover"};"
-        >
-      `;
-    }
-
-    function aplicarAjusteCara(elemento, item) {
-      elemento.innerHTML = crearContenidoMedia(item);
-    }
-
-    function actualizarDots() {
-      if (!dotsContainer) return;
-
-      dotsContainer.innerHTML = "";
-
-      MEDIA_SLIDES.forEach((item, index) => {
-        const dot = document.createElement("span");
-        dot.className = index === currentSlide ? "dot active" : "dot";
-
-        dot.addEventListener("click", () => {
-          currentSlide = index;
-          cambiarSlide();
-          reiniciarTemporizador();
-        });
-
-        dotsContainer.appendChild(dot);
-      });
-    }
-
-    function iniciarPantalla() {
-      if (!MEDIA_SLIDES.length) return;
-
-      currentSlide = 0;
-      isFlipped = false;
-
-      aplicarAjusteCara(flipFront, MEDIA_SLIDES[currentSlide]);
-
-      if (flipBack) {
-        flipBack.innerHTML = "";
-      }
-
-      actualizarDots();
-      reiniciarTemporizador();
-    }
-
-    function cambiarSlide() {
-      if (!MEDIA_SLIDES.length) return;
-
-      currentSlide = (currentSlide + 1) % MEDIA_SLIDES.length;
-
-      if (isFlipped) {
-        aplicarAjusteCara(flipFront, MEDIA_SLIDES[currentSlide]);
-      } else {
-        aplicarAjusteCara(flipFront, MEDIA_SLIDES[currentSlide]);
-      }
-
-      actualizarDots();
-    }
-
-    function reiniciarTemporizador() {
-      clearInterval(flipTimer);
-
-      flipTimer = setInterval(() => {
-        cambiarSlide();
-      }, TIEMPO_ROTACION);
-    }
-
-    iniciarPantalla();
-
-
-    /* ==========================================
-       RELOJ DE PUERTO RICO
-    ========================================== */
-
-    function initClock() {
-      const clock = document.getElementById("digital-clock");
-
-      if (!clock) return;
-
-      function actualizarReloj() {
-        const ahora = new Date();
-
-        clock.textContent = ahora.toLocaleTimeString("es-PR", {
-          timeZone: "America/Puerto_Rico",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true
-        });
-      }
-
-      actualizarReloj();
-      setInterval(actualizarReloj, 1000);
-    }
-
-    initClock();
-
-
-    /* ==========================================
-       CONEXIÓN CASTER.FM
-    ========================================== */
-
-    const audioPlayer = document.getElementById("core-audio");
-    const iconSvg = document.getElementById("icon-svg");
-    const signalDot = document.getElementById("signal-dot");
-    const signalText = document.getElementById("signal-text");
-    const trackNameContainer = document.getElementById("current-track-name");
-    const listenerCount = document.getElementById("listener-count");
-    const qualityStatus = document.getElementById("quality-status");
-    const eq = document.getElementById("player-eq");
-    const statusMessage = document.getElementById("status-message");
-    const volumeSlider = document.getElementById("volume-slider");
-    const volumeNumber = document.getElementById("volume-number");
-    const historyList = document.getElementById("history-list");
-
-    const CASTER_HOST = "sapircast.caster.fm";
-    const CASTER_PORT = "16693";
-    const STREAM_MOUNT = "/kidAJ";
-
-    const STATS_URL =
-      "https://" + CASTER_HOST + ":" + CASTER_PORT +
-      "/admin/publicstats.json";
-
-    let metadataInterval = null;
-    let songHistory = [];
-
-    audioPlayer.volume = 0.85;
-
-    /* ==========================================
-       VOLUMEN
-    ========================================== */
-
-    if (volumeSlider) {
-      volumeSlider.value = 85;
-    }
-
-    if (volumeNumber) {
-      volumeNumber.textContent = "85%";
-    }
-
-    if (volumeSlider) {
-      volumeSlider.addEventListener("input", function () {
-        const value = Number(this.value);
-
-        audioPlayer.volume = value / 100;
-
-        if (volumeNumber) {
-          volumeNumber.textContent = value + "%";
-        }
-      });
-    }
-
-
-    /* ==========================================
-       DATOS DE CASTER
-    ========================================== */
-
-    async function obtenerDatosCaster() {
-      try {
-        const response = await fetch(STATS_URL, {
-          cache: "no-store"
-        });
-
-        if (!response.ok) {
-          throw new Error("No se pudieron obtener estadísticas");
-        }
-
-        const data = await response.json();
-
-        let source = null;
-
-        if (data.source) {
-          source = data.source;
-        } else if (Array.isArray(data.sources)) {
-          source = data.sources.find(item =>
-            String(item.mount || item.listenurl || "")
-              .includes(STREAM_MOUNT)
-          );
-        }
-
-        return {
-          data: data,
-          source: source
-        };
-
-      } catch (error) {
-        console.warn("Caster stats:", error);
-        return {
-          data: null,
-          source: null
-        };
-      }
-    }
-
-
-    /* ==========================================
-       URL DEL AUDIO
-    ========================================== */
-
-    function obtenerUrlAudio(source) {
-      let streamUrl = "";
-
-      if (source) {
-        streamUrl =
-          source.listenurl ||
-          source.listen_url ||
-          "";
-      }
-
-      if (!streamUrl) {
-        streamUrl =
-          "https://" + CASTER_HOST + ":" +
-          CASTER_PORT + STREAM_MOUNT;
-      }
-
-      if (streamUrl.startsWith("http://")) {
-        streamUrl = streamUrl.replace("http://", "https://");
-      }
-
-      return streamUrl;
-    }
-
-
-    /* ==========================================
-       ACTUALIZAR NOMBRE DE CANCIÓN
-    ========================================== */
-
-    async function updateTrackName() {
-      const result = await obtenerDatosCaster();
-      const source = result.source;
-
-      try {
-        if (source) {
-          const metadata = source.metadata || {};
-
-          const title =
-            metadata.x_icy_title ||
-            metadata.title ||
-            source.title ||
-            "";
-
-          if (title && title !== trackNameContainer.textContent) {
-            trackNameContainer.textContent = title;
-            addToHistory(title);
-          } else if (!title) {
-            trackNameContainer.textContent =
-              "Tropical Flow Radio TV";
-          }
-
-          const listeners =
-            source.listeners ||
-            source.listener_count ||
-            source.connections ||
-            source.currentlisteners ||
-            0;
-
-          listenerCount.textContent = listeners;
-
-          qualityStatus.textContent =
-            source.bitrate
-              ? source.bitrate + " kbps"
-              : "HD AUDIO";
-
-        } else {
-          trackNameContainer.textContent =
-            "Tropical Flow Radio TV";
-
-          qualityStatus.textContent = "HD AUDIO";
-        }
-
-      } catch (error) {
-        console.warn("Error actualizando información:", error);
+  <div class="flip-screen-container">
+    <div class="flip-card" id="promoFlipCard">
+      <div class="flip-face flip-front" id="flipFront"></div>
+      <div class="flip-face flip-back" id="flipBack"></div>
+    </div>
+    <button class="nav-arrow left-arrow" id="prev-slide" aria-label="Anterior">&#10094;</button>
+    <button class="nav-arrow right-arrow" id="next-slide" aria-label="Siguiente">&#10095;</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+
+  <div class="song-metadata-box"><span class="song-title-label">🎵 SONANDO AHORA</span><div id="current-track-name" class="song-now-playing">Tropical Flow Radio TV</div></div>
+  <div class="stats-row">
+    <div class="stat-box"><span class="stat-label">AUDIENCIA</span><span id="listener-count" class="stat-value">Consultando…</span></div>
+    <div class="stat-box"><span class="stat-label">CALIDAD</span><span id="quality-status" class="stat-value">HD AUDIO</span></div>
+  </div>
+  <div id="player-eq" class="wave-equalizer">
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+  </div>
+
+  <audio id="core-audio" preload="none"></audio>
+  <div class="control-center"><button id="master-btn" class="cyber-play-btn" aria-label="Reproducir o detener" type="button"><span id="icon-svg">▶</span></button></div>
+  <div class="volume-section"><span class="volume-icon">🔊</span><input id="volume-slider" class="volume-slider" type="range" min="0" max="100" step="1" value="85"><span id="volume-number" class="volume-number">85%</span></div>
+
+  <div class="real-eq-panel">
+    <div class="real-eq-heading"><span class="real-eq-title">🎚️ PRO AUDIO EQUALIZER</span><span class="real-eq-badge">5 BANDAS</span></div>
+    <div class="eq-bands">
+      <div class="eq-band"><span class="eq-band-name">GRAVES</span><span class="eq-band-frequency">60 Hz</span><input class="eq-slider" id="eq-60" type="range" min="-12" max="12" step=".5" value="0"><span class="eq-band-value" id="eq-value-60">0 dB</span></div>
+      <div class="eq-band"><span class="eq-band-name">CUERPO</span><span class="eq-band-frequency">250 Hz</span><input class="eq-slider" id="eq-250" type="range" min="-12" max="12" step=".5" value="0"><span class="eq-band-value" id="eq-value-250">0 dB</span></div>
+      <div class="eq-band"><span class="eq-band-name">MEDIOS</span><span class="eq-band-frequency">1 kHz</span><input class="eq-slider" id="eq-1000" type="range" min="-12" max="12" step=".5" value="0"><span class="eq-band-value" id="eq-value-1000">0 dB</span></div>
+      <div class="eq-band"><span class="eq-band-name">VOCES</span><span class="eq-band-frequency">4 kHz</span><input class="eq-slider" id="eq-4000" type="range" min="-12" max="12" step=".5" value="0"><span class="eq-band-value" id="eq-value-4000">0 dB</span></div>
+      <div class="eq-band"><span class="eq-band-name">BRILLO</span><span class="eq-band-frequency">12 kHz</span><input class="eq-slider" id="eq-12000" type="range" min="-12" max="12" step=".5" value="0"><span class="eq-band-value" id="eq-value-12000">0 dB</span></div>
+    </div>
+    <div class="eq-scale"><span>+12 dB</span><span>0 dB</span><span>-12 dB</span></div>
+    <div class="eq-reset-row"><span class="eq-description">Ajuste independiente de cada banda</span><button class="eq-reset-btn" id="eq-reset" type="button">↺ RESET</button></div>
+  </div>
+
+  <div class="action-grid">
+    <button class="action-btn" id="share-button" type="button"><span>📲</span>COMPARTIR</button>
+    <button class="action-btn" id="request-button" type="button"><span>🎤</span>SOLICITA TU CANCIÓN</button>
+  </div>
+  <div class="history-panel"><div class="history-title">⏮️ ÚLTIMAS CANCIONES</div><ul id="history-list" class="history-list"><li>Esperando información de la emisora…</li></ul></div>
+  <div id="status-message" class="status-message">Pulsa ▶ para escuchar Tropical Flow Radio TV</div>
+  <div class="footer-text">AUDIO EN VIVO • <span class="footer-brand">TROPICAL FLOW RADIO TV</span></div>
+</div>
+  const MEDIA_SLIDES = [
+  {type:"image",src:"logo.png",fit:"contain"},
+  {type:"image",src:"anuncio1.jpg",fit:"cover"},
+  {type:"video",src:"promo.mp4",fit:"cover"}
+];
+const ROTATION_MS = 7000;
+const flipCard = document.getElementById("promoFlipCard");
+const flipFront = document.getElementById("flipFront");
+const flipBack = document.getElementById("flipBack");
+const dotsContainer = document.getElementById("carouselDots");
+let currentSlide = 0;
+let showingBack = false;
+let flipTimer = null;
+let slideBusy = false;
+
+function makeMedia(item){
+  if(!item) return '<div class="logo-fallback">TROPICAL FLOW<br>RADIO TV</div>';
+  if(item.type === "video"){
+    return `<video src="${item.src}" autoplay muted loop playsinline style="object-fit:${item.fit||"cover"}"></video>`;
+  }
+  return `<img src="${item.src}" alt="Tropical Flow Radio TV" style="object-fit:${item.fit||"contain"}" onerror="this.outerHTML='<div class=&quot;logo-fallback&quot;>TROPICAL FLOW<br>RADIO TV</div>'">`;
+}
+function pauseFaceMedia(face){
+  const video = face.querySelector("video");
+  if(video){video.pause();video.removeAttribute("src");video.load();}
+}
+function renderDots(){
+  dotsContainer.innerHTML="";
+  MEDIA_SLIDES.forEach((_,i)=>{
+    const dot=document.createElement("span");
+    dot.className="dot"+(i===currentSlide?" active":"");
+    dot.setAttribute("role","button");
+    dot.setAttribute("aria-label","Mostrar anuncio "+(i+1));
+    dot.addEventListener("click",()=>goToSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+}
+function renderInitialSlide(){
+  flipCard.classList.remove("is-flipped");
+  showingBack=false;
+  flipFront.innerHTML=makeMedia(MEDIA_SLIDES[currentSlide]);
+  flipBack.innerHTML="";
+  renderDots();
+  playVisibleVideo();
+}
+function playVisibleVideo(){
+  const face=showingBack?flipBack:flipFront;
+  const video=face.querySelector("video");
+  if(video) video.play().catch(()=>{});
+}
+function goToSlide(index){
+  if(!MEDIA_SLIDES.length || slideBusy) return;
+  currentSlide=(index+MEDIA_SLIDES.length)%MEDIA_SLIDES.length;
+  const nextFace=showingBack?flipFront:flipBack;
+  const oldFace=showingBack?flipBack:flipFront;
+  pauseFaceMedia(nextFace);
+  nextFace.innerHTML=makeMedia(MEDIA_SLIDES[currentSlide]);
+  flipCard.classList.toggle("is-flipped",!showingBack);
+  showingBack=!showingBack;
+  slideBusy=true;
+  renderDots();
+  setTimeout(()=>{
+    pauseFaceMedia(oldFace);
+    slideBusy=false;
+    playVisibleVideo();
+  },900);
+  restartCarousel();
+}
+function changeSlide(direction=1){goToSlide(currentSlide+direction);}
+function restartCarousel(){
+  clearInterval(flipTimer);
+  if(MEDIA_SLIDES.length>1) flipTimer=setInterval(()=>changeSlide(1),ROTATION_MS);
+}
+document.getElementById("prev-slide").addEventListener("click",()=>changeSlide(-1));
+document.getElementById("next-slide").addEventListener("click",()=>changeSlide(1));
+renderInitialSlide();
+restartCarousel();
+
+function updateClock(){
+  const clock=document.getElementById("player-clock");
+  clock.textContent=new Date().toLocaleTimeString("es-PR",{timeZone:"America/Puerto_Rico",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true});
+}
+updateClock();
+setInterval(updateClock,1000);
+
+/* CASTER.FM: conserva el host, puerto y mount que ya usaba el reproductor. */
+const CASTER_HOST="sapircast.caster.fm";
+const CASTER_PORT="16693";
+const STREAM_MOUNT="/kidAJ";
+const STREAM_URL=`https://${CASTER_HOST}:${CASTER_PORT}${STREAM_MOUNT}`;
+const STATS_URL=`https://${CASTER_HOST}:${CASTER_PORT}/admin/publicstats.json`;
+const audioPlayer=document.getElementById("core-audio");
+const masterButton=document.getElementById("master-btn");
+const icon=document.getElementById("icon-svg");
+const signalDot=document.getElementById("signal-dot");
+const signalText=document.getElementById("signal-text");
+const trackName=document.getElementById("current-track-name");
+const listenerCount=document.getElementById("listener-count");
+const qualityStatus=document.getElementById("quality-status");
+const waveEq=document.getElementById("player-eq");
+const statusMessage=document.getElementById("status-message");
+const historyList=document.getElementById("history-list");
+let metadataTimer=null;
+let historyItems=[];
+
+function setSignal(state,label){
+  signalDot.classList.remove("active","connecting","error");
+  if(state) signalDot.classList.add(state);
+  signalText.textContent=label;
+}
+function setPlayingUI(playing){
+  icon.textContent=playing?"Ⅱ":"▶";
+  waveEq.classList.toggle("playing",playing);
+  trackName.classList.toggle("playing",playing);
+}
+function addToHistory(title){
+  if(!title || historyItems[0]===title) return;
+  historyItems.unshift(title);
+  historyItems=historyItems.slice(0,5);
+  historyList.innerHTML="";
+  historyItems.forEach(t=>{
+    const li=document.createElement("li");
+    li.textContent=t;
+    historyList.appendChild(li);
+  });
+}
+function findSource(data){
+  if(!data) return null;
+  if(data.source) return data.source;
+  const sources=Array.isArray(data.sources)?data.sources:[];
+  return sources.find(s=>String(s.mount||s.listenurl||s.listen_url||"").includes(STREAM_MOUNT))||sources[0]||null;
+}
+async function getCasterStats(){
+  try{
+    const response=await fetch(STATS_URL,{cache:"no-store"});
+    if(!response.ok) throw new Error("HTTP "+response.status);
+    const data=await response.json();
+    return {data,source:findSource(data)};
+  }catch(error){
+    console.warn("No se pudieron leer las estadísticas públicas de Caster.fm:",error);
+    return {data:null,source:null};
+  }
+}
+function firstValidNumber(...values){
+  for(const value of values){
+    if(value!==undefined && value!==null && value!=="" && Number.isFinite(Number(value))) return Number(value);
+  }
+  return null;
+}
+async function updateStationInfo(){
+  const result=await getCasterStats();
+  const source=result.source;
+  if(!source){
+    listenerCount.textContent="No disponible";
+    return;
+  }
+  const meta=source.metadata||{};
+  const title=meta.song||meta.title||meta.streamtitle||meta.icy_title||meta.x_icy_title||source.title||"";
+  if(title){trackName.textContent=title;addToHistory(title);}
+  const listeners=firstValidNumber(source.listeners,source.listener_count,source.connections,source.currentlisteners,source.current_listeners);
+  listenerCount.textContent=listeners===null?"No disponible":String(listeners);
+  const bitrate=firstValidNumber(source.bitrate,source.bitrate_kbps);
+  qualityStatus.textContent=bitrate===null?"HD AUDIO":bitrate+" kbps";
+}
+async function refreshStationInfo(){
+  await updateStationInfo();
+}
+refreshStationInfo();
+metadataTimer=setInterval(refreshStationInfo,15000);
+
+<script>
+"use strict";
+  let audioContext=null;
+let sourceNode=null;
+let filters=[];
+let audioGraphReady=false;
+let graphFailed=false;
+const EQ_BANDS=[
+  {id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},
+  {id:"eq-250",valueId:"eq-value-250",frequency:250,type:"peaking"},
+  {id:"eq-1000",valueId:"eq-value-1000",frequency:1000,type:"peaking"},
+  {id:"eq-4000",valueId:"eq-value-4000",frequency:4000,type:"peaking"},
+  {id:"eq-12000",valueId:"eq-value-12000",frequency:12000,type:"highshelf"}
+];
+function createAudioGraph(){
+  if(audioGraphReady) return true;
+  if(graphFailed) return false;
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx) throw new Error("Web Audio API no disponible");
+    /* crossOrigin debe establecerse antes de asignar src al audio.
+       El servidor de streaming debe permitir CORS para que el EQ procese audio remoto. */
+    audioPlayer.crossOrigin="anonymous";
+    audioContext=new AudioCtx();
+    sourceNode=audioContext.createMediaElementSource(audioPlayer);
+    let previous=sourceNode;
+    filters=EQ_BANDS.map(b=>{
+      const f=audioContext.createBiquadFilter();
+      f.type=b.type;
+      f.frequency.value=b.frequency;
+      f.Q.value=1;
+      f.gain.value=0;
+      previous.connect(f);
+      previous=f;
+      return f;
+    });
+    previous.connect(audioContext.destination);
+    audioGraphReady=true;
+    updateAllEQDisplays();
+    return true;
+  }catch(error){
+    console.error("No se pudo crear el ecualizador:",error);
+    graphFailed=true;
+    statusMessage.textContent="EQ no disponible en este navegador; revisa la consola.";
+    return false;
+  }
+}
+function updateEQBand(index){
+  const band=EQ_BANDS[index];
+  const slider=document.getElementById(band.id);
+  const display=document.getElementById(band.valueId);
+  if(!slider) return;
+  const value=Number(slider.value);
+  if(filters[index]&&audioContext){
+    filters[index].gain.setTargetAtTime(value,audioContext.currentTime,.015);
+  }
+  if(display) display.textContent=(value>0?"+":"")+value+" dB";
+}
+function updateAllEQDisplays(){
+  EQ_BANDS.forEach((band,i)=>{
+    const slider=document.getElementById(band.id);
+    if(slider){
+      updateEQBand(i);
+      if(!slider.dataset.bound){
+        slider.addEventListener("input",()=>updateEQBand(i));
+        slider.dataset.bound="1";
       }
     }
-    /* ==========================================
-       HISTORIAL DE CANCIONES
-    ========================================== */
-
-    function addToHistory(title) {
-      if (!title) return;
-
-      if (songHistory.length && songHistory[0] === title) {
-        return;
-      }
-
-      songHistory.unshift(title);
-      songHistory = songHistory.slice(0, 5);
-
-      renderHistory();
-    }
-
-    function renderHistory() {
-      if (!historyList) return;
-
-      historyList.innerHTML = "";
-
-      if (songHistory.length === 0) {
-        historyList.innerHTML =
-          "<li>Esperando información de la emisora...</li>";
-        return;
-      }
-
-      songHistory.forEach(title => {
-        const li = document.createElement("li");
-        li.textContent = title;
-        historyList.appendChild(li);
-      });
-    }
-
-
-    /* ==========================================
-       ECUALIZADOR REAL DE 5 BANDAS
-       WEB AUDIO API
-    ========================================== */
-
-    let audioContext = null;
-    let audioSourceNode = null;
-    let eqFilters = [];
-    let audioGraphReady = false;
-
-    const EQ_BANDS = [
-      {
-        id: "eq-60",
-        valueId: "eq-value-60",
-        frequency: 60,
-        type: "lowshelf",
-        label: "60 Hz"
-      },
-      {
-        id: "eq-250",
-        valueId: "eq-value-250",
-        frequency: 250,
-        type: "peaking",
-        label: "250 Hz"
-      },
-      {
-        id: "eq-1000",
-        valueId: "eq-value-1000",
-        frequency: 1000,
-        type: "peaking",
-        label: "1 kHz"
-      },
-      {
-        id: "eq-4000",
-        valueId: "eq-value-4000",
-        frequency: 4000,
-        type: "peaking",
-        label: "4 kHz"
-      },
-      {
-        id: "eq-12000",
-        valueId: "eq-value-12000",
-        frequency: 12000,
-        type: "highshelf",
-        label: "12 kHz"
-      }
-    ];
-
-
-    /* CREAR CADENA DE FILTROS */
-
-    function crearEcualizadorReal() {
-
-      if (audioGraphReady) return true;
-
-      try {
-
-        const AudioContextClass =
-          window.AudioContext || window.webkitAudioContext;
-
-        if (!AudioContextClass) {
-          throw new Error("Web Audio API no disponible");
-        }
-
-        audioContext = new AudioContextClass();
-
-        audioPlayer.crossOrigin = "anonymous";
-
-        audioSourceNode =
-          audioContext.createMediaElementSource(audioPlayer);
-
-        eqFilters = [];
-
-        EQ_BANDS.forEach((band, index) => {
-
-          const filter = audioContext.createBiquadFilter();
-
-          filter.type = band.type;
-          filter.frequency.value = band.frequency;
-
-          if (band.type === "peaking") {
-            filter.Q.value = 1;
-          } else {
-            filter.Q.value = 0.7;
-          }
-
-          filter.gain.value = 0;
-
-          eqFilters.push(filter);
-
-        });
-
-        /* Conectar audio a los cinco filtros */
-
-        let previousNode = audioSourceNode;
-
-        eqFilters.forEach(filter => {
-          previousNode.connect(filter);
-          previousNode = filter;
-        });
-
-        /* Salida final hacia los altavoces */
-
-        previousNode.connect(audioContext.destination);
-
-        audioGraphReady = true;
-
-        console.log("Ecualizador real conectado correctamente.");
-
-        actualizarTodosLosControlesEQ();
-
-        return true;
-
-      } catch (error) {
-
-        console.error("Error creando ecualizador:", error);
-
-        statusMessage.textContent =
-          "No se pudo activar el procesamiento de audio.";
-
-        return false;
-      }
-    }
-
-
-    /* ACTUALIZAR UNA BANDA */
-
-    function actualizarBandaEQ(index) {
-
-      const band = EQ_BANDS[index];
-      const slider = document.getElementById(band.id);
-      const valueDisplay = document.getElementById(band.valueId);
-
-      if (!slider) return;
-
-      const value = Number(slider.value);
-
-      if (eqFilters[index]) {
-        eqFilters[index].gain.setTargetAtTime(
-          value,
-          audioContext.currentTime,
-          0.015
-        );
-      }
-
-      if (valueDisplay) {
-        valueDisplay.textContent =
-          (value > 0 ? "+" : "") + value + " dB";
-      }
-    }
-
-
-    /* ACTUALIZAR TODAS LAS BANDAS */
-
-    function actualizarTodosLosControlesEQ() {
-
-      EQ_BANDS.forEach((band, index) => {
-
-        const slider = document.getElementById(band.id);
-
-        if (!slider) return;
-
-        actualizarBandaEQ(index);
-
-        slider.addEventListener("input", () => {
-          actualizarBandaEQ(index);
-        });
-
-      });
-    }
-
-
-    /* BOTÓN RESET */
-
-    function resetEqualizer() {
-
-      EQ_BANDS.forEach((band, index) => {
-
-        const slider = document.getElementById(band.id);
-
-        if (slider) {
-          slider.value = 0;
-        }
-
-        if (eqFilters[index] && audioContext) {
-          eqFilters[index].gain.setTargetAtTime(
-            0,
-            audioContext.currentTime,
-            0.015
-          );
-        }
-
-        const valueDisplay =
-          document.getElementById(band.valueId);
-
-        if (valueDisplay) {
-          valueDisplay.textContent = "0 dB";
-        }
-
-      });
-
-      console.log("Ecualizador restablecido.");
-    }
-
-
-    /* ACTIVAR LOS CONTROLES */
-
-    actualizarTodosLosControlesEQ();
-
-    const resetButton = document.getElementById("eq-reset");
-
-    if (resetButton) {
-      resetButton.addEventListener("click", resetEqualizer);
-    }
-
-
-    /* ==========================================
-       REPRODUCCIÓN DE TROPICAL FLOW
-    ========================================== */
-
-    async function startCyberStream() {
-
-      if (!audioPlayer.paused) return;
-
-      try {
-
-        statusMessage.textContent =
-          "Conectando con Tropical Flow Radio TV...";
-
-        signalText.textContent = "CONECTANDO";
-        signalDot.classList.remove("error");
-
-        /* Crear el procesamiento de audio una sola vez */
-
-        const graphCreated = crearEcualizadorReal();
-
-        if (graphCreated && audioContext.state === "suspended") {
-          await audioContext.resume();
-        }
-
-        /* Obtener conexión de Caster */
-
-        const result = await obtenerDatosCaster();
-
-        const streamUrl = obtenerUrlAudio(result.source);
-
-        audioPlayer.crossOrigin = "anonymous";
-        audioPlayer.src = streamUrl;
-        audioPlayer.load();
-
-        await audioPlayer.play();
-
-        statusMessage.textContent =
-          "¡Estás escuchando Tropical Flow Radio TV!";
-
-        signalText.textContent = "EN VIVO";
-        signalDot.classList.add("active");
-
-        iconSvg.innerHTML = "❚❚";
-
-        if (eq) {
-          eq.classList.add("playing");
-        }
-
-        await updateTrackName();
-
-        clearInterval(metadataInterval);
-
-        metadataInterval = setInterval(() => {
-          updateTrackName();
-        }, 15000);
-
-      } catch (error) {
-
-        console.error("Error de reproducción:", error);
-
-        statusMessage.textContent =
-          "No se pudo conectar. Intenta nuevamente.";
-
-        signalText.textContent = "DESCONECTADO";
-        signalDot.classList.add("error");
-
-        iconSvg.innerHTML = "▶";
-
-        if (eq) {
-          eq.classList.remove("playing");
-        }
-
-      }
-    }
-
-
-    /* ==========================================
-       DETENER REPRODUCCIÓN
-    ========================================== */
-
-    function stopCyberStream() {
-
-      audioPlayer.pause();
-
-      audioPlayer.removeAttribute("src");
+  });
+}
+function resetEQ(){
+  EQ_BANDS.forEach((band,i)=>{
+    const slider=document.getElementById(band.id);
+    if(slider) slider.value=0;
+    updateEQBand(i);
+  });
+}
+updateAllEQDisplays();
+document.getElementById("eq-reset").addEventListener("click",resetEQ);
+
+async function startStream(){
+  if(!audioPlayer.paused) return;
+  statusMessage.textContent="Conectando con Tropical Flow Radio TV…";
+  setSignal("connecting","CONECTANDO");
+  try{
+    const graphOK=createAudioGraph();
+    if(graphOK && audioContext.state==="suspended") await audioContext.resume();
+    /* Mantener la URL del mount configurado en Caster.fm. */
+    if(!audioPlayer.src || audioPlayer.src!==STREAM_URL){
+      audioPlayer.src=STREAM_URL;
       audioPlayer.load();
-
-      statusMessage.textContent =
-        "Reproducción detenida. Pulsa ▶ para escuchar.";
-
-      signalText.textContent = "DESCONECTADO";
-      signalDot.classList.remove("active");
-
-      iconSvg.innerHTML = "▶";
-
-      if (eq) {
-        eq.classList.remove("playing");
-      }
-
-      clearInterval(metadataInterval);
     }
-
-
-    /* ==========================================
-       EVENTOS DEL AUDIO
-    ========================================== */
-
-    audioPlayer.addEventListener("playing", () => {
-
-      signalText.textContent = "EN VIVO";
-      signalDot.classList.add("active");
-
-      statusMessage.textContent =
-        "¡Tropical Flow Radio TV está en el aire!";
-
-      iconSvg.innerHTML = "❚❚";
-
-      if (eq) {
-        eq.classList.add("playing");
-      }
-
-    });
-
-
-    audioPlayer.addEventListener("waiting", () => {
-
-      statusMessage.textContent =
-        "Conectando con la señal de la emisora...";
-
-    });
-
-
-    audioPlayer.addEventListener("error", () => {
-
-      signalText.textContent = "ERROR DE AUDIO";
-      signalDot.classList.add("error");
-
-      statusMessage.textContent =
-        "Error en la señal. Intenta nuevamente.";
-
-      iconSvg.innerHTML = "▶";
-
-      if (eq) {
-        eq.classList.remove("playing");
-      }
-
-    });
-
-
-    /* ==========================================
-       COMPARTIR EMISORA
-    ========================================== */
-
-    function shareRadio() {
-
-      const radioUrl = window.location.href;
-
-      if (navigator.share) {
-
-        navigator.share({
-          title: "Tropical Flow Radio TV",
-          text: "¡Escucha la mejor música en Tropical Flow Radio TV!",
-          url: radioUrl
-        }).catch(error => {
-          console.log("Compartir cancelado:", error);
-        });
-
-      } else {
-
-        const whatsappUrl =
-          "https://api.whatsapp.com/send?text=" +
-          encodeURIComponent(
-            "¡Escucha Tropical Flow Radio TV! " + radioUrl
-          );
-
-        window.open(whatsappUrl, "_blank");
-
-      }
+    await audioPlayer.play();
+    statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";
+    setSignal("active","EN VIVO");
+    setPlayingUI(true);
+    refreshStationInfo();
+    if(!metadataTimer) metadataTimer=setInterval(refreshStationInfo,15000);
+  }catch(error){
+    console.error("Error al reproducir Caster.fm:",error);
+    statusMessage.textContent="No se pudo conectar. Verifica la señal y vuelve a intentar.";
+    setSignal("error","DESCONECTADO");
+    setPlayingUI(false);
+  }
+}
+function stopStream(){
+  audioPlayer.pause();
+  setPlayingUI(false);
+  statusMessage.textContent="Reproducción detenida. Pulsa ▶ para escuchar.";
+  setSignal("","OFFLINE");
+}
+masterButton.addEventListener("click",()=>{
+  if(audioPlayer.paused) startStream();
+  else stopStream();
+});
+audioPlayer.addEventListener("playing",()=>{
+  setSignal("active","EN VIVO");
+  setPlayingUI(true);
+  statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";
+});
+audioPlayer.addEventListener("pause",()=>{
+  if(audioPlayer.ended) return;
+  setPlayingUI(false);
+});
+audioPlayer.addEventListener("waiting",()=>{
+  setSignal("connecting","CONECTANDO");
+  statusMessage.textContent="Conectando con la señal de la emisora…";
+});
+audioPlayer.addEventListener("error",()=>{
+  setSignal("error","ERROR DE AUDIO");
+  setPlayingUI(false);
+  statusMessage.textContent="Error en la señal. Comprueba el mount de Caster.fm.";
+});
+audioPlayer.volume=.85;
+const volumeSlider=document.getElementById("volume-slider");
+const volumeNumber=document.getElementById("volume-number");
+volumeSlider.addEventListener("input",()=>{
+  const value=Number(volumeSlider.value);
+  audioPlayer.volume=value/100;
+  volumeNumber.textContent=value+"%";
+});
+document.getElementById("share-button").addEventListener("click",async()=>{
+  const shareData={title:"Tropical Flow Radio TV",text:"¡Escucha la mejor música en Tropical Flow Radio TV!",url:location.href};
+  try{
+    if(navigator.share) await navigator.share(shareData);
+    else{
+      const wa="https://api.whatsapp.com/send?text="+encodeURIComponent(shareData.text+" "+shareData.url);
+      window.open(wa,"_blank","noopener");
     }
-
-
-    /* ==========================================
-       SOLICITAR CANCIÓN
-    ========================================== */
-
-    function requestSong() {
-
-      const message =
-        "¡Hola Tropical Flow Radio TV! Quiero solicitar una canción. 🎶";
-
-      const whatsappUrl =
-        "https://api.whatsapp.com/send?text=" +
-        encodeURIComponent(message);
-
-      window.open(whatsappUrl, "_blank");
-
-    }
-
-
-    /* ==========================================
-       INICIALIZACIÓN FINAL
-    ========================================== */
-
-    renderHistory();
-
-    console.log(
-      "Tropical Flow Radio TV - Pro Player iniciado."
-    );
-
-  </script>
-
+  }catch(error){if(error.name!=="AbortError") console.warn("No se pudo compartir:",error);}
+});
+document.getElementById("request-button").addEventListener("click",()=>{
+  const msg="¡Hola Tropical Flow Radio TV! Quiero solicitar una canción. 🎶";
+  window.open("https://api.whatsapp.com/send?text="+encodeURIComponent(msg),"_blank","noopener");
+});
+window.addEventListener("beforeunload",()=>{
+  clearInterval(flipTimer);
+  clearInterval(metadataTimer);
+});
+console.log("Tropical Flow Radio TV Pro Player: inicializado.");
+</script>
 </body>
 </html>
