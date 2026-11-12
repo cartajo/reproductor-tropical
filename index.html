@@ -334,12 +334,12 @@
   </div>
   <script>
     /* CONFIGURACIÓN DE PANTALLA GIRATORIA (EDITA AQUÍ) */
-    const MEDIA_SLIDES = [
-      { type: "image", src: "logo.png" },      // 1. Logo oficial
-      { type: "image", src: "anuncio1.jpg" },  // 2. Primer anuncio
-      { type: "video", src: "promo.mp4" },     // 3. Video promo (sin audio)
-      { type: "image", src: "anuncio2.jpg" }   // 4. Segundo anuncio
+        const MEDIA_SLIDES = [
+      { type: "image", src: "logo.png" },      // <-- Cambia "logo.png" por el nombre exacto de tu archivo
+      { type: "image", src: "anuncio1.jpg" },
+      { type: "video", src: "promo.mp4" }
     ];
+
 
     const TIEMPO_ROTACION = 7000; // 7000 = 7 segundos
     let currentSlide = 0;
@@ -377,13 +377,15 @@
       });
     }
 
-    function iniciarPantalla() {
+           function iniciarPantalla() {
       if (MEDIA_SLIDES.length === 0) return;
       flipFront.innerHTML = "";
-      flipFront.appendChild(crearContenidoMedia(MEDIA_SLIDES[0]));
+      flipFront.appendChild(crearContenidoMedia(MEDIA_SLIDES.at(0)));
       actualizarDots();
       reiniciarTemporizador();
     }
+
+
 
     function cambiarSlide(direccion) {
       if (MEDIA_SLIDES.length <= 1) return;
@@ -462,8 +464,10 @@
           for (const item of data) {
             if (item && item.source) {
               if (item.source[STREAM_MOUNT]) { source = item.source[STREAM_MOUNT]; break; }
-              const mountPoints = Object.keys(item.source);
-              if (mountPoints.length > 0) { source = item.source[mountPoints[0]]; break; }
+                                          const mountPoints = Object.keys(item.source);
+              if (mountPoints.length > 0) { source = item.source[mountPoints.at(0)]; break; }
+
+
             }
           }
         }
