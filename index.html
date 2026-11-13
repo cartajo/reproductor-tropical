@@ -485,7 +485,7 @@ function extractCasterSource(raw){
 async function fetchStatsWithFallback(){
   const urls=[
     STATS_URL+"?t="+Date.now(),
-    "https://allorigins.win"+encodeURIComponent(STATS_URL+"?t="+Date.now())
+    "https://api.allorigins.win/raw?url="+encodeURIComponent(STATS_URL+"?t="+Date.now())
   ];
   for(const url of urls){
     try{
@@ -505,7 +505,6 @@ function firstValidNumber(...values){
   }
   return null;
 }
-</script>
 
 /* INFORMACIÓN DE LA EMISORA */
 async function updateStationInfo(){
