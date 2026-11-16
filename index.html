@@ -102,20 +102,44 @@ body{background:#05020d;min-height:100vh;display:flex;justify-content:center;ali
 .text-signal{font-size:9px;font-weight:900;color:#d1d5db;letter-spacing:.5px}
 @keyframes neonPulse{from{opacity:.35;transform:scale(.8)}to{opacity:1;transform:scale(1.15)}}
 
-/* Pantalla / Logos 16:9 */
+/* Pantalla / Logos */
 .flip-screen-container{
   position:relative;z-index:2;width:100%;aspect-ratio:16 / 9;height:auto;
   perspective:1000px;margin-bottom:14px;
 }
-.nav-arrow{
-  position:absolute;top:50%;transform:translateY(-50%);z-index:10;
-  width:30px;height:30px;border-radius:50%;border:1px solid rgba(168,85,247,.75);
-  background:rgba(7,2,18,.82);color:#fff;font-size:20px;line-height:1;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 12px rgba(168,85,247,.5);
+.flip-card{
+  width:100%;height:100%;position:relative;
+  transition:transform .85s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;
 }
+.flip-card.is-flipped{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;inset:0;width:100%;height:100%;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:17px;overflow:hidden;border:2px solid rgba(168,85,247,.85);
+  box-shadow:0 0 18px rgba(168,85,247,.45),inset 0 0 15px rgba(0,0,0,.6);
+  background:#070212;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;padding:0;text-align:center;
+}
+.flip-back{transform:rotateY(180deg)}
+.brand-logo{
+  display:block;width:100%;height:100%;max-width:100%;min-height:0;
+  object-fit:cover;object-position:center;border-radius:0;
+}
+.logo-caption{
+  position:absolute;left:8px;right:8px;bottom:7px;color:#ec4899;
+  font-size:10px;font-weight:900;letter-spacing:1px;margin:0;
+  text-shadow:0 0 10px rgba(236,72,153,.9);pointer-events:none;
+}
+.nav-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(9,0,20,.78);color:#fff;border:1.5px solid rgba(168,85,247,.8);
+  border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;
+  font-size:13px;display:flex;align-items:center;justify-content:center;
+}
+.nav-arrow:hover{background:#a855f7}
 .left-arrow{left:8px}
 .right-arrow{right:8px}
+
 .flip-card{
   width:100%;height:100%;position:relative;
   transition:transform .85s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;
@@ -415,54 +439,23 @@ body{background:#05020d;min-height:100vh;display:flex;justify-content:center;ali
     </div>
   </div>
 
-    <div class="flip-screen-container">
+     <div class="flip-screen-container">
     <button class="nav-arrow left-arrow" id="flip-prev" aria-label="Anterior">‹</button>
+
     <div class="flip-card" id="flip-card">
-      <!-- CARA 1: LOGO PRINCIPAL -->
+      <!-- LOGO 1 (Cuando tengas tu enlace .png/.jpg, cambia el src="...") -->
       <div class="flip-face flip-front">
-        <svg viewBox="0 0 640 360" width="100%" height="100%" xmlns="http://w3.org">
-          <defs>
-            <radialGradient id="bgLogo1" cx="50%" cy="45%" r="65%">
-              <stop offset="0%" stop-color="#3b0764"/>
-              <stop offset="60%" stop-color="#130529"/>
-              <stop offset="100%" stop-color="#05010d"/>
-            </radialGradient>
-            <linearGradient id="neonText1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#38bdf8"/>
-              <stop offset="50%" stop-color="#ec4899"/>
-              <stop offset="100%" stop-color="#fde047"/>
-            </linearGradient>
-          </defs>
-          <rect width="640" height="360" fill="url(#bgLogo1)"/>
-          <circle cx="320" cy="165" r="118" fill="none" stroke="#ec4899" stroke-width="3" stroke-opacity="0.45"/>
-          <circle cx="320" cy="165" r="102" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="10 8"/>
-          <text x="320" y="135" text-anchor="middle" font-size="44">🌴🎧🇵🇷</text>
-          <text x="320" y="185" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="42" fill="url(#neonText1)" letter-spacing="2">TROPICAL FLOW</text>
-          <text x="320" y="222" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="22" fill="#ffffff" letter-spacing="8">RADIO TV</text>
-        </svg>
-        <div class="logo-caption">SEÑAL DIGITAL HD • PUERTO RICO</div>
+        <img class="brand-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 640 360'><defs><radialGradient id='g1' cx='50%' cy='45%' r='65%'><stop offset='0%' stop-color='%233b0764'/><stop offset='65%' stop-color='%23130529'/><stop offset='100%' stop-color='%2305010d'/></radialGradient></defs><rect width='640' height='360' fill='url(%23g1)'/><circle cx='320' cy='160' r='115' fill='none' stroke='%23ec4899' stroke-width='3' stroke-opacity='0.5'/><circle cx='320' cy='160' r='98' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-dasharray='10 8'/><text x='320' y='130' text-anchor='middle' font-size='44'>🌴🎧🇵🇷</text><text x='320' y='182' text-anchor='middle' font-family='Arial Black, sans-serif' font-weight='900' font-size='40' fill='%23ffffff' letter-spacing='2'>TROPICAL FLOW</text><text x='320' y='218' text-anchor='middle' font-family='Arial, sans-serif' font-weight='900' font-size='22' fill='%2338bdf8' letter-spacing='8'>RADIO TV</text></svg>" alt="Tropical Flow Radio TV">
+        <p class="logo-caption">TROPICAL FLOW RADIO TV • PUERTO RICO 🇵🇷</p>
       </div>
 
-      <!-- CARA 2: CABINA EN VIVO -->
+      <!-- LOGO 2 (Cuando tengas tu enlace .png/.jpg, cambia el src="...") -->
       <div class="flip-face flip-back">
-        <svg viewBox="0 0 640 360" width="100%" height="100%" xmlns="http://w3.org">
-          <defs>
-            <radialGradient id="bgLogo2" cx="50%" cy="45%" r="65%">
-              <stop offset="0%" stop-color="#0c4a6e"/>
-              <stop offset="65%" stop-color="#1e1b4b"/>
-              <stop offset="100%" stop-color="#05010d"/>
-            </radialGradient>
-          </defs>
-          <rect width="640" height="360" fill="url(#bgLogo2)"/>
-          <rect x="170" y="75" width="300" height="54" rx="27" fill="#dc2626" stroke="#fca5a5" stroke-width="2.5"/>
-          <circle cx="205" cy="102" r="9" fill="#ffffff"/>
-          <text x="335" y="110" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="24" fill="#ffffff" letter-spacing="3">ON AIR • 24/7</text>
-          <text x="320" y="185" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="34" fill="#38bdf8" letter-spacing="2">MÚSICA SIN LÍMITES</text>
-          <text x="320" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="18" fill="#fde047" letter-spacing="3">CABINA: 939-314-2657</text>
-        </svg>
-        <div class="logo-caption">TRANSMITIENDO PARA EL MUNDO</div>
+        <img class="brand-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 640 360'><defs><radialGradient id='g2' cx='50%' cy='45%' r='65%'><stop offset='0%' stop-color='%230c4a6e'/><stop offset='65%' stop-color='%231e1b4b'/><stop offset='100%' stop-color='%2305010d'/></radialGradient></defs><rect width='640' height='360' fill='url(%23g2)'/><rect x='175' y='72' width='290' height='50' rx='25' fill='%23dc2626' stroke='%23fca5a5' stroke-width='2.5'/><circle cx='210' cy='97' r='8' fill='%23ffffff'/><text x='336' y='105' text-anchor='middle' font-family='Arial Black, sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='3'>EN VIVO 24/7</text><text x='320' y='180' text-anchor='middle' font-family='Arial Black, sans-serif' font-weight='900' font-size='32' fill='%2338bdf8' letter-spacing='2'>SEÑAL DIGITAL HD</text><text x='320' y='218' text-anchor='middle' font-family='Arial, sans-serif' font-weight='800' font-size='18' fill='%23fde047' letter-spacing='3'>CABINA: 939-314-2657</text></svg>" alt="Señal Digital HD">
+        <p class="logo-caption">MÚSICA SIN LÍMITES • 24/7</p>
       </div>
     </div>
+
     <button class="nav-arrow right-arrow" id="flip-next" aria-label="Siguiente">›</button>
   </div>
 
