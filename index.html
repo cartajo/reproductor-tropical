@@ -726,34 +726,40 @@ audioPlayer.volume=.85;
 const volumeSlider=document.getElementById("volume-slider"),volumeNumber=document.getElementById("volume-number");
 if(volumeSlider) volumeSlider.addEventListener("input",()=>{const v=Number(volumeSlider.value);audioPlayer.volume=v/100;volumeNumber.textContent=v+"%";});
 
-/* COMPARTIR Y SOLICITAR CANCIÓN */
-async function shareRadio(){
-  const shareUrl=window.location.href;
-  const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
-  if(navigator.share){
-    try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}
-  }
-  const whatsappUrl="https://wa.me"+encodeURIComponent(shareText+"\n"+shareUrl);
-  window.open(whatsappUrl,"_blank");
-}
+/* =====================================================
+       SOLICITAR CANCIÓN
+    ===================================================== */
 
-function requestSong(){
-  const shareUrl=window.location.href;
-  const message=
-    "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n"+
-    "Quiero solicitar una canción.\n\n"+
-    "Canción: __________________\n"+
-    "Artista: __________________\n\n"+
-    "🌴 Tropical Flow Radio TV 🇵🇷\n"+
-    "📱 Cabina: 939-314-2657\n"+
-    shareUrl;
+    function requestSong() {
 
-  const whatsappUrl="https://whatsapp.com"+encodeURIComponent(message);
-  const win=window.open(whatsappUrl,"_blank","noopener,noreferrer");
-  if(!win){
-    window.location.href=whatsappUrl;
-  }
-}
+
+      const shareUrl =
+        window.location.href;
+
+
+      const message =
+        "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n" +
+        "Quiero solicitar una canción.\n\n" +
+        "Canción: __________________\n" +
+        "Artista: __________________\n\n" +
+        "🌴 Tropical Flow Radio TV 🇵🇷\n" +
+        shareUrl;
+
+
+      const whatsappUrl =
+        "https://wa.me/?text=" +
+        encodeURIComponent(
+          message
+        );
+
+
+      window.open(
+        whatsappUrl,
+        "_blank"
+      );
+
+    }
+
 
 document.getElementById("share-button").addEventListener("click",shareRadio);
 document.getElementById("request-button").addEventListener("click",requestSong);
