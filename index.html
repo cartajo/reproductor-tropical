@@ -729,8 +729,18 @@ if(volumeSlider) volumeSlider.addEventListener("input",()=>{const v=Number(volum
 /* =====================================================
    SOLICITAR CANCIÓN
 ===================================================== */
-function requestSong() {
-  const shareUrl = window.location.href;
+sync function shareRadio(){
+  const shareUrl=window.location.href;
+  const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
+  if(navigator.share){
+    try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}
+  }
+  const whatsappUrl="https://wa.me"+encodeURIComponent(shareText+"\n"+shareUrl);
+  window.open(whatsappUrl,"_blank");
+}
+
+function requestSong(){
+  const shareUrl=window.location.href;
 
   const message =
     "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n" +
