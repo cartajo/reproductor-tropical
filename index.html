@@ -799,16 +799,43 @@ if(volumeSlider) volumeSlider.addEventListener("input",()=>{const v=Number(volum
 async function shareRadio(){
   const shareUrl=window.location.href;
   const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
-  if(navigator.share){try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});}catch(e){}}
-  else window.open("https://whatsapp.com"+encodeURIComponent(shareText+"\n"+shareUrl),"_blank");
+
+  if(navigator.share){
+    try{
+      await navigator.share({
+        title:"Tropical Flow Radio TV",
+        text:shareText,
+        url:shareUrl
+      });
+      return;
+    }catch(e){}
+  }
+
+  const waShareUrl="https://whatsapp.com"+encodeURIComponent(shareText+"\n"+shareUrl);
+  window.open(waShareUrl,"_blank","noopener,noreferrer");
 }
 
-function requestSong(){
-  const msg="🎤 Hola Tropical Flow Radio TV 🌴📻\n\nQuiero solicitar una canción.\n\nCanción: __________________\nArtista: __________________\n\n🌴 Tropical Flow Radio TV 🇵🇷\n📱 Cabina: 939-314-2657\n"+window.location.href;
-  window.open("https://wa.me"+encodeURIComponent(msg),"_blank");
+function requestSong() {
+  const shareUrl = window.location.href;
+
+  const message =
+    "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n" +
+    "Quiero solicitar una canción.\n\n" +
+    "Canción: __________________\n" +
+    "Artista: __________________\n\n" +
+    "🌴 Tropical Flow Radio TV 🇵🇷\n" +
+    "📱 Cabina: 939-314-2657\n" +
+    shareUrl;
+
+  const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+  window.open(whatsappUrl, "_blank");
 }
-document.getElementById("share-button").addEventListener("click",shareRadio);
-document.getElementById("request-button").addEventListener("click",requestSong);
+
+/* Conectar botones nuevos con las funciones originales */
+document.getElementById("share-button").addEventListener("click", shareRadio);
+document.getElementById("request-button").addEventListener("click", requestSong);
+
+
 
 /* =========================================================
    INTRO VIP ESTILO CARIBBEAN CINEMAS
