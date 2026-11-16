@@ -480,14 +480,15 @@ body{
 <audio id="core-audio" preload="none"></audio>
 
 <script>
-/* RELOJ Y TARJETA FLIP */
+/* RELOJ 12 HORAS (AM/PM EN PC Y CELULAR) */
 function updateClock(){
   const now=new Date();
   document.getElementById("live-clock").textContent=
-    now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
 }
 updateClock();
 setInterval(updateClock,1000);
+
 
 const flipCard=document.getElementById("flip-card");
 let isFlipped=false;
@@ -746,8 +747,12 @@ function requestSong(){
     "🌴 Tropical Flow Radio TV 🇵🇷\n"+
     "📱 Cabina: 939-314-2657\n"+
     shareUrl;
-  const whatsappUrl="https://wa.me"+encodeURIComponent(message);
-  window.open(whatsappUrl,"_blank");
+
+  const whatsappUrl="https://whatsapp.com"+encodeURIComponent(message);
+  const win=window.open(whatsappUrl,"_blank","noopener,noreferrer");
+  if(!win){
+    window.location.href=whatsappUrl;
+  }
 }
 
 document.getElementById("share-button").addEventListener("click",shareRadio);
