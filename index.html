@@ -437,6 +437,22 @@ body{
   .eq-slider{width:68px}
   .eq-slider-wrap{height:74px}
 }
+/* Ajuste automático para que quepa sin scroll en PC y Smart TV */
+@media (min-width: 900px) {
+  body {
+    height: 100vh;
+    overflow: hidden; /* Quita la barra de scroll en PC y Smart TV */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cyber-player-container {
+    transform: scale(0.84); /* Ajusta la tarjeta completa a la altura de la pantalla */
+    transform-origin: center center;
+    margin: 0 auto;
+  }
+}
+  
 </style>
 </head>
 <body>
