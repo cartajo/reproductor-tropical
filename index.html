@@ -72,7 +72,7 @@ body{
 .nebula-glow{position:absolute;width:50vw;height:50vw;max-width:800px;max-height:800px;min-width:280px;min-height:280px;border-radius:50%;filter:blur(95px);opacity:.38;will-change:transform;animation:nebulaFloat 14s ease-in-out infinite alternate}
 .nebula-left{background:radial-gradient(circle,#9333ea,transparent 70%);top:-12%;left:-8%}
 .nebula-right{background:radial-gradient(circle,#0284c7,transparent 70%);bottom:-12%;right:-8%;animation-delay:4s}
-@keyframes nebulaFloat{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(5vw,-4vh,0) scale(1.15)}}
+  @keyframes nebulaFloat{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(5vw,-4vh,0) scale(1.15)}}
 .ufo-craft{position:absolute;will-change:transform;filter:drop-shadow(0 0 18px rgba(56,189,248,.75))}
 .ufo-craft svg{display:block;width:100%;height:auto;animation:ufoHover 2.8s ease-in-out infinite alternate}
 @keyframes ufoHover{0%{transform:translateY(-6px) rotate(-3deg)}100%{transform:translateY(6px) rotate(3deg)}}
@@ -211,7 +211,7 @@ body{
 .eq-slider-wrap{height:84px;display:flex;align-items:center;justify-content:center}
 .eq-slider{width:76px;transform:rotate(-90deg);accent-color:#ec4899;cursor:pointer}
 .eq-band-value{display:block;color:#fff;font-size:8px;font-weight:800;margin-top:4px}
-.eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
+  .eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
 .eq-description{font-size:9px;color:#9ca3af}
 .eq-reset-btn{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.45);color:#e9d5ff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:12px;cursor:pointer}
 .eq-reset-btn:hover{background:#a855f7;color:#fff}
@@ -397,7 +397,7 @@ body{
     <div class="stat-box">
       <span class="stat-label">📡 CALIDAD DE SEÑAL</span>
       <span class="stat-value" id="quality-status">HD STEREO</span>
-    </div>
+          </div>
   </div>
 
   <div class="wave-equalizer" id="player-eq">
@@ -625,7 +625,7 @@ async function updateStationInfo(){
 }
 updateStationInfo();
 let metadataTimer=setInterval(updateStationInfo,12000);
-/* ECUALIZADOR WEB AUDIO API */
+  /* ECUALIZADOR WEB AUDIO API */
 let audioContext=null,sourceNode=null,filters=[],audioGraphReady=false,graphFailed=false;
 const EQ_BANDS=[
   {id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},
@@ -729,13 +729,15 @@ if(volumeSlider) volumeSlider.addEventListener("input",()=>{const v=Number(volum
 /* =====================================================
    COMPARTIR Y SOLICITAR CANCIÓN
 ===================================================== */
+const REQUEST_WHATSAPP_NUMBER="19393142657"; // Puerto Rico: +1 939-314-2657
+
 async function shareRadio(){
   const shareUrl=window.location.href;
   const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
   if(navigator.share){
     try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}
   }
-  const whatsappUrl="https://wa.me"+encodeURIComponent(shareText+"\n"+shareUrl);
+  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(shareText+"\n"+shareUrl)}`;
   window.open(whatsappUrl,"_blank");
 }
 function requestSong(){
@@ -748,7 +750,7 @@ function requestSong(){
     "🌴 Tropical Flow Radio TV 🇵🇷\n"+
     shareUrl;
 
-  const whatsappUrl="https://wa.me"+encodeURIComponent(message);
+  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   window.open(whatsappUrl,"_blank");
 }
 
