@@ -127,7 +127,7 @@ body{
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
   border-radius:17px;overflow:hidden;border:2px solid rgba(168,85,247,.85);
   box-shadow:0 0 18px rgba(168,85,247,.45),inset 0 0 15px rgba(0,0,0,.6);
-   background:#070212;display:flex;flex-direction:column;justify-content:center;
+  background:#070212;display:flex;flex-direction:column;justify-content:center;
   align-items:center;padding:0;text-align:center;
 }
 .flip-back{transform:rotateY(180deg)}
@@ -143,7 +143,7 @@ body{
 .nav-arrow{
   position:absolute;top:50%;transform:translateY(-50%);
   background:rgba(9,0,20,.78);color:#fff;border:1.5px solid rgba(168,85,247,.8);
-  border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;
+   border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;
   font-size:13px;display:flex;align-items:center;justify-content:center;
 }
 .nav-arrow:hover{background:#a855f7}
@@ -193,7 +193,7 @@ body{
   position:relative;z-index:2;display:flex;align-items:center;gap:9px;margin-bottom:14px;
   padding:9px 11px;background:rgba(255,255,255,.035);border-radius:13px;border:1px solid rgba(168,85,247,.18);
 }
-.volume-icon{font-size:15px}.volume-slider{flex:1;height:5px;accent-color:#a855f7;cursor:pointer}.volume-number{width:35px;text-align:right;color:#c4b5fd;font-size:10px;font-weight:800}
+.volume-icon{font-size:15px}.volume-slider{flex:1;height:5px;accent-color:#a855f7;cursor:pointer;touch-action:pan-x;-webkit-appearance:auto}.volume-number{width:35px;text-align:right;color:#c4b5fd;font-size:10px;font-weight:800}
 
 /* Panel Ecualizador 5 Bandas */
 .real-eq-panel{
@@ -209,7 +209,7 @@ body{
 .eq-band-name{display:block;color:#c4b5fd;font-size:7.5px;font-weight:800;margin-bottom:2px}
 .eq-band-frequency{display:block;color:#ec4899;font-size:8.5px;font-weight:900;margin-bottom:6px}
 .eq-slider-wrap{height:84px;display:flex;align-items:center;justify-content:center}
-.eq-slider{width:76px;transform:rotate(-90deg);accent-color:#ec4899;cursor:pointer}
+.eq-slider{width:76px;transform:rotate(-90deg);accent-color:#ec4899;cursor:pointer;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
 .eq-band-value{display:block;color:#fff;font-size:8px;font-weight:800;margin-top:4px}
   .eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
 .eq-description{font-size:9px;color:#9ca3af}
@@ -353,7 +353,7 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
         <span class="reel-number" id="reel-number">3</span>
       </div>
       <div class="reel-caption">PREPARANDO PROYECTOR EN VIVO...</div>
-        </div>
+    </div>
 
     <div class="cinema-act" id="cinema-act-3">
       <div class="feature-kicker">🌴 PRESENTACIÓN ESTELAR 🇵🇷</div>
@@ -395,7 +395,7 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
       <defs>
         <radialGradient id="dome1" cx="50%" cy="35%" r="60%">
           <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.95"/>
-          <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.75"/>
+           <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.75"/>
           <stop offset="100%" stop-color="#0369a1" stop-opacity="0.9"/>
         </radialGradient>
         <linearGradient id="hull1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -652,7 +652,7 @@ function addToHistory(previousTitle){
   historyItems.unshift(previousTitle);
   historyItems=historyItems.slice(0,5);
   try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}
-   renderHistory();
+  renderHistory();
 }
 
 function setSignal(state,label){
@@ -730,7 +730,8 @@ async function updateStationInfo(){
 updateStationInfo();
 let metadataTimer=setInterval(updateStationInfo,12000);
   /* ECUALIZADOR WEB AUDIO API */
-let audioContext=null,sourceNode=null,filters=[],audioGraphReady=false,graphFailed=false;
+let audioContext=null,sourceNode=null,filters=[],masterGain=null,audioGraphReady=false,graphFailed=false;
+let keepStreamPlaying=false,userPausedStream=false,resumeTimer=null,resumeAttempts=0;
 const EQ_BANDS=[
   {id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},
   {id:"eq-250",valueId:"eq-value-250",frequency:250,type:"peaking"},
@@ -754,8 +755,15 @@ function createAudioGraph(){
       f.type=b.type;f.frequency.value=b.frequency;f.Q.value=1;f.gain.value=0;
       previous.connect(f);previous=f;return f;
     });
-    previous.connect(audioContext.destination);
-    audioGraphReady=true;updateAllEQDisplays();return true;
+    // Ganancia maestra: permite controlar el volumen también en Safari/iPhone,
+    // donde HTMLMediaElement.volume puede ser ignorado por el navegador.
+    masterGain=audioContext.createGain();
+    masterGain.gain.value=Number(volumeSlider?.value ?? 85)/100;
+    previous.connect(masterGain);
+    masterGain.connect(audioContext.destination);
+    audioGraphReady=true;updateAllEQDisplays();updateMasterVolume();
+    document.getElementById("eq-status-badge").textContent="5 BANDAS · ACTIVO";
+    return true;
   }catch(e){
     graphFailed=true;
     document.getElementById("eq-status-badge").textContent="MODO DIRECTO";
@@ -789,7 +797,8 @@ document.getElementById("eq-reset").addEventListener("click",resetEQ);
 
 /* REPRODUCCIÓN */
 async function startStream(){
-  if(!audioPlayer.paused) return;
+  if(!audioPlayer.paused){keepStreamPlaying=true;userPausedStream=false;return;}
+  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
   statusMessage.textContent="Conectando con Tropical Flow Radio TV…";
   setSignal("connecting","CONECTANDO");
   try{
@@ -809,26 +818,77 @@ async function startStream(){
         setSignal("active","EN VIVO");setPlayingUI(true);return;
       }catch(e2){}
     }
+    keepStreamPlaying=false;
     statusMessage.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo.";
     setSignal("error","DESCONECTADO");setPlayingUI(false);
   }
 }
 
 function stopStream(){
+  userPausedStream=true;keepStreamPlaying=false;
+  if(resumeTimer){clearTimeout(resumeTimer);resumeTimer=null;}
   audioPlayer.pause();setPlayingUI(false);
   statusMessage.textContent="Reproducción detenida. Pulsa ▶ para escuchar.";
   setSignal("","OFFLINE");
 }
 
 masterButton.addEventListener("click",()=>audioPlayer.paused?startStream():stopStream());
-audioPlayer.addEventListener("playing",()=>{setSignal("active","EN VIVO");setPlayingUI(true);statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";});
-audioPlayer.addEventListener("pause",()=>{if(!audioPlayer.ended)setPlayingUI(false);});
+audioPlayer.addEventListener("playing",()=>{
+  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
+  setSignal("active","EN VIVO");setPlayingUI(true);
+  statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";
+});
+
+// Recuperación prudente si una notificación/interrupción del sistema pausa el audio.
+// Nunca reanuda después de que el oyente haya pulsado PAUSA.
+async function tryResumeAfterInterruption(){
+  if(!keepStreamPlaying || userPausedStream || !audioPlayer.paused || !audioPlayer.src || audioPlayer.ended) return;
+  if(resumeAttempts>=2) return;
+  resumeAttempts++;
+  try{
+    if(audioContext && audioContext.state==="suspended") await audioContext.resume();
+    await audioPlayer.play();
+  }catch(e){
+    // Algunos navegadores móviles exigen un nuevo toque después de una interrupción.
+    setSignal("connecting","TOCA ▶ PARA REANUDAR");
+    statusMessage.textContent="El dispositivo interrumpió el audio. Pulsa ▶ para continuar.";
+  }
+}
+
+audioPlayer.addEventListener("pause",()=>{
+  if(!audioPlayer.ended)setPlayingUI(false);
+  if(keepStreamPlaying && !userPausedStream){
+    if(resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer=setTimeout(tryResumeAfterInterruption,900);
+  }
+});
+audioPlayer.addEventListener("ended",()=>{keepStreamPlaying=false;setPlayingUI(false);});
 audioPlayer.addEventListener("waiting",()=>{setSignal("connecting","CONECTANDO");statusMessage.textContent="Conectando con la señal…";});
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && keepStreamPlaying && audioPlayer.paused){
+    if(resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer=setTimeout(tryResumeAfterInterruption,350);
+  }
+});
+window.addEventListener("pageshow",()=>{
+  if(keepStreamPlaying && audioPlayer.paused) setTimeout(tryResumeAfterInterruption,350);
+});
 
 /* VOLUMEN */
-audioPlayer.volume=.85;
 const volumeSlider=document.getElementById("volume-slider"),volumeNumber=document.getElementById("volume-number");
-if(volumeSlider) volumeSlider.addEventListener("input",()=>{const v=Number(volumeSlider.value);audioPlayer.volume=v/100;volumeNumber.textContent=v+"%";});
+function updateMasterVolume(){
+  const v=Math.max(0,Math.min(100,Number(volumeSlider?.value ?? 85)))/100;
+  if(masterGain && audioContext){
+    masterGain.gain.setTargetAtTime(v,audioContext.currentTime,.025);
+  }else{
+    // Respaldo para navegadores que no permiten crear el grafo Web Audio.
+    try{audioPlayer.volume=v;}catch(e){}
+  }
+  if(volumeNumber) volumeNumber.textContent=Math.round(v*100)+"%";
+}
+audioPlayer.volume=.85;
+if(volumeSlider){volumeSlider.addEventListener("input",updateMasterVolume);volumeSlider.addEventListener("change",updateMasterVolume);}
+updateMasterVolume();
 
 /* =====================================================
    COMPARTIR Y SOLICITAR CANCIÓN
