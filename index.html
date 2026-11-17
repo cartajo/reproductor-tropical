@@ -127,7 +127,7 @@ body{
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
   border-radius:17px;overflow:hidden;border:2px solid rgba(168,85,247,.85);
   box-shadow:0 0 18px rgba(168,85,247,.45),inset 0 0 15px rgba(0,0,0,.6);
-  background:#070212;display:flex;flex-direction:column;justify-content:center;
+   background:#070212;display:flex;flex-direction:column;justify-content:center;
   align-items:center;padding:0;text-align:center;
 }
 .flip-back{transform:rotateY(180deg)}
@@ -240,6 +240,8 @@ body{
   body{height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
   .cyber-player-container{transform:scale(0.84,0.63);transform-origin:center center;margin:0 auto}
 }
+
+
 /* =====================================================
    TROPICAL FLOW - VIAJE CINEMATOGRAFICO 3D
    Capa independiente: conserva intacta la cortina original
@@ -351,7 +353,7 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
         <span class="reel-number" id="reel-number">3</span>
       </div>
       <div class="reel-caption">PREPARANDO PROYECTOR EN VIVO...</div>
-    </div>
+        </div>
 
     <div class="cinema-act" id="cinema-act-3">
       <div class="feature-kicker">🌴 PRESENTACIÓN ESTELAR 🇵🇷</div>
@@ -482,7 +484,7 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
         <img src="WE_MAKE_MUSIC_PR_1600x900.jpg" class="brand-logo" alt="WE MAKE MUSIC PR">
         <span class="logo-caption">WE MAKE MUSIC (PR) • 787-579-7226</span>
       </div>
-       </div>
+    </div>
     <button class="nav-arrow right-arrow" id="flip-next" aria-label="Siguiente">›</button>
   </div>
 
@@ -650,7 +652,7 @@ function addToHistory(previousTitle){
   historyItems.unshift(previousTitle);
   historyItems=historyItems.slice(0,5);
   try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}
-  renderHistory();
+   renderHistory();
 }
 
 function setSignal(state,label){
@@ -724,7 +726,7 @@ async function updateStationInfo(){
   const listeners=firstValidNumber(source.listeners,source.listener_count);
   listenerCount.textContent=listeners!==null?`${listeners} oyentes`:"En línea";
   if(source.bitrate) qualityStatus.textContent=`${source.bitrate} kbps`;
-  }
+}
 updateStationInfo();
 let metadataTimer=setInterval(updateStationInfo,12000);
   /* ECUALIZADOR WEB AUDIO API */
@@ -908,7 +910,7 @@ const tfTunnelOverlay=document.getElementById("tf-tunnel-overlay");
 let tfTunnelStarted=false;
 let tfTunnelTimers=[];
 
-function startTFTunnelSequence(){
+function startTFTunnelSequence(autoPlayAudio){
   if(tfTunnelStarted || !tfTunnelOverlay) return;
   tfTunnelStarted=true;
   tfTunnelTimers.forEach(t=>clearTimeout(t));
@@ -933,6 +935,9 @@ function startTFTunnelSequence(){
     tfTunnelOverlay.classList.remove("active","portal-open","exit");
     tfTunnelOverlay.style.display="none";
     document.body.classList.add("tf-player-revealed");
+
+    // La música comienza DESPUÉS de terminar el destello del portal
+    if(autoPlayAudio) startStream();
   },6100));
 }
 
@@ -942,8 +947,10 @@ function openCurtainsAndPlay(autoPlayAudio){
   cinemaTimers.forEach(t=>clearTimeout(t));
   if(skipCinemaBtn) skipCinemaBtn.style.display="none";
   cinemaIntro.classList.add("curtains-open");
-  if(autoPlayAudio) startStream();
-  setTimeout(()=>{cinemaIntro.style.display="none";startTFTunnelSequence();},1850);
+  setTimeout(()=>{
+    cinemaIntro.style.display="none";
+    startTFTunnelSequence(autoPlayAudio);
+  },1850);
 }
 
 function startCinemaShow(){
