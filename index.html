@@ -72,7 +72,7 @@ body{
 .nebula-glow{position:absolute;width:50vw;height:50vw;max-width:800px;max-height:800px;min-width:280px;min-height:280px;border-radius:50%;filter:blur(95px);opacity:.38;will-change:transform;animation:nebulaFloat 14s ease-in-out infinite alternate}
 .nebula-left{background:radial-gradient(circle,#9333ea,transparent 70%);top:-12%;left:-8%}
 .nebula-right{background:radial-gradient(circle,#0284c7,transparent 70%);bottom:-12%;right:-8%;animation-delay:4s}
-  @keyframes nebulaFloat{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(5vw,-4vh,0) scale(1.15)}}
+@keyframes nebulaFloat{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(5vw,-4vh,0) scale(1.15)}}
 .ufo-craft{position:absolute;will-change:transform;filter:drop-shadow(0 0 18px rgba(56,189,248,.75))}
 .ufo-craft svg{display:block;width:100%;height:auto;animation:ufoHover 2.8s ease-in-out infinite alternate}
 @keyframes ufoHover{0%{transform:translateY(-6px) rotate(-3deg)}100%{transform:translateY(6px) rotate(3deg)}}
@@ -81,6 +81,7 @@ body{
 .ufo-3{top:34%;width:clamp(80px,7.5vw,120px);opacity:.88;filter:drop-shadow(0 0 14px rgba(168,85,247,.85));animation:ufoFlyLeft 24s linear infinite 8s}
 @keyframes ufoFlyRight{0%{transform:translate3d(-260px,0,0)}100%{transform:translate3d(calc(100vw + 260px),-8vh,0)}}
 @keyframes ufoFlyLeft{0%{transform:translate3d(calc(100vw + 260px),0,0)}100%{transform:translate3d(-260px,7vh,0)}}
+
 /* REPRODUCTOR PRO ORIGINAL */
 .cyber-player-container{
   position:relative;z-index:5;width:100%;max-width:400px;padding:20px;
@@ -143,7 +144,7 @@ body{
 .nav-arrow{
   position:absolute;top:50%;transform:translateY(-50%);
   background:rgba(9,0,20,.78);color:#fff;border:1.5px solid rgba(168,85,247,.8);
-   border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;
+  border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;
   font-size:13px;display:flex;align-items:center;justify-content:center;
 }
 .nav-arrow:hover{background:#a855f7}
@@ -211,7 +212,7 @@ body{
 .eq-slider-wrap{height:84px;display:flex;align-items:center;justify-content:center}
 .eq-slider{width:76px;transform:rotate(-90deg);accent-color:#ec4899;cursor:pointer;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
 .eq-band-value{display:block;color:#fff;font-size:8px;font-weight:800;margin-top:4px}
-  .eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
+.eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
 .eq-description{font-size:9px;color:#9ca3af}
 .eq-reset-btn{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.45);color:#e9d5ff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:12px;cursor:pointer}
 .eq-reset-btn:hover{background:#a855f7;color:#fff}
@@ -240,797 +241,788 @@ body{
   body{height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
   .cyber-player-container{transform:scale(0.84,0.63);transform-origin:center center;margin:0 auto}
 }
+/* ==========================================
+   FASE 3: TÚNEL ESPACIAL CINEMATOGRÁFICO
+========================================== */
 
-
-/* =====================================================
-   TROPICAL FLOW - VIAJE CINEMATOGRAFICO 3D
-   Capa independiente: conserva intacta la cortina original
-   ===================================================== */
 .tf-tunnel-overlay{
-  position:fixed;inset:0;z-index:9998;display:none;
-  align-items:center;justify-content:center;overflow:hidden;
-  pointer-events:none;opacity:0;
-  background:radial-gradient(ellipse at 50% 55%,#17245c 0%,#09051f 42%,#020108 100%);
-  perspective:1000px;
+  position:fixed;
+  inset:0;
+  z-index:9990;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  background:radial-gradient(circle at center,#160b35 0%,#05020e 55%,#000 100%);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity 1s ease,visibility 1s ease;
 }
-.tf-tunnel-overlay.active{display:flex;opacity:1}
-.tf-tunnel-overlay .tf-tunnel{
-  position:absolute;width:100vmax;height:100vmax;left:50%;top:50%;
-  transform:translate(-50%,-50%) rotateX(12deg);transform-style:preserve-3d;
+
+.tf-tunnel-overlay.active{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
 }
-.tf-tunnel-overlay .tf-ring{
-  position:absolute;left:50%;top:50%;width:35%;height:35%;
-  border:3px solid rgba(56,189,248,.8);border-radius:50%;
-  box-shadow:0 0 18px #38bdf8,inset 0 0 18px #38bdf8,0 0 45px rgba(168,85,247,.8);
-  transform:translate(-50%,-50%) scale(.12);opacity:0;
+
+.tf-tunnel-space{
+  position:absolute;
+  inset:0;
+  perspective:900px;
+  overflow:hidden;
 }
-.tf-tunnel-overlay.active .tf-ring{animation:tfRingTravel 3.5s linear infinite}
-.tf-tunnel-overlay .tf-ring:nth-child(2){border-color:#a855f7;animation-delay:.7s}
-.tf-tunnel-overlay .tf-ring:nth-child(3){border-color:#38bdf8;animation-delay:1.4s}
-.tf-tunnel-overlay .tf-ring:nth-child(4){border-color:#c084fc;animation-delay:2.1s}
-@keyframes tfRingTravel{
-  0%{transform:translate(-50%,-50%) scale(.08);opacity:0}
-  12%{opacity:.9}
-  100%{transform:translate(-50%,-50%) scale(5.5);opacity:0}
+
+.tf-tunnel-center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:100px;
+  height:100px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,#38bdf8 15%,#9333ea 40%,transparent 75%);
+  box-shadow:0 0 40px #38bdf8,0 0 100px #9333ea;
+  animation:tfCenterPulse 2s ease-in-out infinite alternate;
 }
-.tf-tunnel-overlay .tf-light{
-  position:absolute;width:2px;height:65vh;top:50%;left:50%;
-  transform-origin:center;background:linear-gradient(transparent,#38bdf8,#fff,transparent);
-  box-shadow:0 0 14px #38bdf8;opacity:0;
+
+@keyframes tfCenterPulse{
+  from{transform:translate(-50%,-50%) scale(.7);opacity:.65}
+  to{transform:translate(-50%,-50%) scale(1.5);opacity:1}
 }
-.tf-tunnel-overlay.active .tf-light{animation:tfLightRush 1.1s linear infinite}
-.tf-tunnel-overlay .tf-light:nth-child(5){transform:translate(-50%,-50%) rotate(25deg)}
-.tf-tunnel-overlay .tf-light:nth-child(6){transform:translate(-50%,-50%) rotate(85deg);animation-delay:.25s}
-.tf-tunnel-overlay .tf-light:nth-child(7){transform:translate(-50%,-50%) rotate(145deg);animation-delay:.5s}
-.tf-tunnel-overlay .tf-light:nth-child(8){transform:translate(-50%,-50%) rotate(205deg);animation-delay:.75s}
-.tf-tunnel-overlay .tf-light:nth-child(9){transform:translate(-50%,-50%) rotate(265deg);animation-delay:.4s}
-.tf-tunnel-overlay .tf-light:nth-child(10){transform:translate(-50%,-50%) rotate(325deg);animation-delay:.65s}
-@keyframes tfLightRush{
-  0%{opacity:0;filter:blur(2px);height:15vh}
-  35%{opacity:.9}
-  100%{opacity:0;filter:blur(8px);height:95vh}
+
+.tf-tunnel-ring{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:100px;
+  height:100px;
+  border:3px solid rgba(56,189,248,.9);
+  border-radius:50%;
+  transform:translate(-50%,-50%) translateZ(0);
+  box-shadow:
+    0 0 15px #38bdf8,
+    inset 0 0 15px #38bdf8,
+    0 0 35px rgba(168,85,247,.9);
+  animation:tfTunnelZoom 3s linear infinite;
 }
-.tf-tunnel-overlay .tf-portal{
-  position:absolute;left:50%;top:50%;width:min(48vw,48vh);aspect-ratio:1;
-  border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.05);
-  border:8px solid #a855f7;
-  background:radial-gradient(circle,rgba(56,189,248,.35),rgba(88,28,135,.2) 55%,transparent 70%);
-  box-shadow:0 0 25px #38bdf8,0 0 65px #a855f7,0 0 130px rgba(56,189,248,.8),inset 0 0 35px #c084fc;
-}
-.tf-tunnel-overlay.portal-open .tf-portal{animation:tfPortalOpen 2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes tfPortalOpen{
-  0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}
-  45%{opacity:1}
-  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
-}
-.tf-tunnel-overlay.exit{animation:tfPortalFlash .9s ease-in forwards}
-@keyframes tfPortalFlash{
-  0%{filter:brightness(1);opacity:1}
-  45%{filter:brightness(3);opacity:1}
-  100%{filter:brightness(5);opacity:0}
-}
-/* La entrada no modifica el transform/escala responsive del reproductor */
-body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s ease-out both}
-@keyframes tfPlayerArrival{
-  0%{opacity:0;filter:brightness(2.5) blur(12px);clip-path:inset(12% 12% 12% 12%)}
-  65%{opacity:1;filter:brightness(1.5) blur(2px);clip-path:inset(0)}
-  100%{opacity:1;filter:brightness(1) blur(0);clip-path:inset(0)}
-}
-@media(prefers-reduced-motion:reduce){
-  .tf-tunnel-overlay.active .tf-ring,.tf-tunnel-overlay.active .tf-light,
-  .tf-tunnel-overlay.portal-open .tf-portal,.tf-tunnel-overlay.exit,
-  body.tf-player-revealed .cyber-player-container{
-    animation-duration:.01ms!important;animation-iteration-count:1!important;
+
+.tf-tunnel-ring:nth-child(2){animation-delay:.35s;border-color:#ec4899}
+.tf-tunnel-ring:nth-child(3){animation-delay:.7s;border-color:#a855f7}
+.tf-tunnel-ring:nth-child(4){animation-delay:1.05s;border-color:#38bdf8}
+.tf-tunnel-ring:nth-child(5){animation-delay:1.4s;border-color:#facc15}
+.tf-tunnel-ring:nth-child(6){animation-delay:1.75s;border-color:#ec4899}
+
+@keyframes tfTunnelZoom{
+  0%{
+    width:80px;
+    height:80px;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.2);
+  }
+  15%{opacity:1}
+  100%{
+    width:150vw;
+    height:150vw;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.8);
   }
 }
 
+.tf-tunnel-lights{
+  position:absolute;
+  inset:-50%;
+  background:conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(56,189,248,.25) 35deg,
+    transparent 75deg,
+    rgba(236,72,153,.25) 120deg,
+    transparent 170deg,
+    rgba(168,85,247,.3) 230deg,
+    transparent 280deg,
+    rgba(250,204,21,.2) 320deg,
+    transparent 360deg
+  );
+  animation:tfLightsSpin 8s linear infinite;
+  filter:blur(12px);
+}
+
+@keyframes tfLightsSpin{
+  to{transform:rotate(360deg)}
+}
+
+/* PORTAL DE LUZ */
+
+.tf-portal{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(65vw,420px);
+  aspect-ratio:1;
+  border-radius:50%;
+  border:7px solid rgba(56,189,248,.9);
+  transform:translate(-50%,-50%) scale(.05);
+  opacity:0;
+  box-shadow:
+    0 0 20px #38bdf8,
+    0 0 45px #9333ea,
+    inset 0 0 35px #38bdf8,
+    inset 0 0 70px #9333ea;
+  background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(56,189,248,.55) 15%,rgba(88,28,135,.5) 48%,rgba(0,0,0,.9) 75%);
+  transition:transform 2s cubic-bezier(.16,1,.3,1),opacity 1s ease;
+}
+
+.tf-portal.portal-open{
+  transform:translate(-50%,-50%) scale(1);
+  opacity:1;
+}
+
+.tf-portal:before{
+  content:"";
+  position:absolute;
+  inset:-18px;
+  border:3px dashed rgba(236,72,153,.9);
+  border-radius:50%;
+  animation:tfPortalRotate 12s linear infinite;
+}
+
+.tf-portal:after{
+  content:"";
+  position:absolute;
+  inset:12%;
+  border:2px solid rgba(250,204,21,.85);
+  border-radius:50%;
+  box-shadow:0 0 25px #facc15;
+  animation:tfPortalRotate 7s linear infinite reverse;
+}
+
+@keyframes tfPortalRotate{
+  to{transform:rotate(360deg)}
+}
+
+/* SALIDA DEL PORTAL */
+
+.tf-tunnel-overlay.exit{
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 1.5s ease,visibility 1.5s ease;
+}
+
+.tf-player-revealed .cyber-player-container{
+  animation:tfPlayerReveal 1.5s cubic-bezier(.16,1,.3,1) both;
+}
+
+@keyframes tfPlayerReveal{
+  0%{
+    opacity:0;
+    transform:scale(.65) translateY(40px);
+    filter:blur(12px);
+  }
+  70%{
+    opacity:1;
+    filter:blur(0);
+  }
+  100%{
+    opacity:1;
+    transform:scale(1) translateY(0);
+    filter:blur(0);
+  }
+}
+
+.tf-tunnel-message{
+  position:absolute;
+  z-index:5;
+  left:0;
+  right:0;
+  top:12%;
+  text-align:center;
+  padding:0 15px;
+  color:#fff;
+  font-size:clamp(13px,3vw,22px);
+  font-weight:900;
+  letter-spacing:3px;
+  text-shadow:0 0 15px #38bdf8,0 0 30px #9333ea;
+  animation:tfMessageGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes tfMessageGlow{
+  from{opacity:.65;text-shadow:0 0 10px #38bdf8}
+  to{opacity:1;text-shadow:0 0 25px #38bdf8,0 0 45px #ec4899}
+}
+
+/* AJUSTES PARA PANTALLAS PEQUEÑAS */
+
+@media(max-width:600px){
+  .tf-portal{width:75vw}
+  .tf-tunnel-message{letter-spacing:2px;top:15%}
+}
+
+/* FIN DE LOS ESTILOS ESPACIALES */
 </style>
 </head>
+
 <body>
-<div class="cinema-intro-overlay" id="cinema-intro">
+
+<!-- ======================================
+     INTRO CINEMATOGRÁFICA
+====================================== -->
+
+<div class="cinema-intro-overlay" id="cinemaIntro">
+
+  <div class="projector-beam"></div>
   <div class="cinema-valance"></div>
+
   <div class="curtain-panel curtain-left"></div>
   <div class="curtain-panel curtain-right"></div>
-  <div class="projector-beam"></div>
 
   <div class="cinema-stage">
-    <div class="ticket-card" id="cinema-welcome">
-      <div class="vip-badge">🎟️ SALA VIP • DOLBY DIGITAL HD</div>
-      <h1 class="cinema-main-title">TROPICAL FLOW<span>RADIO TV</span></h1>
-      <p class="cinema-sub">TRANSMISIÓN ESTELAR EN VIVO DESDE PUERTO RICO 🇵🇷</p>
-      <button type="button" class="cinema-enter-btn" id="cinema-enter-btn">🎬 ENTRAR A LA SALA</button>
-    </div>
 
-    <div class="cinema-act" id="cinema-act-1">
-      <div class="policy-icons">📵 🎧 🍿</div>
-      <h2 class="policy-title">SUBE EL VOLUMEN Y DISFRUTA LA FUNCIÓN</h2>
-      <p class="policy-desc">SEÑAL DIGITAL DE ALTA DEFINICIÓN • TROPICAL FLOW NETWORK</p>
-    </div>
+    <div class="cinema-act active" id="cinemaWelcome">
+      <div class="ticket-card">
+        <div class="vip-badge">EXPERIENCIA VIP</div>
 
-    <div class="cinema-act" id="cinema-act-2">
-      <div class="reel-circle">
-        <div class="reel-sweep"></div>
-        <span class="reel-number" id="reel-number">3</span>
+        <h1 class="cinema-main-title">
+          TROPICAL FLOW
+          <span>RADIO TV</span>
+        </h1>
+
+        <p class="cinema-sub">
+          MÚSICA · TECNOLOGÍA · ENTRETENIMIENTO
+        </p>
+
+        <button class="cinema-enter-btn" id="cinemaEnterBtn">
+          ✨ ENTRAR A LA EXPERIENCIA ✨
+        </button>
       </div>
-      <div class="reel-caption">PREPARANDO PROYECTOR EN VIVO...</div>
     </div>
 
-    <div class="cinema-act" id="cinema-act-3">
-      <div class="feature-kicker">🌴 PRESENTACIÓN ESTELAR 🇵🇷</div>
-      <div class="feature-banner">¡EN EL AIRE!</div>
+    <div class="cinema-act" id="cinemaFeature">
+      <div class="feature-kicker">BIENVENIDOS A</div>
+      <div class="feature-banner">TROPICAL FLOW</div>
+      <p class="cinema-sub">RADIO TV · EXPERIENCIA DIGITAL</p>
     </div>
+
   </div>
 
-  <button type="button" class="skip-cinema-btn" id="skip-cinema-btn">SALTAR INTRO ⏭</button>
+  <button class="skip-cinema-btn" id="skipCinemaBtn">
+    SALTAR INTRO
+  </button>
+
 </div>
 
+<!-- ======================================
+     UNIVERSO ESPACIAL
+====================================== -->
 
+<div class="space-universe">
 
-<!-- TROPICAL FLOW: TUNEL CINEMATOGRAFICO 3D -->
-<div class="tf-tunnel-overlay" id="tf-tunnel-overlay" aria-hidden="true">
-  <div class="tf-tunnel">
-    <div class="tf-ring"></div>
-    <div class="tf-ring"></div>
-    <div class="tf-ring"></div>
-    <div class="tf-ring"></div>
-    <div class="tf-light"></div>
-    <div class="tf-light"></div>
-    <div class="tf-light"></div>
-    <div class="tf-light"></div>
-    <div class="tf-light"></div>
-    <div class="tf-light"></div>
-  </div>
-  <div class="tf-portal"></div>
-</div>
-<!-- FIN DEL TUNEL -->
-
-<div class="space-universe" aria-hidden="true">
   <div class="space-stars-layer"></div>
   <div class="space-stars-big"></div>
+
   <div class="nebula-glow nebula-left"></div>
   <div class="nebula-glow nebula-right"></div>
 
+  <!-- UFO 1 -->
   <div class="ufo-craft ufo-1">
-    <svg viewBox="0 0 220 110" xmlns="http://w3.org">
-      <defs>
-        <radialGradient id="dome1" cx="50%" cy="35%" r="60%">
-          <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.95"/>
-           <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.75"/>
-          <stop offset="100%" stop-color="#0369a1" stop-opacity="0.9"/>
-        </radialGradient>
-        <linearGradient id="hull1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#cbd5e1"/>
-          <stop offset="50%" stop-color="#475569"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </linearGradient>
-        <linearGradient id="beam1" x1="50%" y1="0%" x2="50%" y2="100%">
-          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <polygon points="75,62 145,62 175,108 45,108" fill="url(#beam1)"/>
-      <ellipse cx="110" cy="40" rx="46" ry="24" fill="url(#dome1)" stroke="#7dd3fc" stroke-width="1.5"/>
-      <ellipse cx="110" cy="54" rx="95" ry="20" fill="url(#hull1)" stroke="#38bdf8" stroke-width="2"/>
-      <ellipse cx="110" cy="64" rx="52" ry="9" fill="#0284c7"/>
-      <circle cx="42" cy="54" r="4" fill="#ffffff"/>
-      <circle cx="74" cy="59" r="4.5" fill="#38bdf8"/>
-      <circle cx="110" cy="61" r="5" fill="#ffffff"/>
-      <circle cx="146" cy="59" r="4.5" fill="#38bdf8"/>
-      <circle cx="178" cy="54" r="4" fill="#ffffff"/>
+    <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="57" rx="88" ry="25" fill="#64748b" stroke="#38bdf8" stroke-width="4"/>
+      <ellipse cx="100" cy="45" rx="48" ry="27" fill="#a855f7" stroke="#c4b5fd" stroke-width="3"/>
+      <ellipse cx="100" cy="44" rx="32" ry="18" fill="#38bdf8" opacity=".55"/>
+      <circle cx="45" cy="61" r="5" fill="#facc15"/>
+      <circle cx="75" cy="73" r="5" fill="#ec4899"/>
+      <circle cx="125" cy="73" r="5" fill="#38bdf8"/>
+      <circle cx="155" cy="61" r="5" fill="#facc15"/>
     </svg>
   </div>
 
+  <!-- UFO 2 -->
   <div class="ufo-craft ufo-2">
-    <svg viewBox="0 0 220 110" xmlns="http://w3.org">
+    <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="57" rx="88" ry="25" fill="#312e81" stroke="#ec4899" stroke-width="4"/>
+      <ellipse cx="100" cy="45" rx="48" ry="27" fill="#9333ea" stroke="#f0abfc" stroke-width="3"/>
+      <ellipse cx="100" cy="44" rx="30" ry="17" fill="#f9a8d4" opacity=".55"/>
+      <circle cx="45" cy="61" r="5" fill="#38bdf8"/>
+      <circle cx="75" cy="73" r="5" fill="#facc15"/>
+      <circle cx="125" cy="73" r="5" fill="#38bdf8"/>
+      <circle cx="155" cy="61" r="5" fill="#ec4899"/>
+    </svg>
+  </div>
+
+  <!-- UFO 3 -->
+  <div class="ufo-craft ufo-3">
+    <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="57" rx="88" ry="25" fill="#334155" stroke="#a855f7" stroke-width="4"/>
+      <ellipse cx="100" cy="45" rx="48" ry="27" fill="#0e7490" stroke="#38bdf8" stroke-width="3"/>
+      <ellipse cx="100" cy="44" rx="30" ry="17" fill="#67e8f9" opacity=".5"/>
+    </svg>
+  </div>
+
+</div>
+
+<!-- ======================================
+     TÚNEL Y PORTAL ESPACIAL
+====================================== -->
+
+<div class="tf-tunnel-overlay" id="tfTunnelOverlay">
+
+  <div class="tf-tunnel-space">
+
+    <div class="tf-tunnel-lights"></div>
+
+    <div class="tf-tunnel-center"></div>
+
+    <div class="tf-tunnel-ring"></div>
+    <div class="tf-tunnel-ring"></div>
+    <div class="tf-tunnel-ring"></div>
+    <div class="tf-tunnel-ring"></div>
+    <div class="tf-tunnel-ring"></div>
+    <div class="tf-tunnel-ring"></div>
+
+    <div class="tf-portal" id="tfPortal"></div>
+
+  </div>
+
+  <div class="tf-tunnel-message">
+    PREPARANDO VIAJE A TROPICAL FLOW RADIO TV
+  </div>
+
+</div>
+  <!-- ==========================================
+     MISIÓN ESPACIAL: PUERTO RICO Y TROPICAL FLOW
+========================================== -->
+
+<div class="tf-space-mission" aria-hidden="true">
+
+  <div class="tf-space-stars"></div>
+
+  <div class="tf-mission-tag">
+    TROPICAL FLOW RADIO TV · MISIÓN ESPACIAL
+  </div>
+
+  <!-- PLANETA TIERRA -->
+
+  <div class="tf-earth-wrap">
+    <div class="tf-earth-glow"></div>
+    <div class="tf-earth"></div>
+    <div class="tf-orbit"></div>
+
+    <div class="tf-earth-caption">
+      PUERTO RICO · PLANETA TIERRA
+    </div>
+  </div>
+
+  <!-- NAVE 1: PUERTO RICO -->
+
+  <div class="tf-mission-ship tf-ship-pr">
+
+    <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+
       <defs>
-        <radialGradient id="dome2" cx="50%" cy="35%" r="60%">
-          <stop offset="0%" stop-color="#fce7f3" stop-opacity="0.95"/>
-          <stop offset="55%" stop-color="#ec4899" stop-opacity="0.75"/>
-          <stop offset="100%" stop-color="#831843" stop-opacity="0.9"/>
-        </radialGradient>
-        <linearGradient id="hull2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#e2e8f0"/>
-          <stop offset="50%" stop-color="#3b0764"/>
-          <stop offset="100%" stop-color="#090014"/>
+        <linearGradient id="tfPrHull" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#fff"/>
+          <stop offset=".48" stop-color="#a8c5e8"/>
+          <stop offset="1" stop-color="#334b70"/>
         </linearGradient>
-        <linearGradient id="beam2" x1="50%" y1="0%" x2="50%" y2="100%">
-          <stop offset="0%" stop-color="#ec4899" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+
+        <linearGradient id="tfPrWing" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#dbeafe"/>
+          <stop offset="1" stop-color="#64748b"/>
+        </linearGradient>
+
+        <linearGradient id="tfPrFlame">
+          <stop stop-color="#fff"/>
+          <stop offset=".4" stop-color="#38bdf8"/>
+          <stop offset="1" stop-color="#2563eb" stop-opacity="0"/>
         </linearGradient>
       </defs>
-      <polygon points="75,62 145,62 175,108 45,108" fill="url(#beam2)"/>
-      <ellipse cx="110" cy="40" rx="46" ry="24" fill="url(#dome2)" stroke="#f9a8d4" stroke-width="1.5"/>
-      <ellipse cx="110" cy="54" rx="95" ry="20" fill="url(#hull2)" stroke="#ec4899" stroke-width="2"/>
-      <ellipse cx="110" cy="64" rx="52" ry="9" fill="#db2777"/>
-      <circle cx="42" cy="54" r="4" fill="#ffffff"/>
-      <circle cx="74" cy="59" r="4.5" fill="#f472b6"/>
-      <circle cx="110" cy="61" r="5" fill="#ffffff"/>
-      <circle cx="146" cy="59" r="4.5" fill="#f472b6"/>
-      <circle cx="178" cy="54" r="4" fill="#ffffff"/>
+
+      <path d="M35 84 L5 65 L18 105 L68 108 Z"
+            fill="url(#tfPrFlame)" opacity=".9"/>
+
+      <path d="M110 84 L48 28 L145 65 L300 70 L355 84 L300 98 L145 103 L48 140 Z"
+            fill="url(#tfPrWing)" stroke="#e0f2fe" stroke-width="3"/>
+
+      <path d="M55 84 Q145 20 310 72 L390 84 L310 96 Q145 148 55 84Z"
+            fill="url(#tfPrHull)" stroke="#fff" stroke-width="3"/>
+
+      <path d="M310 72 L390 84 L310 96 L285 84Z"
+            fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+
+      <path d="M82 82 Q150 48 260 74 L300 84 L260 94 Q150 120 82 86Z"
+            fill="#0c4a6e" stroke="#7dd3fc" stroke-width="2"/>
+
+      <path d="M112 78 Q155 52 205 73 L205 95 Q155 116 112 90Z"
+            fill="#38bdf8" opacity=".75"/>
+
+      <!-- BANDERA DE PUERTO RICO -->
+
+      <rect x="213" y="76" width="61" height="17" rx="3"
+            fill="#fff" stroke="#64748b"/>
+
+      <g transform="translate(220 78)">
+        <rect width="47" height="13" fill="#fff"/>
+
+        <path d="M0 0h47v2H0zm0 4h47v2H0zm0 4h47v2H0z"
+              fill="#ed1c24"/>
+
+        <path d="M0 0L17 6.5 0 13Z" fill="#0b3c8c"/>
+
+        <path d="M5 3.4l.8 2.2h2.3L6.2 7l.7 2.2L5 7.8l-1.9 1.4.7-2.2-1.9-1.4h2.3z"
+              fill="#fff"/>
+      </g>
+
+      <path d="M25 84h-17"
+            stroke="#7dd3fc" stroke-width="5" stroke-linecap="round"/>
+
+      <circle cx="365" cy="84" r="5" fill="#38bdf8"/>
+      <circle cx="365" cy="84" r="10" fill="none" stroke="#bae6fd"/>
+
     </svg>
+
   </div>
 
-  <div class="ufo-craft ufo-3">
-    <svg viewBox="0 0 220 110" xmlns="http://w3.org">
-      <ellipse cx="110" cy="40" rx="46" ry="24" fill="#a855f7" fill-opacity="0.75" stroke="#e9d5ff" stroke-width="1.5"/>
-      <ellipse cx="110" cy="54" rx="95" ry="20" fill="#1e1b4b" stroke="#c084fc" stroke-width="2"/>
-      <circle cx="45" cy="54" r="4" fill="#38bdf8"/>
-      <circle cx="88" cy="59" r="4.5" fill="#ffffff"/>
-      <circle cx="132" cy="59" r="4.5" fill="#ffffff"/>
-      <circle cx="175" cy="54" r="4" fill="#38bdf8"/>
+  <!-- NAVE 2: TROPICAL FLOW RADIO TV -->
+
+  <div class="tf-mission-ship tf-ship-flow">
+
+    <svg viewBox="0 0 460 180" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <linearGradient id="tfFlowHull" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#fff"/>
+          <stop offset=".38" stop-color="#c4b5fd"/>
+          <stop offset="1" stop-color="#312e81"/>
+        </linearGradient>
+
+        <linearGradient id="tfFlowWing" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#e0f2fe"/>
+          <stop offset="1" stop-color="#4338ca"/>
+        </linearGradient>
+
+        <linearGradient id="tfFlowEngine">
+          <stop stop-color="#fff"/>
+          <stop offset=".35" stop-color="#f0abfc"/>
+          <stop offset="1" stop-color="#a855f7" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+
+      <path d="M38 90 L0 67 L16 112 L73 112Z"
+            fill="url(#tfFlowEngine)"/>
+
+      <path d="M120 90 L55 30 L165 66 L350 70 L414 90 L350 110 L165 114 L55 150Z"
+            fill="url(#tfFlowWing)" stroke="#c4b5fd" stroke-width="3"/>
+
+      <path d="M60 90 Q165 20 360 76 L430 90 L360 104 Q165 160 60 90Z"
+            fill="url(#tfFlowHull)" stroke="#fff" stroke-width="3"/>
+
+      <path d="M95 87 Q170 48 280 78 L325 90 L280 102 Q170 132 95 93Z"
+            fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+
+      <path d="M118 84 Q160 54 205 77 L205 101 Q160 125 118 96Z"
+            fill="#38bdf8" opacity=".72"/>
+
+      <!-- LOGO DE LA EMISORA -->
+
+      <rect x="218" y="76" width="105" height="29" rx="5"
+            fill="#090014" stroke="#a855f7" stroke-width="2"/>
+
+      <text x="270" y="88" text-anchor="middle"
+            font-size="12" font-weight="900" fill="#fff">
+        TROPICAL FLOW
+      </text>
+
+      <text x="270" y="99" text-anchor="middle"
+            font-size="8" font-weight="800" fill="#f0abfc">
+        RADIO TV
+      </text>
+
+      <path d="M26 90H8"
+            stroke="#e9d5ff" stroke-width="5" stroke-linecap="round"/>
+
+      <circle cx="395" cy="90" r="6" fill="#f0abfc"/>
+      <circle cx="395" cy="90" r="12" fill="none" stroke="#f5d0fe"/>
+
     </svg>
+
   </div>
+
 </div>
 
-<div class="cyber-player-container">
-  <div class="top-status-bar">
-    <div>
-      <span class="clock-title">HORA LOCAL</span>
-      <span class="clock-num" id="live-clock">00:00:00</span>
-    </div>
-    <div class="badge-live">
-      <span class="dot-signal" id="signal-dot"></span>
-      <span class="text-signal" id="signal-text">OFFLINE</span>
-    </div>
-  </div>
+<!-- FIN DE LA MISIÓN ESPACIAL -->
+<style>
+/* ==========================================
+   PARTE 4: ANIMACIÓN DE LA MISIÓN ESPACIAL
+========================================== */
 
-  <div class="flip-screen-container">
-    <button class="nav-arrow left-arrow" id="flip-prev" aria-label="Anterior">‹</button>
-    <div class="flip-card" id="flip-card">
-      <div class="flip-face">
-        <img src="Tropical_Flow_Radio_TV_1600x900.jpg" class="brand-logo" alt="Tropical Flow Radio TV">
-      </div>
-      <div class="flip-face flip-back">
-        <img src="WE_MAKE_MUSIC_PR_1600x900.jpg" class="brand-logo" alt="WE MAKE MUSIC PR">
-        <span class="logo-caption">WE MAKE MUSIC (PR) • 787-579-7226</span>
-      </div>
-    </div>
-    <button class="nav-arrow right-arrow" id="flip-next" aria-label="Siguiente">›</button>
-  </div>
+.tf-space-mission{
+  position:relative;
+  width:100%;
+  min-height:440px;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 50%,#172554 0%,#09051d 48%,#02010a 100%);
+}
 
-  <div class="song-metadata-box">
-    <div class="song-title-label">🎵 SONANDO AHORA</div>
-    <div class="song-now-playing" id="current-track-name">Cargando información de la emisora...</div>
-  </div>
+.tf-space-stars{
+  position:absolute;
+  inset:0;
+  opacity:.8;
+  background-image:
+    radial-gradient(2px 2px at 12% 22%,#fff 99%,transparent),
+    radial-gradient(1px 1px at 35% 68%,#fff 99%,transparent),
+    radial-gradient(2px 2px at 72% 18%,#fff 99%,transparent),
+    radial-gradient(1px 1px at 88% 72%,#fff 99%,transparent),
+    radial-gradient(2px 2px at 52% 42%,#fff 99%,transparent),
+    radial-gradient(1px 1px at 22% 85%,#fff 99%,transparent),
+    radial-gradient(2px 2px at 93% 34%,#fff 99%,transparent);
+  background-size:300px 220px;
+  animation:tfStarDrift 35s linear infinite;
+}
 
-  <div class="stats-row">
-    <div class="stat-box">
-      <span class="stat-label">👥 AUDIENCIA EN VIVO</span>
-      <span class="stat-value" id="listener-count">Conectando...</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-label">📡 CALIDAD DE SEÑAL</span>
-      <span class="stat-value" id="quality-status">HD STEREO</span>
-          </div>
-  </div>
+@keyframes tfStarDrift{
+  from{transform:translateY(0)}
+  to{transform:translateY(-220px)}
+}
 
-  <div class="wave-equalizer" id="player-eq">
-    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-  </div>
-  <div class="control-center">
-    <button class="cyber-play-btn" id="master-btn" aria-label="Reproducir o Pausar">
-      <span id="icon-svg">▶</span>
-    </button>
-    <div class="status-msg" id="status-message">Pulsa ▶ para escuchar en vivo</div>
-  </div>
+.tf-mission-tag{
+  position:absolute;
+  z-index:5;
+  top:18px;
+  left:0;
+  right:0;
+  text-align:center;
+  color:#e0f2fe;
+  font-size:clamp(11px,2vw,16px);
+  font-weight:900;
+  letter-spacing:3px;
+  text-shadow:0 0 12px #38bdf8;
+}
 
-  <div class="volume-section">
-    <span class="volume-icon">🔊</span>
-    <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="85">
-    <span class="volume-number" id="volume-number">85%</span>
-  </div>
+.tf-earth-wrap{
+  position:absolute;
+  width:clamp(190px,35vw,330px);
+  aspect-ratio:1;
+  left:50%;
+  top:52%;
+  transform:translate(-50%,-50%);
+}
 
-  <div class="real-eq-panel">
-    <div class="real-eq-heading">
-      <span class="real-eq-title">🎛️ ECUALIZADOR PRO</span>
-      <span class="real-eq-badge" id="eq-status-badge">5 BANDAS</span>
-    </div>
+.tf-earth-glow{
+  position:absolute;
+  inset:-18%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.34),transparent 68%);
+  animation:tfEarthGlow 4s ease-in-out infinite alternate;
+}
 
-    <div class="eq-bands">
-      <div class="eq-band">
-        <span class="eq-band-name">BASS</span>
-        <span class="eq-band-frequency">60Hz</span>
-        <div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-60" min="-12" max="12" value="0"></div>
-        <span class="eq-band-value" id="eq-value-60">0 dB</span>
-      </div>
-      <div class="eq-band">
-        <span class="eq-band-name">LOW</span>
-        <span class="eq-band-frequency">250Hz</span>
-        <div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-250" min="-12" max="12" value="0"></div>
-        <span class="eq-band-value" id="eq-value-250">0 dB</span>
-      </div>
-      <div class="eq-band">
-        <span class="eq-band-name">MID</span>
-        <span class="eq-band-frequency">1kHz</span>
-        <div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-1000" min="-12" max="12" value="0"></div>
-        <span class="eq-band-value" id="eq-value-1000">0 dB</span>
-      </div>
-      <div class="eq-band">
-        <span class="eq-band-name">HIGH</span>
-        <span class="eq-band-frequency">4kHz</span>
-        <div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-4000" min="-12" max="12" value="0"></div>
-        <span class="eq-band-value" id="eq-value-4000">0 dB</span>
-      </div>
-      <div class="eq-band">
-        <span class="eq-band-name">AIR</span>
-        <span class="eq-band-frequency">12kHz</span>
-        <div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-12000" min="-12" max="12" value="0"></div>
-        <span class="eq-band-value" id="eq-value-12000">0 dB</span>
-      </div>
-    </div>
+.tf-earth{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border-radius:50%;
+  border:2px solid rgba(147,197,253,.8);
+  background:
+    radial-gradient(ellipse at 28% 35%,rgba(34,197,94,.95) 0 9%,transparent 10%),
+    radial-gradient(ellipse at 60% 62%,rgba(22,163,74,.95) 0 12%,transparent 13%),
+    radial-gradient(ellipse at 72% 27%,rgba(34,197,94,.9) 0 8%,transparent 9%),
+    radial-gradient(ellipse at 40% 75%,rgba(21,128,61,.9) 0 8%,transparent 9%),
+    linear-gradient(145deg,#7dd3fc,#075985 48%,#082f49);
+  box-shadow:
+    inset -25px -10px 45px rgba(0,0,0,.75),
+    inset 10px 5px 25px rgba(255,255,255,.35),
+    0 0 25px #38bdf8,
+    0 0 65px rgba(37,99,235,.6);
+  animation:tfEarthRotate 24s linear infinite;
+}
 
-    <div class="eq-reset-row">
-      <span class="eq-description">Ajuste de frecuencias en tiempo real</span>
-      <button class="eq-reset-btn" id="eq-reset" type="button">Resetear</button>
-    </div>
-  </div>
+@keyframes tfEarthRotate{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(25deg)}
+}
 
-  <div class="history-box">
-    <span class="history-title">🕒 ÚLTIMAS CANCIONES QUE SONARON</span>
-    <ul class="history-list" id="history-list">
-      <li>Esperando cambio de canción...</li>
-    </ul>
-  </div>
+@keyframes tfEarthGlow{
+  from{opacity:.5;transform:scale(.92)}
+  to{opacity:1;transform:scale(1.12)}
+}
 
-  <div class="action-buttons">
-    <button class="action-btn" id="share-button" type="button">📲 Compartir</button>
-    <button class="action-btn whatsapp" id="request-button" type="button">💬 Pedir Canción</button>
-  </div>
-</div>
+.tf-orbit{
+  position:absolute;
+  inset:-13%;
+  border:1px solid rgba(125,211,252,.55);
+  border-radius:50%;
+  transform:rotateX(68deg) rotateZ(-15deg);
+  box-shadow:0 0 12px rgba(56,189,248,.4);
+}
 
-<audio id="core-audio" preload="none"></audio>
+.tf-earth-caption{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-36px;
+  text-align:center;
+  color:#bae6fd;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-shadow:0 0 10px #38bdf8;
+  white-space:nowrap;
+}
 
+.tf-mission-ship{
+  position:absolute;
+  z-index:4;
+  width:clamp(180px,34vw,340px);
+  filter:drop-shadow(0 0 12px rgba(56,189,248,.75));
+}
+
+.tf-mission-ship svg{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.tf-ship-pr{
+  top:25%;
+  left:-45%;
+  animation:tfShipPRFlight 12s ease-in-out infinite;
+}
+
+.tf-ship-flow{
+  top:62%;
+  left:-55%;
+  animation:tfShipFlowFlight 14s ease-in-out infinite;
+  animation-delay:2s;
+}
+
+@keyframes tfShipPRFlight{
+  0%{left:-45%;transform:translateY(0) rotate(4deg) scale(.7);opacity:0}
+  12%{opacity:1}
+  48%{left:42%;transform:translateY(-35px) rotate(-3deg) scale(1)}
+  82%{opacity:1}
+  100%{left:115%;transform:translateY(-70px) rotate(5deg) scale(.65);opacity:0}
+}
+
+@keyframes tfShipFlowFlight{
+  0%{left:-55%;transform:translateY(0) rotate(-4deg) scale(.65);opacity:0}
+  12%{opacity:1}
+  50%{left:42%;transform:translateY(25px) rotate(3deg) scale(1)}
+  84%{opacity:1}
+  100%{left:120%;transform:translateY(65px) rotate(-4deg) scale(.6);opacity:0}
+}
+
+@media(max-width:600px){
+  .tf-space-mission{min-height:340px}
+  .tf-earth-wrap{width:190px}
+  .tf-ship-pr{top:28%}
+  .tf-ship-flow{top:61%}
+  .tf-mission-tag{letter-spacing:1.5px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .tf-space-stars,
+  .tf-earth,
+  .tf-earth-glow,
+  .tf-ship-pr,
+  .tf-ship-flow{
+    animation:none!important;
+  }
+}
+</style>
 <script>
-/* RELOJ 12 HORAS (AM/PM EN PC Y CELULAR) */
-function updateClock(){
-  const now=new Date();
-  document.getElementById("live-clock").textContent=
-    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-}
-updateClock();
-setInterval(updateClock,1000);
+/* ==========================================
+   PARTE 5: SECUENCIA DE ENTRADA TROPICAL FLOW
+========================================== */
 
+(function(){
 
-const flipCard=document.getElementById("flip-card");
-let isFlipped=false;
-function toggleFlip(){
-  isFlipped=!isFlipped;
-  flipCard.classList.toggle("is-flipped",isFlipped);
-}
-let flipTimer=setInterval(toggleFlip,7000);
-document.getElementById("flip-prev").addEventListener("click",toggleFlip);
-document.getElementById("flip-next").addEventListener("click",toggleFlip);
+  const cinema = document.getElementById("cinemaIntro");
+  const enterButton = document.getElementById("cinemaEnterBtn");
+  const skipButton = document.getElementById("skipCinemaBtn");
+  const welcome = document.getElementById("cinemaWelcome");
+  const feature = document.getElementById("cinemaFeature");
 
-/* CONFIGURACIÓN CASTER.FM */
-const CASTER_HOST="sapircast.caster.fm";
-const CASTER_PORT="16693";
-const STREAM_MOUNT="/kidAJ";
-const STREAM_URL=`https://${CASTER_HOST}:${CASTER_PORT}${STREAM_MOUNT}`;
-const STATS_URL=`https://${CASTER_HOST}:${CASTER_PORT}/admin/publicstats.json`;
+  const tunnel = document.getElementById("tfTunnelOverlay");
+  const portal = document.getElementById("tfPortal");
 
-const audioPlayer=document.getElementById("core-audio");
-const masterButton=document.getElementById("master-btn");
-const icon=document.getElementById("icon-svg");
-const signalDot=document.getElementById("signal-dot");
-const signalText=document.getElementById("signal-text");
-const trackName=document.getElementById("current-track-name");
-const listenerCount=document.getElementById("listener-count");
-const qualityStatus=document.getElementById("quality-status");
-const waveEq=document.getElementById("player-eq");
-const statusMessage=document.getElementById("status-message");
-const historyList=document.getElementById("history-list");
-
-let currentSongText="";
-let historyItems=[];
-
-try{
-  const savedHistory=JSON.parse(localStorage.getItem("tf_song_history")||"[]");
-  historyItems=Array.isArray(savedHistory)?savedHistory:[];
-}catch(e){historyItems=[];}
-
-function renderHistory(){
-  historyList.innerHTML="";
-  if(historyItems.length===0){
-    const li=document.createElement("li");
-    li.textContent="Aún no hay historial reciente.";
-    historyList.appendChild(li);
+  if(!cinema || !tunnel || !portal){
+    console.warn("Tropical Flow: faltan elementos de la entrada espacial.");
     return;
   }
-  historyItems.forEach(t=>{
-    const li=document.createElement("li");
-    li.textContent=t;
-    historyList.appendChild(li);
-  });
-}
-renderHistory();
 
-function addToHistory(previousTitle){
-  if(!previousTitle || previousTitle==="Tropical Flow Radio TV" || historyItems[0]===previousTitle) return;
-  historyItems.unshift(previousTitle);
-  historyItems=historyItems.slice(0,5);
-  try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}
-  renderHistory();
-}
+  let sequenceStarted = false;
+  let timers = [];
 
-function setSignal(state,label){
-  signalDot.classList.remove("active","connecting","error");
-  if(state) signalDot.classList.add(state);
-  signalText.textContent=label;
-}
-
-function setPlayingUI(playing){
-  icon.textContent=playing?"Ⅱ":"▶";
-  waveEq.classList.toggle("playing",playing);
-  trackName.classList.toggle("playing",playing);
-}
-
-function extractCasterSource(raw){
-  if(!raw) return null;
-  let root=Array.isArray(raw)?(raw[1]||raw[0]):raw;
-  if(root && root.icestats) root=root.icestats;
-  if(!root || !root.source) return null;
-  if(typeof root.source==="object" && !Array.isArray(root.source)){
-    if(root.source[STREAM_MOUNT]) return root.source[STREAM_MOUNT];
-    const cleanMount=STREAM_MOUNT.replace("/","");
-    if(root.source[cleanMount]) return root.source[cleanMount];
-    const keys=Object.keys(root.source);
-    return keys.length>0?root.source[keys[0]]:null;
+  function wait(callback, milliseconds){
+    const timer = setTimeout(callback,milliseconds);
+    timers.push(timer);
   }
-  if(Array.isArray(root.source)){
-    return root.source.find(s=>String(s.listenurl||s.mount||"").includes(STREAM_MOUNT))||root.source[0];
-  }
-  return root.source;
-}
 
-async function fetchStatsWithFallback(){
-  const urls=[
-    STATS_URL+"?t="+Date.now(),
-    "https://allorigins.win"+encodeURIComponent(STATS_URL+"?t="+Date.now())
-  ];
-  for(const url of urls){
-    try{
-      const res=await fetch(url,{cache:"no-store"});
-      if(!res.ok) continue;
-      const json=await res.json();
-      const src=extractCasterSource(json);
-      if(src) return src;
-    }catch(e){}
-  }
-  return null;
-}
+  function revealPlayer(){
 
-function firstValidNumber(...values){
-  for(const value of values){
-    if(value!==undefined && value!==null && value!=="" && Number.isFinite(Number(value))) return Number(value);
-  }
-  return null;
-}
+    tunnel.classList.remove("active");
+    tunnel.classList.add("exit");
 
-async function updateStationInfo(){
-  const source=await fetchStatsWithFallback();
-  if(!source){
-    if(!currentSongText) trackName.textContent="Tropical Flow Radio TV - En Vivo";
-    listenerCount.textContent="En línea";
-    return;
-  }
-  const meta=source.metadata||{};
-  const newTitle=(source["display-title"]||source.display_title||meta.song||meta.title||source.title||source.server_name||"Tropical Flow Radio TV").trim();
-  if(newTitle){
-    if(currentSongText && currentSongText!==newTitle) addToHistory(currentSongText);
-    currentSongText=newTitle;
-    trackName.textContent=newTitle;
-  }
-  const listeners=firstValidNumber(source.listeners,source.listener_count);
-  listenerCount.textContent=listeners!==null?`${listeners} oyentes`:"En línea";
-  if(source.bitrate) qualityStatus.textContent=`${source.bitrate} kbps`;
-}
-updateStationInfo();
-let metadataTimer=setInterval(updateStationInfo,12000);
-  /* ECUALIZADOR WEB AUDIO API */
-let audioContext=null,sourceNode=null,filters=[],masterGain=null,audioGraphReady=false,graphFailed=false;
-let keepStreamPlaying=false,userPausedStream=false,resumeTimer=null,resumeAttempts=0;
-const EQ_BANDS=[
-  {id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},
-  {id:"eq-250",valueId:"eq-value-250",frequency:250,type:"peaking"},
-  {id:"eq-1000",valueId:"eq-value-1000",frequency:1000,type:"peaking"},
-  {id:"eq-4000",valueId:"eq-value-4000",frequency:4000,type:"peaking"},
-  {id:"eq-12000",valueId:"eq-value-12000",frequency:12000,type:"highshelf"}
-];
-
-function createAudioGraph(){
-  if(audioGraphReady) return true;
-  if(graphFailed) return false;
-  try{
-    const AudioCtx=window.AudioContext||window.webkitAudioContext;
-    if(!AudioCtx) throw new Error("No Web Audio");
-    audioPlayer.crossOrigin="anonymous";
-    audioContext=new AudioCtx();
-    sourceNode=audioContext.createMediaElementSource(audioPlayer);
-    let previous=sourceNode;
-    filters=EQ_BANDS.map(b=>{
-      const f=audioContext.createBiquadFilter();
-      f.type=b.type;f.frequency.value=b.frequency;f.Q.value=1;f.gain.value=0;
-      previous.connect(f);previous=f;return f;
-    });
-    // Ganancia maestra: permite controlar el volumen también en Safari/iPhone,
-    // donde HTMLMediaElement.volume puede ser ignorado por el navegador.
-    masterGain=audioContext.createGain();
-    masterGain.gain.value=Number(volumeSlider?.value ?? 85)/100;
-    previous.connect(masterGain);
-    masterGain.connect(audioContext.destination);
-    audioGraphReady=true;updateAllEQDisplays();updateMasterVolume();
-    document.getElementById("eq-status-badge").textContent="5 BANDAS · ACTIVO";
-    return true;
-  }catch(e){
-    graphFailed=true;
-    document.getElementById("eq-status-badge").textContent="MODO DIRECTO";
-    return false;
-  }
-}
-
-function updateEQBand(i){
-  const band=EQ_BANDS[i],slider=document.getElementById(band.id),display=document.getElementById(band.valueId);
-  if(!slider) return;
-  const val=Number(slider.value);
-  if(filters[i]&&audioContext) filters[i].gain.setTargetAtTime(val,audioContext.currentTime,.015);
-  if(display) display.textContent=(val>0?"+":"")+val+" dB";
-}
-
-function updateAllEQDisplays(){
-  EQ_BANDS.forEach((b,i)=>{
-    const s=document.getElementById(b.id);
-    if(s){
-      updateEQBand(i);
-      if(!s.dataset.bound){s.addEventListener("input",()=>updateEQBand(i));s.dataset.bound="1";}
-    }
-  });
-}
-
-function resetEQ(){
-  EQ_BANDS.forEach((b,i)=>{const s=document.getElementById(b.id);if(s)s.value=0;updateEQBand(i);});
-}
-updateAllEQDisplays();
-document.getElementById("eq-reset").addEventListener("click",resetEQ);
-
-/* REPRODUCCIÓN */
-async function startStream(){
-  if(!audioPlayer.paused){keepStreamPlaying=true;userPausedStream=false;return;}
-  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
-  statusMessage.textContent="Conectando con Tropical Flow Radio TV…";
-  setSignal("connecting","CONECTANDO");
-  try{
-    const graphOK=createAudioGraph();
-    if(graphOK && audioContext.state==="suspended") await audioContext.resume();
-    if(!audioPlayer.src || audioPlayer.src!==STREAM_URL){audioPlayer.src=STREAM_URL;audioPlayer.load();}
-    await audioPlayer.play();
-    statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";
-    setSignal("active","EN VIVO");setPlayingUI(true);updateStationInfo();
-  }catch(err){
-    if(audioPlayer.crossOrigin){
-      audioPlayer.removeAttribute("crossorigin");audioPlayer.src=STREAM_URL;audioPlayer.load();
-      try{
-        await audioPlayer.play();
-        document.getElementById("eq-status-badge").textContent="AUDIO DIRECTO";
-        statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";
-        setSignal("active","EN VIVO");setPlayingUI(true);return;
-      }catch(e2){}
-    }
-    keepStreamPlaying=false;
-    statusMessage.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo.";
-    setSignal("error","DESCONECTADO");setPlayingUI(false);
-  }
-}
-
-function stopStream(){
-  userPausedStream=true;keepStreamPlaying=false;
-  if(resumeTimer){clearTimeout(resumeTimer);resumeTimer=null;}
-  audioPlayer.pause();setPlayingUI(false);
-  statusMessage.textContent="Reproducción detenida. Pulsa ▶ para escuchar.";
-  setSignal("","OFFLINE");
-}
-
-masterButton.addEventListener("click",()=>audioPlayer.paused?startStream():stopStream());
-audioPlayer.addEventListener("playing",()=>{
-  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
-  setSignal("active","EN VIVO");setPlayingUI(true);
-  statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";
-});
-
-// Recuperación prudente si una notificación/interrupción del sistema pausa el audio.
-// Nunca reanuda después de que el oyente haya pulsado PAUSA.
-async function tryResumeAfterInterruption(){
-  if(!keepStreamPlaying || userPausedStream || !audioPlayer.paused || !audioPlayer.src || audioPlayer.ended) return;
-  if(resumeAttempts>=2) return;
-  resumeAttempts++;
-  try{
-    if(audioContext && audioContext.state==="suspended") await audioContext.resume();
-    await audioPlayer.play();
-  }catch(e){
-    // Algunos navegadores móviles exigen un nuevo toque después de una interrupción.
-    setSignal("connecting","TOCA ▶ PARA REANUDAR");
-    statusMessage.textContent="El dispositivo interrumpió el audio. Pulsa ▶ para continuar.";
-  }
-}
-
-audioPlayer.addEventListener("pause",()=>{
-  if(!audioPlayer.ended)setPlayingUI(false);
-  if(keepStreamPlaying && !userPausedStream){
-    if(resumeTimer) clearTimeout(resumeTimer);
-    resumeTimer=setTimeout(tryResumeAfterInterruption,900);
-  }
-});
-audioPlayer.addEventListener("ended",()=>{keepStreamPlaying=false;setPlayingUI(false);});
-audioPlayer.addEventListener("waiting",()=>{setSignal("connecting","CONECTANDO");statusMessage.textContent="Conectando con la señal…";});
-document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden && keepStreamPlaying && audioPlayer.paused){
-    if(resumeTimer) clearTimeout(resumeTimer);
-    resumeTimer=setTimeout(tryResumeAfterInterruption,350);
-  }
-});
-window.addEventListener("pageshow",()=>{
-  if(keepStreamPlaying && audioPlayer.paused) setTimeout(tryResumeAfterInterruption,350);
-});
-
-/* VOLUMEN */
-const volumeSlider=document.getElementById("volume-slider"),volumeNumber=document.getElementById("volume-number");
-function updateMasterVolume(){
-  const v=Math.max(0,Math.min(100,Number(volumeSlider?.value ?? 85)))/100;
-  if(masterGain && audioContext){
-    masterGain.gain.setTargetAtTime(v,audioContext.currentTime,.025);
-  }else{
-    // Respaldo para navegadores que no permiten crear el grafo Web Audio.
-    try{audioPlayer.volume=v;}catch(e){}
-  }
-  if(volumeNumber) volumeNumber.textContent=Math.round(v*100)+"%";
-}
-audioPlayer.volume=.85;
-if(volumeSlider){volumeSlider.addEventListener("input",updateMasterVolume);volumeSlider.addEventListener("change",updateMasterVolume);}
-updateMasterVolume();
-
-/* =====================================================
-   COMPARTIR Y SOLICITAR CANCIÓN
-===================================================== */
-const REQUEST_WHATSAPP_NUMBER="19393142657"; // Puerto Rico: +1 939-314-2657
-
-async function shareRadio(){
-  const shareUrl=window.location.href;
-  const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
-  if(navigator.share){
-    try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}
-  }
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(shareText+"\n"+shareUrl)}`;
-  window.open(whatsappUrl,"_blank");
-}
-function requestSong(){
-  const shareUrl=window.location.href;
-  const message=
-    "🎤 Hola Tropical Flow Radio TV 🌴📻\n\n"+
-    "Quiero solicitar una canción.\n\n"+
-    "Canción: __________________\n"+
-    "Artista: __________________\n\n"+
-    "🌴 Tropical Flow Radio TV 🇵🇷\n"+
-    shareUrl;
-
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl,"_blank");
-}
-
-document.getElementById("share-button").addEventListener("click",shareRadio);
-document.getElementById("request-button").addEventListener("click",requestSong);
-
-
-/* =========================================================
-   INTRO VIP ESTILO CARIBBEAN CINEMAS
-   ========================================================= */
-const cinemaIntro=document.getElementById("cinema-intro");
-const cinemaEnterBtn=document.getElementById("cinema-enter-btn");
-const skipCinemaBtn=document.getElementById("skip-cinema-btn");
-const cinemaWelcome=document.getElementById("cinema-welcome");
-const act1=document.getElementById("cinema-act-1");
-const act2=document.getElementById("cinema-act-2");
-const act3=document.getElementById("cinema-act-3");
-const reelNumber=document.getElementById("reel-number");
-let sequenceStarted=false,curtainsOpened=false,cinemaTimers=[];
-
-function playCinemaTone(type){
-  try{
-    const Ctx=window.AudioContext||window.webkitAudioContext;
-    if(!Ctx) return;
-    const ctx=new Ctx(),osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.connect(gain);gain.connect(ctx.destination);
-    const now=ctx.currentTime;
-    if(type==="beep"){
-      osc.type="sine";osc.frequency.setValueAtTime(1000,now);
-      gain.gain.setValueAtTime(0.12,now);gain.gain.exponentialRampToValueAtTime(0.001,now+0.12);
-      osc.start(now);osc.stop(now+0.13);
-    }else if(type==="boom"){
-      osc.type="sawtooth";osc.frequency.setValueAtTime(65,now);
-      osc.frequency.exponentialRampToValueAtTime(140,now+1.4);
-      gain.gain.setValueAtTime(0.01,now);gain.gain.linearRampToValueAtTime(0.18,now+0.6);
-      gain.gain.exponentialRampToValueAtTime(0.001,now+1.8);
-      osc.start(now);osc.stop(now+1.85);
-    }
-  }catch(e){}
-}
-
-function showCinemaAct(el){
-  [act1,act2,act3].forEach(a=>a.classList.remove("active"));
-  if(el) el.classList.add("active");
-}
-
-
-
-/* =====================================================
-   TROPICAL FLOW - SECUENCIA POSTERIOR A LAS CORTINAS
-   ===================================================== */
-const tfTunnelOverlay=document.getElementById("tf-tunnel-overlay");
-let tfTunnelStarted=false;
-let tfTunnelTimers=[];
-
-function startTFTunnelSequence(autoPlayAudio){
-  if(tfTunnelStarted || !tfTunnelOverlay) return;
-  tfTunnelStarted=true;
-  tfTunnelTimers.forEach(t=>clearTimeout(t));
-  tfTunnelTimers=[];
-
-  // Inicia el viaje por el tunel
-  tfTunnelOverlay.style.display="";
-  tfTunnelOverlay.classList.add("active");
-
-  // Se abre el portal futurista
-  tfTunnelTimers.push(setTimeout(()=>{
-    tfTunnelOverlay.classList.add("portal-open");
-  },3200));
-
-  // La camara atraviesa el portal
-  tfTunnelTimers.push(setTimeout(()=>{
-    tfTunnelOverlay.classList.add("exit");
-  },5100));
-
-  // Revela el Pro Player
-  tfTunnelTimers.push(setTimeout(()=>{
-    tfTunnelOverlay.classList.remove("active","portal-open","exit");
-    tfTunnelOverlay.style.display="none";
     document.body.classList.add("tf-player-revealed");
 
-    // La música comienza DESPUÉS de terminar el destello del portal
-    if(autoPlayAudio) startStream();
-  },6100));
-}
+    wait(function(){
+      tunnel.classList.remove("exit");
+      cinema.style.display = "none";
+    },1600);
 
-function openCurtainsAndPlay(autoPlayAudio){
-  if(curtainsOpened) return;
-  curtainsOpened=true;
-  cinemaTimers.forEach(t=>clearTimeout(t));
-  if(skipCinemaBtn) skipCinemaBtn.style.display="none";
-  cinemaIntro.classList.add("curtains-open");
-  setTimeout(()=>{
-    cinemaIntro.style.display="none";
-    startTFTunnelSequence(autoPlayAudio);
-  },1850);
-}
+  }
 
-function startCinemaShow(){
-  if(sequenceStarted) return;
-  sequenceStarted=true;
-  cinemaWelcome.style.display="none";
-  cinemaIntro.classList.add("lights-dimmed");
-  playCinemaTone("boom");
-  showCinemaAct(act1);
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act2);reelNumber.textContent="3";playCinemaTone("beep");},2400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="2";playCinemaTone("beep");},3400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="1";playCinemaTone("beep");},4400));
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act3);playCinemaTone("boom");},5400));
-  cinemaTimers.push(setTimeout(()=>{openCurtainsAndPlay(true);},6900));
-}
+  function startSpaceSequence(){
 
-cinemaEnterBtn.addEventListener("click",startCinemaShow);
-skipCinemaBtn.addEventListener("click",()=>openCurtainsAndPlay(true));
+    if(sequenceStarted) return;
+    sequenceStarted = true;
 
-window.addEventListener("beforeunload",()=>{clearInterval(flipTimer);clearInterval(metadataTimer);});
+    if(welcome) welcome.classList.remove("active");
+    if(feature) feature.classList.add("active");
+
+    cinema.classList.add("cinema-finished");
+
+    wait(function(){
+
+      cinema.style.display = "none";
+
+      tunnel.classList.add("active");
+
+      wait(function(){
+        portal.classList.add("portal-open");
+      },900);
+
+      wait(function(){
+        revealPlayer();
+      },4200);
+
+    },1200);
+
+  }
+
+  if(enterButton){
+    enterButton.addEventListener("click",startSpaceSequence);
+  }
+
+  if(skipButton){
+    skipButton.addEventListener("click",startSpaceSequence);
+  }
+
+  /* Evita que el portal quede abierto si el usuario
+     vuelve a iniciar la secuencia desde la página. */
+
+  window.addEventListener("pageshow",function(){
+    portal.classList.remove("portal-open");
+    tunnel.classList.remove("active","exit");
+    document.body.classList.remove("tf-player-revealed");
+  });
+
+})();
 </script>
+<!-- ======================================
+     CIERRE FINAL TROPICAL FLOW RADIO TV
+====================================== -->
+
 </body>
 </html>
