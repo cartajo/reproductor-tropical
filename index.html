@@ -3,523 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#090014">
-<title>Tropical Flow Radio TV - Pro Player</title>
+<meta name="theme-color" content="#08010f">
+<title>Tropical Flow Radio TV - Oficial</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;min-height:100%;width:100%;overflow-x:hidden}
-body{
-  background:#05020d;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:12px;
-  font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
-  color:#fff;
-}
-.cinema-intro-overlay{position:fixed;inset:0;z-index:9999;background:#04010a;display:flex;justify-content:center;align-items:center;overflow:hidden;user-select:none}
-.curtain-panel{position:absolute;top:0;bottom:0;width:51%;z-index:2;background:repeating-linear-gradient(90deg,#1a0312 0px,#4a0728 18px,#240417 36px,#5c0a33 54px,#14020d 72px);box-shadow:inset 0 0 90px rgba(0,0,0,.92);transition:transform 1.8s cubic-bezier(.77,0,.175,1)}
-.curtain-left{left:0;border-right:3px solid #d4af37;box-shadow:10px 0 40px rgba(0,0,0,.95),inset 0 0 80px rgba(0,0,0,.9)}
-.curtain-right{right:0;border-left:3px solid #d4af37;box-shadow:-10px 0 40px rgba(0,0,0,.95),inset 0 0 80px rgba(0,0,0,.9)}
-.cinema-valance{position:absolute;top:0;left:0;right:0;height:36px;z-index:5;background:linear-gradient(180deg,#2b0518 0%,#12020a 100%);border-bottom:3px solid #f59e0b;box-shadow:0 8px 30px rgba(0,0,0,.95),0 0 20px rgba(245,158,11,.4);transition:transform 1.4s ease,opacity 1.2s ease}
-.cinema-intro-overlay.curtains-open .curtain-left{transform:translateX(-102%)}
-.cinema-intro-overlay.curtains-open .curtain-right{transform:translateX(102%)}
-.cinema-intro-overlay.curtains-open .cinema-valance{transform:translateY(-100%);opacity:0}
-.cinema-intro-overlay.curtains-open{pointer-events:none}
-.projector-beam{position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:140vw;height:120vh;z-index:3;background:conic-gradient(from 162deg at 50% 0%,transparent 0deg,rgba(255,248,220,.06) 10deg,rgba(56,189,248,.16) 18deg,rgba(255,248,220,.06) 26deg,transparent 36deg);pointer-events:none;opacity:0;animation:beamFlicker 5s infinite alternate;transition:opacity .8s ease}
-.cinema-intro-overlay.lights-dimmed .projector-beam{opacity:1}
-@keyframes beamFlicker{0%,100%{opacity:.85}50%{opacity:1}52%{opacity:.72}54%{opacity:.95}}
-.cinema-stage{position:relative;z-index:6;width:100%;max-width:780px;padding:24px;text-align:center;transition:opacity .7s ease,transform .7s ease}
-.cinema-intro-overlay.curtains-open .cinema-stage{opacity:0;transform:scale(1.12)}
-.ticket-card{background:linear-gradient(145deg,rgba(25,8,45,.92),rgba(10,3,20,.96));border:2px solid #f59e0b;border-radius:24px;padding:30px 22px;box-shadow:0 0 50px rgba(245,158,11,.28),inset 0 0 30px rgba(168,85,247,.2);animation:cinemaFadeUp .9s ease-out}
-@keyframes cinemaFadeUp{0%{opacity:0;transform:translateY(25px) scale(.92)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.vip-badge{display:inline-block;padding:5px 16px;border-radius:99px;background:linear-gradient(90deg,#b45309,#f59e0b,#b45309);color:#090214;font-size:11px;font-weight:900;letter-spacing:3px;margin-bottom:14px}
-.cinema-main-title{margin:0;font-size:clamp(28px,6vw,58px);font-weight:900;letter-spacing:2px;line-height:1.05;color:#fff;text-shadow:0 0 25px rgba(245,158,11,.7),0 0 50px rgba(236,72,153,.5)}
-.cinema-main-title span{display:block;background:linear-gradient(90deg,#fde68a,#f59e0b,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:clamp(22px,4.5vw,44px);margin-top:6px}
-.cinema-sub{color:#e9d5ff;font-size:clamp(12px,1.6vw,15px);letter-spacing:2px;margin:14px 0 26px}
-.cinema-enter-btn{padding:16px 38px;font-size:clamp(13px,1.7vw,16px);font-weight:900;letter-spacing:2.5px;color:#090214;background:linear-gradient(135deg,#fde047,#f59e0b,#ec4899);border:2px solid #fff;border-radius:50px;cursor:pointer;box-shadow:0 0 30px rgba(245,158,11,.75),0 0 60px rgba(236,72,153,.45);transition:transform .25s ease}
-.cinema-enter-btn:hover{transform:scale(1.06)}
-.cinema-act{display:none;flex-direction:column;align-items:center;justify-content:center}
-.cinema-act.active{display:flex;animation:actZoomIn .65s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes actZoomIn{0%{opacity:0;transform:scale(.85)}100%{opacity:1;transform:scale(1)}}
-.policy-icons{display:flex;gap:22px;font-size:34px;margin-bottom:14px;filter:drop-shadow(0 0 12px rgba(56,189,248,.8))}
-.policy-title{font-size:clamp(18px,3.5vw,30px);font-weight:900;letter-spacing:3px;color:#fde047;text-transform:uppercase;margin:0 0 8px}
-.policy-desc{font-size:clamp(12px,1.8vw,16px);color:#cbd5e1;letter-spacing:1.5px;margin:0}
-.reel-circle{position:relative;width:150px;height:150px;border-radius:50%;border:4px solid rgba(253,224,71,.85);box-shadow:0 0 35px rgba(245,158,11,.6),inset 0 0 25px rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(30,15,50,.9),rgba(5,2,13,.95))}
-.reel-circle::before,.reel-circle::after{content:"";position:absolute;background:rgba(253,224,71,.4)}
-.reel-circle::before{width:100%;height:2px;top:50%;left:0}
-.reel-circle::after{width:2px;height:100%;left:50%;top:0}
-.reel-sweep{position:absolute;inset:6px;border-radius:50%;border:3px dashed #38bdf8;animation:reelSpin 1s linear infinite}
-@keyframes reelSpin{to{transform:rotate(360deg)}}
-.reel-number{position:relative;z-index:2;font-size:74px;font-weight:900;color:#fff;text-shadow:0 0 25px #fde047}
-.reel-caption{margin-top:16px;font-size:12px;font-weight:800;letter-spacing:4px;color:#38bdf8}
-.feature-kicker{font-size:clamp(12px,2vw,16px);font-weight:900;letter-spacing:6px;color:#38bdf8;margin-bottom:10px}
-.feature-banner{font-size:clamp(26px,5.5vw,54px);font-weight:900;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(90deg,#fff,#fde047,#f59e0b,#ec4899,#fff);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:goldShine 2s linear infinite}
-@keyframes goldShine{to{background-position:200% center}}
-.skip-cinema-btn{position:fixed;bottom:22px;right:22px;z-index:10000;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.3);color:#cbd5e1;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:8px 16px;border-radius:20px;cursor:pointer}
-.skip-cinema-btn:hover{background:rgba(245,158,11,.25);color:#fff;border-color:#f59e0b}
-.space-universe{position:fixed;inset:0;z-index:0;background:radial-gradient(circle at 50% 25%,#260b4d 0%,#0d041c 48%,#030108 100%);overflow:hidden;pointer-events:none}
-.space-stars-layer{position:absolute;inset:-100px;background-image:radial-gradient(2.5px 2.5px at 10% 20%,#fff,transparent),radial-gradient(3px 3px at 30% 70%,#38bdf8,transparent),radial-gradient(2.5px 2.5px at 50% 15%,#fff,transparent),radial-gradient(3px 3px at 70% 80%,#ec4899,transparent),radial-gradient(2.5px 2.5px at 88% 30%,#fff,transparent),radial-gradient(3px 3px at 22% 48%,#c084fc,transparent),radial-gradient(2px 2px at 64% 52%,#fff,transparent),radial-gradient(3px 3px at 92% 85%,#38bdf8,transparent);background-size:420px 420px;animation:starsTwinkle 3.5s ease-in-out infinite alternate,starsDrift 45s linear infinite}
-.space-stars-big{position:absolute;inset:-120px;background-image:radial-gradient(4px 4px at 16% 32%,#fff 30%,rgba(56,189,248,.6) 60%,transparent 100%),radial-gradient(5px 5px at 78% 22%,#fff 30%,rgba(236,72,153,.7) 60%,transparent 100%),radial-gradient(4.5px 4.5px at 84% 72%,#fff 30%,rgba(168,85,247,.7) 60%,transparent 100%),radial-gradient(4px 4px at 24% 82%,#fff 30%,rgba(56,189,248,.6) 60%,transparent 100%),radial-gradient(5px 5px at 62% 14%,#fff 30%,rgba(255,255,255,.5) 60%,transparent 100%);background-size:550px 550px;filter:drop-shadow(0 0 6px #fff);animation:bigStarsPulse 2.4s ease-in-out infinite alternate,starsDrift 30s linear infinite reverse}
-@keyframes starsTwinkle{0%{opacity:.45;transform:scale(.98)}100%{opacity:1;transform:scale(1.02)}}
-@keyframes bigStarsPulse{0%{opacity:.35;filter:drop-shadow(0 0 2px #38bdf8)}100%{opacity:1;filter:drop-shadow(0 0 12px #fff)}}
-@keyframes starsDrift{0%{background-position:0 0}100%{background-position:420px 210px}}
-.nebula-glow{position:absolute;width:50vw;height:50vw;max-width:800px;max-height:800px;min-width:280px;min-height:280px;border-radius:50%;filter:blur(95px);opacity:.38;will-change:transform;animation:nebulaFloat 14s ease-in-out infinite alternate}
-.nebula-left{background:radial-gradient(circle,#9333ea,transparent 70%);top:-12%;left:-8%}
-.nebula-right{background:radial-gradient(circle,#0284c7,transparent 70%);bottom:-12%;right:-8%;animation-delay:4s}
-@keyframes nebulaFloat{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(5vw,-4vh,0) scale(1.15)}}
-.ufo-craft{position:absolute;will-change:transform;filter:drop-shadow(0 0 18px rgba(56,189,248,.75))}
-.ufo-craft svg{display:block;width:100%;height:auto;animation:ufoHover 2.8s ease-in-out infinite alternate}
-@keyframes ufoHover{0%{transform:translateY(-6px) rotate(-3deg)}100%{transform:translateY(6px) rotate(3deg)}}
-.ufo-1{top:12%;width:clamp(115px,11vw,175px);animation:ufoFlyRight 16s linear infinite}
-.ufo-2{top:72%;width:clamp(125px,12vw,190px);filter:drop-shadow(0 0 20px rgba(236,72,153,.8));animation:ufoFlyLeft 19s linear infinite 3s}
-.ufo-3{top:34%;width:clamp(80px,7.5vw,120px);opacity:.88;filter:drop-shadow(0 0 14px rgba(168,85,247,.85));animation:ufoFlyLeft 24s linear infinite 8s}
-@keyframes ufoFlyRight{0%{transform:translate3d(-260px,0,0)}100%{transform:translate3d(calc(100vw + 260px),-8vh,0)}}
-@keyframes ufoFlyLeft{0%{transform:translate3d(calc(100vw + 260px),0,0)}100%{transform:translate3d(-260px,7vh,0)}}
-  /* SATELITE CON BANDERA PR */
-.tf-satellite{position:absolute;top:8%;left:50%;width:clamp(140px,18vw,220px);animation:tfSatOrbit 28s linear infinite;filter:drop-shadow(0 0 15px rgba(255,255,255,.7));z-index:4}
-.tf-satellite svg{display:block;width:100%;height:auto;animation:tfSatFloat 3s ease-in-out infinite alternate}
-@keyframes tfSatFloat{from{transform:translateY(-5px) rotate(-2deg)}to{transform:translateY(5px) rotate(2deg)}}
-@keyframes tfSatOrbit{0%{transform:translateX(-55vw) translateY(0)}50%{transform:translateX(0) translateY(25px)}100%{transform:translateX(55vw) translateY(0)}}
-.tf-sat-label{text-align:center;margin-top:2px;font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 0 8px #38bdf8;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:20px;border:1px solid rgba(56,189,248,.6)}
-/* NAVE NASA */
-.tf-nasa{position:absolute;bottom:6%;left:50%;width:clamp(160px,22vw,260px);animation:tfNasaFly 32s linear infinite;filter:drop-shadow(0 0 20px rgba(255,255,255,.8));z-index:4}
-.tf-nasa svg{display:block;width:100%;height:auto}
-@keyframes tfNasaFly{0%{transform:translateX(60vw) translateY(20px)}50%{transform:translateX(0) translateY(-15px)}100%{transform:translateX(-60vw) translateY(20px)}}
-.tf-nasa-name{text-align:center;margin-top:4px;font-size:10px;font-weight:900;letter-spacing:1.5px;color:#fff;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:20px;border:1px solid #fff}
-.cyber-player-container{position:relative;z-index:5;width:100%;max-width:400px;padding:20px;background:linear-gradient(145deg,rgba(20,10,42,.92),rgba(7,4,18,.94));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:2px solid rgba(168,85,247,.85);border-radius:28px;box-shadow:0 0 25px rgba(168,85,247,.5),0 0 70px rgba(168,85,247,.22),inset 0 0 30px rgba(168,85,247,.08);overflow:hidden}
-.cyber-player-container:before,.cyber-player-container:after{content:"";position:absolute;pointer-events:none;filter:blur(90px);opacity:.22}
-.cyber-player-container:before{width:180px;height:180px;top:-90px;right:-70px;background:#a855f7}
-.cyber-player-container:after{width:150px;height:150px;bottom:-80px;left:-70px;background:#ec4899}
-.top-status-bar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.06);padding:10px 13px;border-radius:17px;margin-bottom:14px}
-.clock-title{display:block;font-size:8px;color:#a855f7;font-weight:900;letter-spacing:1px}
-.clock-num{display:block;font-family:monospace;font-size:15px;font-weight:bold;color:#fff}
-.badge-live{display:flex;align-items:center;gap:7px;background:#030303;padding:7px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.05)}
-.dot-signal{width:8px;height:8px;border-radius:50%;background:#ef4444}
-.dot-signal.connecting{background:#f59e0b;box-shadow:0 0 12px #f59e0b;animation:neonPulse .8s infinite alternate}
-.dot-signal.active{background:#10b981;box-shadow:0 0 12px #10b981;animation:neonPulse .8s infinite alternate}
-.dot-signal.error{background:#ef4444;box-shadow:0 0 10px #ef4444}
-.text-signal{font-size:9px;font-weight:900;color:#d1d5db;letter-spacing:.5px}
-@keyframes neonPulse{from{opacity:.35;transform:scale(.8)}to{opacity:1;transform:scale(1.15)}}
-.flip-screen-container{position:relative;z-index:2;width:100%;aspect-ratio:16 / 9;height:auto;perspective:1000px;margin-bottom:14px}
-.flip-card{width:100%;height:100%;position:relative;transition:transform .85s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
-.flip-card.is-flipped{transform:rotateY(180deg)}
-.flip-face{position:absolute;inset:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:17px;overflow:hidden;border:2px solid rgba(168,85,247,.85);box-shadow:0 0 18px rgba(168,85,247,.45),inset 0 0 15px rgba(0,0,0,.6);background:#070212;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0;text-align:center}
-.flip-back{transform:rotateY(180deg)}
-.brand-logo{display:block;width:100%;height:100%;max-width:100%;min-height:0;object-fit:cover;object-position:center;border-radius:0}
-.logo-caption{position:absolute;left:8px;right:8px;bottom:7px;color:#ec4899;font-size:10px;font-weight:900;letter-spacing:1px;margin:0;text-shadow:0 0 10px rgba(236,72,153,.9);pointer-events:none}
-.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(9,0,20,.78);color:#fff;border:1.5px solid rgba(168,85,247,.8);border-radius:50%;width:28px;height:28px;cursor:pointer;z-index:10;font-size:13px;display:flex;align-items:center;justify-content:center}
-.nav-arrow:hover{background:#a855f7}
-.left-arrow{left:8px}.right-arrow{right:8px}
-.song-metadata-box{position:relative;z-index:2;background:rgba(0,0,0,.48);border:1px solid rgba(168,85,247,.35);border-radius:17px;padding:12px 14px;margin-bottom:12px;min-height:68px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
-.song-title-label{font-size:9px;color:#ec4899;font-weight:900;text-transform:uppercase;letter-spacing:1.3px;margin-bottom:5px}
-.song-now-playing{font-size:13px;color:#fff;font-weight:700;line-height:1.35;word-break:break-word}
-.song-now-playing.playing{text-shadow:0 0 10px rgba(236,72,153,.9);animation:songGlow 2s infinite alternate}
-@keyframes songGlow{from{opacity:.85}to{opacity:1}}
-.stats-row{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
-.stat-box{background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:9px;text-align:center}
-.stat-label{display:block;color:#8f8a9d;font-size:8px;font-weight:800;letter-spacing:.8px}
-.stat-value{display:block;margin-top:3px;color:#fff;font-size:12px;font-weight:900}
-.wave-equalizer{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;height:42px;padding:0 12px;margin-bottom:15px;background:rgba(0,0,0,.4);border-radius:15px;overflow:hidden;box-shadow:inset 0 0 12px rgba(0,0,0,.7)}
-.wave-bar{width:4px;height:12%;background:#2e1a4d;border-radius:4px 4px 0 0;transition:height .2s}
-.wave-equalizer.playing .wave-bar{animation:proBounce .7s ease-in-out infinite alternate}
-.wave-equalizer .wave-bar:nth-child(even){background:#ec4899;animation-duration:.5s}
-.wave-equalizer .wave-bar:nth-child(3n){background:#a855f7;animation-duration:.9s}
-.wave-equalizer .wave-bar:nth-child(5n){background:#3b82f6;animation-duration:.6s}
-@keyframes proBounce{0%{height:15%}100%{height:95%}}
-.control-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;margin-bottom:14px}
-.cyber-play-btn{width:76px;height:76px;border-radius:50%;border:0;background:linear-gradient(135deg,#a855f7,#6366f1);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 25px rgba(168,85,247,.55),0 0 35px rgba(99,102,241,.25);color:#fff;font-size:28px;transition:transform .2s}
-.cyber-play-btn:active{transform:scale(.95)}
-.status-msg{margin-top:9px;font-size:11px;color:#c4b5fd;text-align:center;min-height:15px}
-.volume-section{position:relative;z-index:2;display:flex;align-items:center;gap:9px;margin-bottom:14px;padding:9px 11px;background:rgba(255,255,255,.035);border-radius:13px;border:1px solid rgba(168,85,247,.18)}
-.volume-icon{font-size:15px}.volume-slider{flex:1;height:5px;accent-color:#a855f7;cursor:pointer}.volume-number{width:35px;text-align:right;color:#c4b5fd;font-size:10px;font-weight:800}
-.real-eq-panel{position:relative;z-index:2;background:linear-gradient(145deg,rgba(20,8,40,.95),rgba(5,3,15,.95));border:1px solid rgba(168,85,247,.45);border-radius:17px;padding:12px 10px;margin-bottom:14px;box-shadow:inset 0 0 15px rgba(168,85,247,.08)}
-.real-eq-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px}
-.real-eq-title{color:#e9d5ff;font-size:10px;font-weight:900;letter-spacing:1px}
-.real-eq-badge{color:#10b981;font-size:8px;font-weight:900;border:1px solid rgba(16,185,129,.35);border-radius:20px;padding:3px 7px;background:rgba(16,185,129,.08)}
-.eq-bands{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
-.eq-band{min-width:0;text-align:center;background:rgba(255,255,255,.025);border:1px solid rgba(168,85,247,.13);border-radius:10px;padding:7px 2px}
-.eq-band-name{display:block;color:#c4b5fd;font-size:7.5px;font-weight:800;margin-bottom:2px}
-.eq-band-frequency{display:block;color:#ec4899;font-size:8.5px;font-weight:900;margin-bottom:6px}
-.eq-slider-wrap{height:84px;display:flex;align-items:center;justify-content:center}
-.eq-slider{width:76px;transform:rotate(-90deg);accent-color:#ec4899;cursor:pointer}
-.eq-band-value{display:block;color:#fff;font-size:8px;font-weight:800;margin-top:4px}
-.eq-reset-row{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)}
-.eq-description{font-size:9px;color:#9ca3af}
-.eq-reset-btn{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.45);color:#e9d5ff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:12px;cursor:pointer}
-.history-box{position:relative;z-index:2;background:rgba(0,0,0,.42);border:1px solid rgba(168,85,247,.25);border-radius:15px;padding:10px 12px;margin-bottom:13px}
-.history-title{display:block;font-size:9px;font-weight:900;color:#a855f7;letter-spacing:1px;margin-bottom:6px}
-.history-list{margin:0;padding-left:16px;font-size:11px;color:#d1d5db;line-height:1.45}
-.history-list li{margin-bottom:3px}
-.action-buttons{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.action-btn{padding:11px 10px;border-radius:14px;border:1px solid rgba(168,85,247,.45);background:rgba(168,85,247,.15);color:#e9d5ff;font-size:11px;font-weight:800;cursor:pointer}
-.action-btn.whatsapp{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.45);color:#a7f3d0}
-@media (max-width:420px){body{padding:8px}.cyber-player-container{padding:14px;border-radius:22px}.flip-screen-container{height:auto;aspect-ratio:16 / 9}.logo-caption{font-size:9px}.cyber-play-btn{width:68px;height:68px;font-size:24px}.eq-band-name{font-size:7px}.eq-slider{width:68px}.eq-slider-wrap{height:74px}}
-@media (min-width:900px){body{height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}.cyber-player-container{transform:scale(0.84,0.63);transform-origin:center center;margin:0 auto}}
-.tf-tunnel-overlay{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;overflow:hidden;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 55%,#17245c 0%,#09051f 42%,#020108 100%);perspective:1000px}
-.tf-tunnel-overlay.active{display:flex;opacity:1}
-.tf-tunnel-overlay .tf-tunnel{position:absolute;width:100vmax;height:100vmax;left:50%;top:50%;transform:translate(-50%,-50%) rotateX(12deg);transform-style:preserve-3d}
-.tf-tunnel-overlay .tf-ring{position:absolute;left:50%;top:50%;width:35%;height:35%;border:3px solid rgba(56,189,248,.8);border-radius:50%;box-shadow:0 0 18px #38bdf8,inset 0 0 18px #38bdf8,0 0 45px rgba(168,85,247,.8);transform:translate(-50%,-50%) scale(.12);opacity:0}
-.tf-tunnel-overlay.active .tf-ring{animation:tfRingTravel 3.5s linear infinite}
-.tf-tunnel-overlay .tf-ring:nth-child(2){border-color:#a855f7;animation-delay:.7s}
-.tf-tunnel-overlay .tf-ring:nth-child(3){border-color:#38bdf8;animation-delay:1.4s}
-.tf-tunnel-overlay .tf-ring:nth-child(4){border-color:#c084fc;animation-delay:2.1s}
-@keyframes tfRingTravel{0%{transform:translate(-50%,-50%) scale(.08);opacity:0}12%{opacity:.9}100%{transform:translate(-50%,-50%) scale(5.5);opacity:0}}
-.tf-tunnel-overlay .tf-light{position:absolute;width:2px;height:65vh;top:50%;left:50%;transform-origin:center;background:linear-gradient(transparent,#38bdf8,#fff,transparent);box-shadow:0 0 14px #38bdf8;opacity:0}
-.tf-tunnel-overlay.active .tf-light{animation:tfLightRush 1.1s linear infinite}
-.tf-tunnel-overlay .tf-light:nth-child(5){transform:translate(-50%,-50%) rotate(25deg)}
-.tf-tunnel-overlay .tf-light:nth-child(6){transform:translate(-50%,-50%) rotate(85deg);animation-delay:.25s}
-.tf-tunnel-overlay .tf-light:nth-child(7){transform:translate(-50%,-50%) rotate(145deg);animation-delay:.5s}
-.tf-tunnel-overlay .tf-light:nth-child(8){transform:translate(-50%,-50%) rotate(205deg);animation-delay:.75s}
-.tf-tunnel-overlay .tf-light:nth-child(9){transform:translate(-50%,-50%) rotate(265deg);animation-delay:.4s}
-.tf-tunnel-overlay .tf-light:nth-child(10){transform:translate(-50%,-50%) rotate(325deg);animation-delay:.65s}
-@keyframes tfLightRush{0%{opacity:0;height:15vh}35%{opacity:.9}100%{opacity:0;height:95vh}}
-.tf-tunnel-overlay .tf-portal{position:absolute;left:50%;top:50%;width:min(48vw,48vh);aspect-ratio:1;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.05);border:8px solid #a855f7;background:radial-gradient(circle,rgba(56,189,248,.35),rgba(88,28,135,.2) 55%,transparent 70%);box-shadow:0 0 25px #38bdf8,0 0 65px #a855f7,0 0 130px rgba(56,189,248,.8),inset 0 0 35px #c084fc}
-.tf-tunnel-overlay.portal-open .tf-portal{animation:tfPortalOpen 2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes tfPortalOpen{0%{opacity:0;transform:translate(-50%,-50%) scale(.05)}45%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-.tf-tunnel-overlay.exit{animation:tfPortalFlash .9s ease-in forwards}
-@keyframes tfPortalFlash{0%{filter:brightness(1);opacity:1}45%{filter:brightness(3);opacity:1}100%{filter:brightness(5);opacity:0}}
-body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s ease-out both}
-@keyframes tfPlayerArrival{0%{opacity:0;filter:brightness(2.5) blur(12px)}65%{opacity:1;filter:brightness(1.5) blur(2px)}100%{opacity:1;filter:brightness(1) blur(0)}}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden}
+body{background:#05010e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:14px;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:#fff}
+/* CINEMA PRO */
+.cinema{position:fixed;inset:0;z-index:9999;background:#04010a;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.curtain{position:absolute;top:0;bottom:0;width:51%;z-index:2;background:repeating-linear-gradient(90deg,#160310 0,#3d0622 18px,#200412 36px,#4d0a2c 54px,#12020a 72px);transition:transform 1.6s cubic-bezier(.77,0,.175,1)}
+.curtain.l{left:0;border-right:3px solid #d4af37}
+.curtain.r{right:0;border-left:3px solid #d4af37}
+.cinema.open .curtain.l{transform:translateX(-102%)}
+.cinema.open .curtain.r{transform:translateX(102%)}
+.cinema.open{pointer-events:none}
+.stage{position:relative;z-index:5;width:100%;max-width:680px;padding:20px;text-align:center;transition:opacity .6s,transform .6s}
+.cinema.open .stage{opacity:0;transform:scale(1.1)}
+.card{background:linear-gradient(145deg,rgba(25,8,45,.95),rgba(8,3,18,.98));border:1px solid rgba(245,158,11,.7);border-radius:22px;padding:32px 20px;box-shadow:0 0 45px rgba(245,158,11,.22)}
+.badge{display:inline-block;padding:6px 14px;border-radius:99px;background:#f59e0b;color:#090214;font-size:10px;font-weight:900;letter-spacing:2.5px;margin-bottom:16px}
+.stage h1{margin:0;font-size:clamp(30px,7vw,56px);font-weight:900;letter-spacing:1px;line-height:1.02}
+.stage h1 span{display:block;background:linear-gradient(90deg,#fde68a,#f59e0b,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:clamp(22px,5vw,42px);margin-top:4px}
+.stage p{color:#d8b4fe;font-size:13px;letter-spacing:1.5px;margin:14px 0 24px}
+.enter{padding:15px 32px;font-size:14px;font-weight:900;letter-spacing:2px;color:#090214;background:linear-gradient(135deg,#fde047,#f59e0b,#ec4899);border:2px solid #fff;border-radius:50px;cursor:pointer;box-shadow:0 0 28px rgba(245,158,11,.6)}
+.act{display:none;flex-direction:column;align-items:center}
+.act.on{display:flex;animation:zoom .5s ease}
+@keyframes zoom{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.act h2{color:#fde047;font-size:clamp(18px,4vw,28px);letter-spacing:2px;margin:10px 0 6px}
+.act p{color:#cbd5e1;margin:0}
+.reel{width:130px;height:130px;border-radius:50%;border:4px solid #fde047;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:900;background:radial-gradient(circle,#2a0f45,#070212)}
+.skip{position:fixed;bottom:20px;right:20px;z-index:10000;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.3);color:#ddd;font-size:11px;font-weight:800;padding:8px 14px;border-radius:20px;cursor:pointer}
+/* ESPACIO PROFESIONAL - LIMPIO */
+.space{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at 50% 20%,#1a0b35 0%,#0a0418 50%,#020107 100%)}
+.stars{position:absolute;inset:-80px;background-image:radial-gradient(2px 2px at 15% 20%,#fff,transparent),radial-gradient(2px 2px at 70% 60%,#38bdf8,transparent),radial-gradient(2px 2px at 40% 80%,#fff,transparent),radial-gradient(2px 2px at 85% 25%,#ec4899,transparent);background-size:380px 380px;opacity:.7;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.45}to{opacity:.85}}
+.neb{position:absolute;width:42vw;height:42vw;max-width:600px;border-radius:50%;filter:blur(90px);opacity:.28}
+.neb.a{top:-10%;left:-8%;background:#7c3aed}
+.neb.b{bottom:-10%;right:-8%;background:#0369a1}
+/* TIERRA Y SOL PRO - CHIQUITOS Y EN SU SITIO */
+.earth{position:absolute;left:2.5%;bottom:5%;width:110px;text-align:center;opacity:.95;animation:floatE 7s ease-in-out infinite alternate}
+.earth svg{width:100%;height:auto;border-radius:50%;box-shadow:0 0 20px rgba(56,189,248,.6)}
+@keyframes floatE{from{transform:translateY(-5px)}to{transform:translateY(5px)}}
+.earth span{display:inline-block;margin-top:4px;font-size:8px;font-weight:900;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:20px;border:1px solid rgba(56,189,248,.5)}
+.sun{position:absolute;right:2.5%;top:2.5%;width:78px;height:78px;border-radius:50%;background:radial-gradient(circle,#fff7cc,#fde047 35%,#f59e0b 65%,#ea580c);box-shadow:0 0 25px #fde047,0 0 60px rgba(245,158,11,.7);display:flex;align-items:center;justify-content:center;font-size:30px;animation:sunP 3s ease-in-out infinite alternate}
+@keyframes sunP{from{transform:scale(1)}to{transform:scale(1.06)}}
+/* SATELITE Y NASA - SUAVES */
+.sat{position:absolute;top:7%;left:50%;width:150px;animation:satFly 30s linear infinite;opacity:.95}
+.sat svg{width:100%;height:auto}
+@keyframes satFly{0%{transform:translateX(-55vw)}100%{transform:translateX(55vw)}}
+.nasa{position:absolute;bottom:4%;left:50%;width:170px;animation:nasaFly 36s linear infinite;opacity:.95}
+.nasa svg{width:100%;height:auto}
+@keyframes nasaFly{0%{transform:translateX(60vw)}100%{transform:translateX(-60vw)}}
+.ufo{position:absolute;opacity:.6;width:90px;animation:ufoF 22s linear infinite}
+.ufo svg{width:100%;height:auto}
+@keyframes ufoF{0%{transform:translateX(-120px)}100%{transform:translateX(calc(100vw + 120px))}}
+@media(max-width:600px){.earth{width:78px;left:2%;bottom:3%}.sun{width:58px;height:58px;font-size:22px}.sat{width:110px}.nasa{width:125px}.earth span{display:none}}
+  /* PLAYER PRO */
+.player{position:relative;z-index:5;width:100%;max-width:420px;background:rgba(14,7,32,.88);backdrop-filter:blur(14px);border:1px solid rgba(168,85,247,.55);border-radius:26px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 35px rgba(168,85,247,.25)}
+.top{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);padding:10px 12px;border-radius:16px;margin-bottom:14px}
+.top small{display:block;font-size:8px;color:#c084fc;font-weight:900;letter-spacing:1.2px}
+.top b{font-family:monospace;font-size:15px}
+.live{display:flex;align-items:center;gap:7px;background:#000;padding:7px 11px;border-radius:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ef4444}
+.dot.on{background:#10b981;box-shadow:0 0 10px #10b981;animation:pulse .8s infinite alternate}
+.dot.load{background:#f59e0b;box-shadow:0 0 10px #f59e0b;animation:pulse .8s infinite alternate}
+@keyframes pulse{from{opacity:.5}to{opacity:1}}
+.live span{font-size:9px;font-weight:900;letter-spacing:.5px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mode{padding:11px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#e9d5ff;font-size:12px;font-weight:900;cursor:pointer}
+.mode.active{background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;border-color:#fff;box-shadow:0 0 18px rgba(168,85,247,.6)}
+.screen{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(168,85,247,.6);margin-bottom:13px;background:#070212}
+.screen img{width:100%;height:100%;object-fit:cover;display:block}
+.screen .cap{position:absolute;left:8px;right:8px;bottom:7px;font-size:9px;font-weight:900;color:#f9a8d4;text-shadow:0 0 8px #ec4899}
+.tv-box{display:none;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(56,189,248,.6);margin-bottom:13px;background:#000}
+.tv-box.on{display:block}
+.tv-box iframe{width:100%;height:100%;border:0}
+.song{background:rgba(0,0,0,.45);border:1px solid rgba(168,85,247,.3);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.song small{font-size:9px;color:#f472b6;font-weight:900;letter-spacing:1.2px}
+.song div{font-size:14px;font-weight:700;line-height:1.35;margin-top:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.2);border-radius:13px;padding:9px;text-align:center}
+.stat small{display:block;color:#9ca3af;font-size:8px;font-weight:800;letter-spacing:.7px}
+.stat b{font-size:12px}
+.eq{height:38px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 10px;background:rgba(0,0,0,.4);border-radius:13px;margin-bottom:14px;overflow:hidden}
+.bar{width:4px;height:12%;background:#2e1a4d;border-radius:4px 4px 0 0}
+.eq.play .bar{animation:bounce .7s ease-in-out infinite alternate}
+.eq .bar:nth-child(even){background:#ec4899;animation-duration:.5s}
+.eq .bar:nth-child(3n){background:#a855f7;animation-duration:.9s}
+@keyframes bounce{from{height:15%}to{height:95%}}
+.center{display:flex;flex-direction:column;align-items:center;margin-bottom:13px}
+.play{width:74px;height:74px;border-radius:50%;border:0;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;font-size:27px;cursor:pointer;box-shadow:0 10px 25px rgba(168,85,247,.55);display:flex;align-items:center;justify-content:center}
+.play:active{transform:scale(.96)}
+.status{margin-top:8px;font-size:11px;color:#c4b5fd;text-align:center;min-height:16px}
+.vol{display:flex;align-items:center;gap:9px;padding:9px 11px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:13px}
+.vol input{flex:1;accent-color:#a855f7;cursor:pointer}
+.vol b{font-size:10px;color:#c4b5fd;width:36px;text-align:right}
+.eqpanel{background:linear-gradient(145deg,rgba(20,8,40,.95),rgba(5,3,15,.95));border:1px solid rgba(168,85,247,.4);border-radius:16px;padding:12px 10px;margin-bottom:13px}
+.eqhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.eqhead b{font-size:10px;letter-spacing:1px;color:#e9d5ff}
+.eqhead span{font-size:8px;font-weight:900;color:#10b981;border:1px solid rgba(16,185,129,.4);padding:3px 7px;border-radius:20px}
+.bands{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.band{text-align:center;background:rgba(255,255,255,.03);border:1px solid rgba(168,85,247,.15);border-radius:10px;padding:7px 2px}
+.band small{display:block;color:#c4b5fd;font-size:7px;font-weight:800}
+.band i{display:block;color:#f472b6;font-size:8px;font-weight:900;font-style:normal;margin:2px 0 6px}
+.band .wrap{height:78px;display:flex;justify-content:center;align-items:center}
+.band input{width:70px;transform:rotate(-90deg);accent-color:#ec4899}
+.band em{display:block;color:#fff;font-size:8px;font-weight:800;font-style:normal;margin-top:4px}
+.eqfoot{display:flex;justify-content:space-between;align-items:center;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.07)}
+.eqfoot span{font-size:9px;color:#9ca3af}
+.eqfoot button{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:#e9d5ff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:12px;cursor:pointer}
+.hist{background:rgba(0,0,0,.4);border:1px solid rgba(168,85,247,.25);border-radius:14px;padding:10px 12px;margin-bottom:12px}
+.hist b{display:block;font-size:9px;color:#c084fc;letter-spacing:1px;margin-bottom:6px}
+.hist ul{margin:0;padding-left:16px;font-size:11px;color:#d1d5db;line-height:1.5}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{padding:11px;border-radius:13px;border:1px solid rgba(168,85,247,.45);background:rgba(168,85,247,.15);color:#e9d5ff;font-size:11px;font-weight:800;cursor:pointer}
+.btn.wa{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.45);color:#a7f3d0}
+.foot{text-align:center;margin-top:12px;font-size:9px;color:#9ca3af;letter-spacing:.5px}
+.tunnel{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,#17245c,#09051f 45%,#020108)}
+.tunnel.on{display:flex}
+.ring{position:absolute;width:35%;aspect-ratio:1;border:3px solid #38bdf8;border-radius:50%;opacity:0}
+.tunnel.on .ring{animation:ring 3.2s linear infinite}
+.ring:nth-child(2){border-color:#a855f7;animation-delay:.7s}
+.ring:nth-child(3){border-color:#c084fc;animation-delay:1.4s}
+@keyframes ring{0%{transform:scale(.08);opacity:0}15%{opacity:.9}100%{transform:scale(5);opacity:0}}
+.portal{position:absolute;width:min(46vw,46vh);aspect-ratio:1;border-radius:50%;border:7px solid #a855f7;background:radial-gradient(circle,rgba(56,189,248,.3),transparent 70%);box-shadow:0 0 30px #38bdf8,0 0 70px #a855f7;opacity:0}
+.tunnel.portal .portal{animation:port 1.8s ease forwards}
+@keyframes port{0%{opacity:0;transform:scale(.05)}100%{opacity:1;transform:scale(1)}}
+.tunnel.exit{animation:flash .8s ease forwards}
+@keyframes flash{0%{opacity:1}100%{opacity:0;filter:brightness(4)}}
+body.reveal .player{animation:arrive 1.2s ease both}
+@keyframes arrive{from{opacity:0;filter:blur(10px) brightness(2)}to{opacity:1;filter:blur(0) brightness(1)}}
 </style>
 </head>
 <body>
-  <div class="cinema-intro-overlay" id="cinema-intro">
-  <div class="cinema-valance"></div>
-  <div class="curtain-panel curtain-left"></div>
-  <div class="curtain-panel curtain-right"></div>
-  <div class="projector-beam"></div>
-  <div class="cinema-stage">
-    <div class="ticket-card" id="cinema-welcome">
-      <div class="vip-badge">🎟️ SALA VIP • DOLBY DIGITAL HD</div>
-      <h1 class="cinema-main-title">TROPICAL FLOW<span>RADIO TV</span></h1>
-      <p class="cinema-sub">TRANSMISIÓN ESTELAR EN VIVO DESDE PUERTO RICO 🇵🇷</p>
-      <button type="button" class="cinema-enter-btn" id="cinema-enter-btn">🎬 ENTRAR A LA SALA</button>
+  <div class="cinema" id="cinema">
+  <div class="curtain l"></div><div class="curtain r"></div>
+  <div class="stage">
+    <div class="card" id="welcome">
+      <div class="badge">🎟️ SALA VIP • HD</div>
+      <h1>TROPICAL FLOW<span>RADIO TV</span></h1>
+      <p>EN VIVO DESDE PUERTO RICO 🇵🇷</p>
+      <button class="enter" id="enterBtn">🎬 ENTRAR A LA SALA</button>
     </div>
-    <div class="cinema-act" id="cinema-act-1">
-      <div class="policy-icons">📵 🎧 🍿</div>
-      <h2 class="policy-title">SUBE EL VOLUMEN Y DISFRUTA LA FUNCIÓN</h2>
-      <p class="policy-desc">SEÑAL DIGITAL DE ALTA DEFINICIÓN • TROPICAL FLOW NETWORK</p>
-    </div>
-    <div class="cinema-act" id="cinema-act-2">
-      <div class="reel-circle"><div class="reel-sweep"></div><span class="reel-number" id="reel-number">3</span></div>
-      <div class="reel-caption">PREPARANDO PROYECTOR EN VIVO...</div>
-    </div>
-    <div class="cinema-act" id="cinema-act-3">
-      <div class="feature-kicker">🌴 PRESENTACIÓN ESTELAR 🇵🇷</div>
-      <div class="feature-banner">¡EN EL AIRE!</div>
-    </div>
+    <div class="act" id="act1"><div style="font-size:36px">📵 🎧 🍿</div><h2>SUBE EL VOLUMEN</h2><p>DISFRUTA LA FUNCIÓN • TROPICAL FLOW NETWORK</p></div>
+    <div class="act" id="act2"><div class="reel"><span id="reelNum">3</span></div><p style="margin-top:12px;letter-spacing:3px;color:#38bdf8;font-size:11px;font-weight:800">PREPARANDO PROYECTOR...</p></div>
+    <div class="act" id="act3"><div style="letter-spacing:5px;color:#38bdf8;font-weight:900;font-size:13px">🌴 PRESENTACIÓN ESTELAR 🇵🇷</div><div style="font-size:clamp(28px,6vw,48px);font-weight:900;background:linear-gradient(90deg,#fff,#fde047,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:8px">¡EN EL AIRE!</div></div>
   </div>
-  <button type="button" class="skip-cinema-btn" id="skip-cinema-btn">SALTAR INTRO ⏭</button>
+  <button class="skip" id="skipBtn">SALTAR INTRO ⏭</button>
 </div>
 
-<div class="tf-tunnel-overlay" id="tf-tunnel-overlay" aria-hidden="true">
-  <div class="tf-tunnel">
-    <div class="tf-ring"></div><div class="tf-ring"></div><div class="tf-ring"></div><div class="tf-ring"></div>
-    <div class="tf-light"></div><div class="tf-light"></div><div class="tf-light"></div><div class="tf-light"></div><div class="tf-light"></div><div class="tf-light"></div>
-  </div>
-  <div class="tf-portal"></div>
-</div>
+<div class="tunnel" id="tunnel"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="portal"></div></div>
 
-<div class="space-universe" aria-hidden="true">
-  <div class="space-stars-layer"></div>
-  <div class="space-stars-big"></div>
-  <div class="nebula-glow nebula-left"></div>
-  <div class="nebula-glow nebula-right"></div>
-  <div class="ufo-craft ufo-1">
-    <svg viewBox="0 0 220 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#38bdf8" opacity=".85"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#475569" stroke="#38bdf8" stroke-width="2"/><circle cx="42" cy="54" r="4" fill="#fff"/><circle cx="74" cy="59" r="4.5" fill="#38bdf8"/><circle cx="110" cy="61" r="5" fill="#fff"/><circle cx="146" cy="59" r="4.5" fill="#38bdf8"/><circle cx="178" cy="54" r="4" fill="#fff"/></svg>
+<div class="space">
+  <div class="stars"></div><div class="neb a"></div><div class="neb b"></div>
+  <div class="ufo"><svg viewBox="0 0 220 110"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#38bdf8" opacity=".8"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#475569" stroke="#38bdf8" stroke-width="2"/><circle cx="60" cy="55" r="5" fill="#fff"/><circle cx="110" cy="60" r="5" fill="#fff"/><circle cx="160" cy="55" r="5" fill="#fff"/></svg></div>
+  <div class="earth">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#1d4ed8"/><circle cx="100" cy="100" r="96" fill="none" stroke="#38bdf8" stroke-width="3"/><path d="M45,45 C60,35 75,40 70,60 C65,75 55,85 48,95 C40,105 35,90 38,70 C40,55 38,50 45,45 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/><path d="M58,115 C70,110 78,120 72,140 C66,155 55,145 52,130 C50,120 52,117 58,115 Z" fill="#4ade80" stroke="#15803d" stroke-width="2"/><path d="M105,45 C120,38 135,45 132,60 C130,75 120,82 112,78 C102,72 98,55 105,45 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/><path d="M110,90 C125,85 138,95 135,115 C132,132 118,138 110,128 C102,115 100,95 110,90 Z" fill="#4ade80" stroke="#15803d" stroke-width="2"/><path d="M145,55 C162,50 172,62 168,75 C164,88 152,85 146,72 C142,62 140,58 145,55 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/><ellipse cx="70" cy="60" rx="22" ry="7" fill="white" opacity=".85"/><ellipse cx="130" cy="110" rx="25" ry="7" fill="white" opacity=".85"/><circle cx="68" cy="105" r="5" fill="#ef3340" stroke="white" stroke-width="1.5"/><text x="68" y="122" text-anchor="middle" font-size="8" font-weight="900" fill="white">PR</text></svg>
+    <span>🌎 TIERRA • PR 🇵🇷</span>
   </div>
-  <div class="ufo-craft ufo-2">
-    <svg viewBox="0 0 220 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#ec4899" opacity=".85"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#3b0764" stroke="#ec4899" stroke-width="2"/><circle cx="42" cy="54" r="4" fill="#fff"/><circle cx="74" cy="59" r="4.5" fill="#f472b6"/><circle cx="110" cy="61" r="5" fill="#fff"/><circle cx="146" cy="59" r="4.5" fill="#f472b6"/><circle cx="178" cy="54" r="4" fill="#fff"/></svg>
+  <div class="sun">☀️</div>
+  <div class="sat">
+    <svg viewBox="0 0 220 120"><rect x="5" y="45" width="55" height="30" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/><rect x="160" y="45" width="55" height="30" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/><rect x="70" y="30" width="80" height="60" rx="10" fill="#e2e8f0" stroke="#fff" stroke-width="2"/><rect x="80" y="38" width="60" height="30" fill="white"/><rect x="80" y="38" width="60" height="6" fill="#ef3340"/><rect x="80" y="50" width="60" height="6" fill="#ef3340"/><rect x="80" y="62" width="60" height="6" fill="#ef3340"/><polygon points="80,38 105,53 80,68" fill="#0050a4"/><polygon points="88,53 90,49 94,49 91,46 92,42 88,45 84,42 85,46 82,49 86,49" fill="white"/><line x1="110" y1="30" x2="110" y2="12" stroke="#fff" stroke-width="2"/><circle cx="110" cy="10" r="5" fill="#f59e0b"/></svg>
   </div>
-  <div class="ufo-craft ufo-3">
-    <svg viewBox="0 0 220 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#a855f7" opacity=".75"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#1e1b4b" stroke="#c084fc" stroke-width="2"/><circle cx="45" cy="54" r="4" fill="#38bdf8"/><circle cx="88" cy="59" r="4.5" fill="#fff"/><circle cx="132" cy="59" r="4.5" fill="#fff"/><circle cx="175" cy="54" r="4" fill="#38bdf8"/></svg>
-  </div>
-
-  <!-- SATELITE CON BANDERA PR -->
-  <div class="tf-satellite">
-    <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
-      <rect x="5" y="45" width="55" height="30" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/>
-      <rect x="160" y="45" width="55" height="30" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/>
-      <rect x="70" y="30" width="80" height="60" rx="10" fill="#e2e8f0" stroke="#fff" stroke-width="2"/>
-      <rect x="80" y="38" width="60" height="30" rx="2" fill="white"/>
-      <rect x="80" y="38" width="60" height="6" fill="#ef3340"/>
-      <rect x="80" y="50" width="60" height="6" fill="#ef3340"/>
-      <rect x="80" y="62" width="60" height="6" fill="#ef3340"/>
-      <polygon points="80,38 105,53 80,68" fill="#0050a4"/>
-      <polygon points="88,53 90.5,49 94.5,49 91.5,46.5 92.5,42.5 88,45 83.5,42.5 84.5,46.5 81.5,49 85.5,49" fill="white"/>
-      <line x1="110" y1="30" x2="110" y2="12" stroke="#fff" stroke-width="2"/>
-      <circle cx="110" cy="10" r="5" fill="#f59e0b"/>
-    </svg>
-    <div class="tf-sat-label">🛰️ TROPICAL FLOW • SATELITE PR 🇵🇷</div>
-  </div>
-
-  <!-- NAVE NASA TROPICAL FLOW -->
-  <div class="tf-nasa">
-    <svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="130" cy="55" rx="115" ry="18" fill="#e2e8f0" stroke="#fff" stroke-width="2"/>
-      <polygon points="20,55 45,35 45,75" fill="#ef4444"/>
-      <polygon points="240,55 215,35 215,75" fill="#1e3a8a"/>
-      <ellipse cx="130" cy="42" rx="40" ry="16" fill="#38bdf8" stroke="white" stroke-width="1.5" opacity=".9"/>
-      <rect x="95" y="62" width="70" height="12" rx="6" fill="#0f172a"/>
-      <circle cx="105" cy="68" r="3" fill="#f59e0b"/><circle cx="130" cy="68" r="3" fill="#10b981"/><circle cx="155" cy="68" r="3" fill="#ec4899"/>
-      <text x="130" y="92" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Arial">NASA • USA</text>
-    </svg>
-    <div class="tf-nasa-name">🚀 TROPICAL FLOW RADIO TV • NASA</div>
+  <div class="nasa">
+    <svg viewBox="0 0 260 110"><ellipse cx="130" cy="55" rx="115" ry="18" fill="#e2e8f0" stroke="#fff" stroke-width="2"/><polygon points="20,55 45,35 45,75" fill="#ef4444"/><polygon points="240,55 215,35 215,75" fill="#1e3a8a"/><ellipse cx="130" cy="42" rx="40" ry="16" fill="#38bdf8" stroke="white" stroke-width="1.5" opacity=".9"/><rect x="95" y="62" width="70" height="12" rx="6" fill="#0f172a"/><circle cx="105" cy="68" r="3" fill="#f59e0b"/><circle cx="130" cy="68" r="3" fill="#10b981"/><circle cx="155" cy="68" r="3" fill="#ec4899"/><text x="130" y="92" text-anchor="middle" font-size="10" font-weight="900" fill="white" font-family="Arial">NASA • USA</text></svg>
   </div>
 </div>
 
-<div class="cyber-player-container">
-  <div class="top-status-bar">
-    <div><span class="clock-title">HORA LOCAL</span><span class="clock-num" id="live-clock">00:00:00</span></div>
-    <div class="badge-live"><span class="dot-signal" id="signal-dot"></span><span class="text-signal" id="signal-text">OFFLINE</span></div>
-  </div>
-  <div class="flip-screen-container">
-    <button class="nav-arrow left-arrow" id="flip-prev" aria-label="Anterior">‹</button>
-    <div class="flip-card" id="flip-card">
-      <div class="flip-face"><img src="Tropical_Flow_Radio_TV_1600x900.jpg" class="brand-logo" alt="Tropical Flow Radio TV"></div>
-      <div class="flip-face flip-back"><img src="WE_MAKE_MUSIC_PR_1600x900.jpg" class="brand-logo" alt="WE MAKE MUSIC PR"><span class="logo-caption">WE MAKE MUSIC (PR) • 787-579-7226</span></div>
+<div class="player">
+  <div class="top"><div><small>HORA LOCAL • PUERTO RICO</small><b id="clock">00:00:00</b></div><div class="live"><span class="dot" id="dot"></span><span id="liveTxt">OFFLINE</span></div></div>
+  <div class="modes"><button class="mode active" id="btnRadio">📻 RADIO EN VIVO</button><button class="mode" id="btnTv">📺 TV EN VIVO</button></div>
+  <div class="screen" id="radioScreen"><img src="Tropical_Flow_Radio_TV_1600x900.jpg" alt="Tropical Flow Radio TV"><div class="cap">TROPICAL FLOW RADIO TV • EN VIVO 🇵🇷</div></div>
+  <div class="tv-box" id="tvBox"><iframe src="https://www.youtube.com/embed/live_stream?channel=UC_TROPICALFLOW" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="song"><small>🎵 SONANDO AHORA</small><div id="track">Cargando información de la emisora...</div></div>
+  <div class="stats"><div class="stat"><small>👥 AUDIENCIA EN VIVO</small><b id="listeners">Conectando...</b></div><div class="stat"><small>📡 CALIDAD</small><b id="quality">HD STEREO</b></div></div>
+  <div class="eq" id="eq"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+  <div class="center"><button class="play" id="playBtn"><span id="playIcon">▶</span></button><div class="status" id="status">Pulsa ▶ para escuchar en vivo</div></div>
+  <div class="vol"><span>🔊</span><input type="range" id="vol" min="0" max="100" value="85"><b id="volTxt">85%</b></div>
+  <div class="eqpanel">
+    <div class="eqhead"><b>🎛️ ECUALIZADOR PRO</b><span id="eqBadge">5 BANDAS</span></div>
+    <div class="bands">
+      <div class="band"><small>BASS</small><i>60Hz</i><div class="wrap"><input type="range" id="eq60" min="-12" max="12" value="0"></div><em id="v60">0 dB</em></div>
+      <div class="band"><small>LOW</small><i>250Hz</i><div class="wrap"><input type="range" id="eq250" min="-12" max="12" value="0"></div><em id="v250">0 dB</em></div>
+      <div class="band"><small>MID</small><i>1kHz</i><div class="wrap"><input type="range" id="eq1000" min="-12" max="12" value="0"></div><em id="v1000">0 dB</em></div>
+      <div class="band"><small>HIGH</small><i>4kHz</i><div class="wrap"><input type="range" id="eq4000" min="-12" max="12" value="0"></div><em id="v4000">0 dB</em></div>
+      <div class="band"><small>AIR</small><i>12kHz</i><div class="wrap"><input type="range" id="eq12000" min="-12" max="12" value="0"></div><em id="v12000">0 dB</em></div>
     </div>
-    <button class="nav-arrow right-arrow" id="flip-next" aria-label="Siguiente">›</button>
+    <div class="eqfoot"><span>Ajuste en tiempo real</span><button id="eqReset">Resetear</button></div>
   </div>
-  <div class="song-metadata-box">
-    <div class="song-title-label">🎵 SONANDO AHORA</div>
-    <div class="song-now-playing" id="current-track-name">Cargando información de la emisora...</div>
-  </div>
-  <div class="stats-row">
-    <div class="stat-box"><span class="stat-label">👥 AUDIENCIA EN VIVO</span><span class="stat-value" id="listener-count">Conectando...</span></div>
-    <div class="stat-box"><span class="stat-label">📡 CALIDAD DE SEÑAL</span><span class="stat-value" id="quality-status">HD STEREO</span></div>
-  </div>
-  <div class="wave-equalizer" id="player-eq">
-    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-  </div>
-  <div class="control-center">
-    <button class="cyber-play-btn" id="master-btn" aria-label="Reproducir o Pausar"><span id="icon-svg">▶</span></button>
-    <div class="status-msg" id="status-message">Pulsa ▶ para escuchar en vivo</div>
-  </div>
-  <div class="volume-section">
-    <span class="volume-icon">🔊</span>
-    <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="85">
-    <span class="volume-number" id="volume-number">85%</span>
-  </div>
-  <div class="real-eq-panel">
-    <div class="real-eq-heading"><span class="real-eq-title">🎛️ ECUALIZADOR PRO</span><span class="real-eq-badge" id="eq-status-badge">5 BANDAS</span></div>
-    <div class="eq-bands">
-      <div class="eq-band"><span class="eq-band-name">BASS</span><span class="eq-band-frequency">60Hz</span><div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-60" min="-12" max="12" value="0"></div><span class="eq-band-value" id="eq-value-60">0 dB</span></div>
-      <div class="eq-band"><span class="eq-band-name">LOW</span><span class="eq-band-frequency">250Hz</span><div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-250" min="-12" max="12" value="0"></div><span class="eq-band-value" id="eq-value-250">0 dB</span></div>
-      <div class="eq-band"><span class="eq-band-name">MID</span><span class="eq-band-frequency">1kHz</span><div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-1000" min="-12" max="12" value="0"></div><span class="eq-band-value" id="eq-value-1000">0 dB</span></div>
-      <div class="eq-band"><span class="eq-band-name">HIGH</span><span class="eq-band-frequency">4kHz</span><div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-4000" min="-12" max="12" value="0"></div><span class="eq-band-value" id="eq-value-4000">0 dB</span></div>
-      <div class="eq-band"><span class="eq-band-name">AIR</span><span class="eq-band-frequency">12kHz</span><div class="eq-slider-wrap"><input type="range" class="eq-slider" id="eq-12000" min="-12" max="12" value="0"></div><span class="eq-band-value" id="eq-value-12000">0 dB</span></div>
-    </div>
-    <div class="eq-reset-row"><span class="eq-description">Ajuste de frecuencias en tiempo real</span><button class="eq-reset-btn" id="eq-reset" type="button">Resetear</button></div>
-  </div>
-  <div class="history-box">
-    <span class="history-title">🕒 ÚLTIMAS CANCIONES QUE SONARON</span>
-    <ul class="history-list" id="history-list"><li>Esperando cambio de canción...</li></ul>
-  </div>
-  <div class="action-buttons">
-    <button class="action-btn" id="share-button" type="button">📲 Compartir</button>
-    <button class="action-btn whatsapp" id="request-button" type="button">💬 Pedir Canción</button>
-  </div>
+  <div class="hist"><b>🕒 ÚLTIMAS CANCIONES</b><ul id="hist"><li>Esperando cambio de canción...</li></ul></div>
+  <div class="btns"><button class="btn" id="shareBtn">📲 Compartir</button><button class="btn wa" id="reqBtn">💬 Pedir Canción</button></div>
+  <div class="foot">TROPICAL FLOW RADIO TV • GUAYABAL, VILLALBA 🇵🇷 • WE MAKE MUSIC PR • 787-579-7226</div>
 </div>
-<audio id="core-audio" preload="none"></audio>
+<audio id="audio" preload="none"></audio>
 <script>
-function updateClock(){
-  const now=new Date();
-  document.getElementById("live-clock").textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-}
-updateClock(); setInterval(updateClock,1000);
-const flipCard=document.getElementById("flip-card");
-let isFlipped=false;
-function toggleFlip(){isFlipped=!isFlipped;flipCard.classList.toggle("is-flipped",isFlipped);}
-let flipTimer=setInterval(toggleFlip,7000);
-document.getElementById("flip-prev").addEventListener("click",toggleFlip);
-document.getElementById("flip-next").addEventListener("click",toggleFlip);
-const CASTER_HOST="sapircast.caster.fm";
-const CASTER_PORT="16693";
-const STREAM_MOUNT="/kidAJ";
-const STREAM_URL=`https://${CASTER_HOST}:${CASTER_PORT}${STREAM_MOUNT}`;
-const STATS_URL=`https://${CASTER_HOST}:${CASTER_PORT}/admin/publicstats.json`;
-const audioPlayer=document.getElementById("core-audio");
-const masterButton=document.getElementById("master-btn");
-const icon=document.getElementById("icon-svg");
-const signalDot=document.getElementById("signal-dot");
-const signalText=document.getElementById("signal-text");
-const trackName=document.getElementById("current-track-name");
-const listenerCount=document.getElementById("listener-count");
-const qualityStatus=document.getElementById("quality-status");
-const waveEq=document.getElementById("player-eq");
-const statusMessage=document.getElementById("status-message");
-const historyList=document.getElementById("history-list");
-let currentSongText=""; let historyItems=[];
-try{const s=JSON.parse(localStorage.getItem("tf_song_history")||"[]");historyItems=Array.isArray(s)?s:[];}catch(e){historyItems=[];}
-function renderHistory(){
-  historyList.innerHTML="";
-  if(historyItems.length===0){const li=document.createElement("li");li.textContent="Aún no hay historial reciente.";historyList.appendChild(li);return;}
-  historyItems.forEach(t=>{const li=document.createElement("li");li.textContent=t;historyList.appendChild(li);});
-}
-renderHistory();
-function addToHistory(t){
-  if(!t||t==="Tropical Flow Radio TV"||historyItems[0]===t) return;
-  historyItems.unshift(t);historyItems=historyItems.slice(0,5);
-  try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}
-  renderHistory();
-}
-function setSignal(state,label){signalDot.classList.remove("active","connecting","error");if(state)signalDot.classList.add(state);signalText.textContent=label;}
-function setPlayingUI(playing){icon.textContent=playing?"Ⅱ":"▶";waveEq.classList.toggle("playing",playing);trackName.classList.toggle("playing",playing);}
-function extractCasterSource(raw){
-  if(!raw) return null;
-  let root=Array.isArray(raw)?(raw[1]||raw[0]):raw;
-  if(root&&root.icestats) root=root.icestats;
-  if(!root||!root.source) return null;
-  if(typeof root.source==="object"&&!Array.isArray(root.source)){
-    if(root.source[STREAM_MOUNT]) return root.source[STREAM_MOUNT];
-    const c=STREAM_MOUNT.replace("/",""); if(root.source[c]) return root.source[c];
-    const k=Object.keys(root.source); return k.length>0?root.source[k[0]]:null;
-  }
-  if(Array.isArray(root.source)){return root.source.find(s=>String(s.listenurl||s.mount||"").includes(STREAM_MOUNT))||root.source[0];}
-  return root.source;
-}
-async function fetchStatsWithFallback(){
-  const urls=[STATS_URL+"?t="+Date.now(),"https://allorigins.win"+encodeURIComponent(STATS_URL+"?t="+Date.now())];
-  for(const url of urls){try{const res=await fetch(url,{cache:"no-store"});if(!res.ok)continue;const j=await res.json();const src=extractCasterSource(j);if(src)return src;}catch(e){}}
-  return null;
-}
-function firstValidNumber(...v){for(const x of v){if(x!==undefined&&x!==null&&x!==""&&Number.isFinite(Number(x)))return Number(x);}return null;}
-async function updateStationInfo(){
-  const source=await fetchStatsWithFallback();
-  if(!source){if(!currentSongText)trackName.textContent="Tropical Flow Radio TV - En Vivo";listenerCount.textContent="En línea";return;}
-  const meta=source.metadata||{};
-  const newTitle=(source["display-title"]||source.display_title||meta.song||meta.title||source.title||source.server_name||"Tropical Flow Radio TV").trim();
-  if(newTitle){if(currentSongText&&currentSongText!==newTitle)addToHistory(currentSongText);currentSongText=newTitle;trackName.textContent=newTitle;}
-  const listeners=firstValidNumber(source.listeners,source.listener_count);
-  listenerCount.textContent=listeners!==null?`${listeners} oyentes`:"En línea";
-  if(source.bitrate) qualityStatus.textContent=`${source.bitrate} kbps`;
-}
-updateStationInfo(); let metadataTimer=setInterval(updateStationInfo,12000);
-let audioContext=null,sourceNode=null,filters=[],masterGain=null,audioGraphReady=false,graphFailed=false;
-let keepStreamPlaying=false,userPausedStream=false,resumeTimer=null,resumeAttempts=0;
-const EQ_BANDS=[{id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},{id:"eq-250",valueId:"eq-value-250",frequency:250,type:"peaking"},{id:"eq-1000",valueId:"eq-value-1000",frequency:1000,type:"peaking"},{id:"eq-4000",valueId:"eq-value-4000",frequency:4000,type:"peaking"},{id:"eq-12000",valueId:"eq-value-12000",frequency:12000,type:"highshelf"}];
-const volumeSlider=document.getElementById("volume-slider"),volumeNumber=document.getElementById("volume-number");
-function updateMasterVolume(){
-  const v=Math.max(0,Math.min(100,Number(volumeSlider?.value ?? 85)))/100;
-  if(masterGain&&audioContext){masterGain.gain.setTargetAtTime(v,audioContext.currentTime,.025);}else{try{audioPlayer.volume=v;}catch(e){}}
-  if(volumeNumber)volumeNumber.textContent=Math.round(v*100)+"%";
-}
-function createAudioGraph(){
-  if(audioGraphReady) return true; if(graphFailed) return false;
-  try{
-    const AudioCtx=window.AudioContext||window.webkitAudioContext; if(!AudioCtx) throw new Error("No Web Audio");
-    audioPlayer.crossOrigin="anonymous"; audioContext=new AudioCtx();
-    sourceNode=audioContext.createMediaElementSource(audioPlayer);
-    let prev=sourceNode;
-    filters=EQ_BANDS.map(b=>{const f=audioContext.createBiquadFilter();f.type=b.type;f.frequency.value=b.frequency;f.Q.value=1;f.gain.value=0;prev.connect(f);prev=f;return f;});
-    masterGain=audioContext.createGain(); masterGain.gain.value=Number(volumeSlider?.value ?? 85)/100;
-    prev.connect(masterGain); masterGain.connect(audioContext.destination);
-    audioGraphReady=true; updateAllEQDisplays(); updateMasterVolume();
-    document.getElementById("eq-status-badge").textContent="5 BANDAS · ACTIVO"; return true;
-  }catch(e){graphFailed=true;document.getElementById("eq-status-badge").textContent="MODO DIRECTO";return false;}
-}
-function updateEQBand(i){
-  const band=EQ_BANDS[i],slider=document.getElementById(band.id),display=document.getElementById(band.valueId);
-  if(!slider) return; const val=Number(slider.value);
-  if(filters[i]&&audioContext) filters[i].gain.setTargetAtTime(val,audioContext.currentTime,.015);
-  if(display) display.textContent=(val>0?"+":"")+val+" dB";
-}
-function updateAllEQDisplays(){EQ_BANDS.forEach((b,i)=>{const s=document.getElementById(b.id);if(s){updateEQBand(i);if(!s.dataset.bound){s.addEventListener("input",()=>updateEQBand(i));s.dataset.bound="1";}}});}
-function resetEQ(){EQ_BANDS.forEach((b,i)=>{const s=document.getElementById(b.id);if(s)s.value=0;updateEQBand(i);});}
-updateAllEQDisplays(); document.getElementById("eq-reset").addEventListener("click",resetEQ);
-async function startStream(){
-  if(!audioPlayer.paused){keepStreamPlaying=true;userPausedStream=false;return;}
-  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
-  statusMessage.textContent="Conectando con Tropical Flow Radio TV…"; setSignal("connecting","CONECTANDO");
-  try{
-    const graphOK=createAudioGraph(); if(graphOK&&audioContext.state==="suspended") await audioContext.resume();
-    if(!audioPlayer.src||audioPlayer.src!==STREAM_URL){audioPlayer.src=STREAM_URL;audioPlayer.load();}
-    await audioPlayer.play(); statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!"; setSignal("active","EN VIVO"); setPlayingUI(true); updateStationInfo();
-  }catch(err){
-    if(audioPlayer.crossOrigin){audioPlayer.removeAttribute("crossorigin");audioPlayer.src=STREAM_URL;audioPlayer.load();
-      try{await audioPlayer.play();document.getElementById("eq-status-badge").textContent="AUDIO DIRECTO";statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";setSignal("active","EN VIVO");setPlayingUI(true);return;}catch(e2){}
-    }
-    keepStreamPlaying=false; statusMessage.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo."; setSignal("error","DESCONECTADO"); setPlayingUI(false);
-  }
-}
-function stopStream(){userPausedStream=true;keepStreamPlaying=false;if(resumeTimer){clearTimeout(resumeTimer);resumeTimer=null;}audioPlayer.pause();setPlayingUI(false);statusMessage.textContent="Reproducción detenida. Pulsa ▶ para escuchar.";setSignal("","OFFLINE");}
-masterButton.addEventListener("click",()=>audioPlayer.paused?startStream():stopStream());
-audioPlayer.addEventListener("playing",()=>{keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;setSignal("active","EN VIVO");setPlayingUI(true);statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";});
-async function tryResumeAfterInterruption(){
-  if(!keepStreamPlaying||userPausedStream||!audioPlayer.paused||!audioPlayer.src||audioPlayer.ended) return;
-  if(resumeAttempts>=2) return; resumeAttempts++;
-  try{if(audioContext&&audioContext.state==="suspended") await audioContext.resume(); await audioPlayer.play();}
-  catch(e){setSignal("connecting","TOCA ▶ PARA REANUDAR");statusMessage.textContent="El dispositivo interrumpió el audio. Pulsa ▶ para continuar.";}
-}
-audioPlayer.addEventListener("pause",()=>{if(!audioPlayer.ended)setPlayingUI(false);if(keepStreamPlaying&&!userPausedStream){if(resumeTimer)clearTimeout(resumeTimer);resumeTimer=setTimeout(tryResumeAfterInterruption,900);}});
-audioPlayer.addEventListener("ended",()=>{keepStreamPlaying=false;setPlayingUI(false);});
-audioPlayer.addEventListener("waiting",()=>{setSignal("connecting","CONECTANDO");statusMessage.textContent="Conectando con la señal…";});
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&keepStreamPlaying&&audioPlayer.paused){if(resumeTimer)clearTimeout(resumeTimer);resumeTimer=setTimeout(tryResumeAfterInterruption,350);}});
-window.addEventListener("pageshow",()=>{if(keepStreamPlaying&&audioPlayer.paused)setTimeout(tryResumeAfterInterruption,350);});
-audioPlayer.volume=.85; if(volumeSlider){volumeSlider.addEventListener("input",updateMasterVolume);volumeSlider.addEventListener("change",updateMasterVolume);} updateMasterVolume();
-const REQUEST_WHATSAPP_NUMBER="19393142657";
-async function shareRadio(){
-  const shareUrl=window.location.href; const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
-  if(navigator.share){try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}}
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(shareText+"\n"+shareUrl)}`; window.open(whatsappUrl,"_blank");
-}
-function requestSong(){
-  const shareUrl=window.location.href;
-  const message="🎤 Hola Tropical Flow Radio TV 🌴📻\n\nQuiero solicitar una canción.\n\nCanción: __________________\nArtista: __________________\n\n🌴 Tropical Flow Radio TV 🇵🇷\n"+shareUrl;
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`; window.open(whatsappUrl,"_blank");
-}
-document.getElementById("share-button").addEventListener("click",shareRadio);
-document.getElementById("request-button").addEventListener("click",requestSong);
-const cinemaIntro=document.getElementById("cinema-intro");
-const cinemaEnterBtn=document.getElementById("cinema-enter-btn");
-const skipCinemaBtn=document.getElementById("skip-cinema-btn");
-const cinemaWelcome=document.getElementById("cinema-welcome");
-const act1=document.getElementById("cinema-act-1");
-const act2=document.getElementById("cinema-act-2");
-const act3=document.getElementById("cinema-act-3");
-const reelNumber=document.getElementById("reel-number");
-let sequenceStarted=false,curtainsOpened=false,cinemaTimers=[];
-function playCinemaTone(type){
-  try{
-    const Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
-    const ctx=new Ctx(),osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination); const now=ctx.currentTime;
-    if(type==="beep"){osc.type="sine";osc.frequency.setValueAtTime(1000,now);gain.gain.setValueAtTime(0.12,now);gain.gain.exponentialRampToValueAtTime(0.001,now+0.12);osc.start(now);osc.stop(now+0.13);}
-    else if(type==="boom"){osc.type="sawtooth";osc.frequency.setValueAtTime(65,now);osc.frequency.exponentialRampToValueAtTime(140,now+1.4);gain.gain.setValueAtTime(0.01,now);gain.gain.linearRampToValueAtTime(0.18,now+0.6);gain.gain.exponentialRampToValueAtTime(0.001,now+1.8);osc.start(now);osc.stop(now+1.85);}
-  }catch(e){}
-}
-function showCinemaAct(el){[act1,act2,act3].forEach(a=>a.classList.remove("active"));if(el)el.classList.add("active");}
-const tfTunnelOverlay=document.getElementById("tf-tunnel-overlay");
-let tfTunnelStarted=false; let tfTunnelTimers=[];
-function startTFTunnelSequence(autoPlayAudio){
-  if(tfTunnelStarted||!tfTunnelOverlay) return; tfTunnelStarted=true;
-  tfTunnelTimers.forEach(t=>clearTimeout(t)); tfTunnelTimers=[];
-  tfTunnelOverlay.style.display=""; tfTunnelOverlay.classList.add("active");
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("portal-open");},3200));
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("exit");},5100));
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.remove("active","portal-open","exit");tfTunnelOverlay.style.display="none";document.body.classList.add("tf-player-revealed");if(autoPlayAudio)startStream();},6100));
-}
-function openCurtainsAndPlay(autoPlayAudio){
-  if(curtainsOpened) return; curtainsOpened=true; cinemaTimers.forEach(t=>clearTimeout(t));
-  if(skipCinemaBtn) skipCinemaBtn.style.display="none";
-  cinemaIntro.classList.add("curtains-open");
-  setTimeout(()=>{cinemaIntro.style.display="none";startTFTunnelSequence(autoPlayAudio);},1850);
-}
-function startCinemaShow(){
-  if(sequenceStarted) return; sequenceStarted=true;
-  cinemaWelcome.style.display="none"; cinemaIntro.classList.add("lights-dimmed"); playCinemaTone("boom"); showCinemaAct(act1);
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act2);reelNumber.textContent="3";playCinemaTone("beep");},2400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="2";playCinemaTone("beep");},3400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="1";playCinemaTone("beep");},4400));
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act3);playCinemaTone("boom");},5400));
-  cinemaTimers.push(setTimeout(()=>{openCurtainsAndPlay(true);},6900));
-}
-cinemaEnterBtn.addEventListener("click",startCinemaShow);
-skipCinemaBtn.addEventListener("click",()=>openCurtainsAndPlay(true));
-window.addEventListener("beforeunload",()=>{clearInterval(flipTimer);clearInterval(metadataTimer);});
+function clock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});}
+clock();setInterval(clock,1000);
+const HOST="sapircast.caster.fm",PORT="16693",MOUNT="/kidAJ";
+const STREAM=`https://${HOST}:${PORT}${MOUNT}`;
+const STATS=`https://${HOST}:${PORT}/admin/publicstats.json`;
+const audio=document.getElementById("audio"),playBtn=document.getElementById("playBtn"),playIcon=document.getElementById("playIcon"),dot=document.getElementById("dot"),liveTxt=document.getElementById("liveTxt"),track=document.getElementById("track"),listeners=document.getElementById("listeners"),quality=document.getElementById("quality"),eqEl=document.getElementById("eq"),statusEl=document.getElementById("status"),histEl=document.getElementById("hist");
+let cur="";let hist=[];
+try{hist=JSON.parse(localStorage.getItem("tf_hist")||"[]");if(!Array.isArray(hist))hist=[];}catch(e){hist=[];}
+function renderHist(){histEl.innerHTML="";if(!hist.length){histEl.innerHTML="<li>Aún no hay historial.</li>";return;}hist.forEach(t=>{let li=document.createElement("li");li.textContent=t;histEl.appendChild(li);});}
+renderHist();
+function addHist(t){if(!t||t==="Tropical Flow Radio TV"||hist[0]===t)return;hist.unshift(t);hist=hist.slice(0,5);try{localStorage.setItem("tf_hist",JSON.stringify(hist));}catch(e){}renderHist();}
+function setLive(s,t){dot.className="dot "+s;liveTxt.textContent=t;}
+function setPlay(p){playIcon.textContent=p?"Ⅱ":"▶";eqEl.classList.toggle("play",p);track.classList.toggle("playing",p);}
+function getSrc(raw){if(!raw)return null;let r=Array.isArray(raw)?(raw[1]||raw[0]):raw;if(r&&r.icestats)r=r.icestats;if(!r||!r.source)return null;if(typeof r.source==="object"&&!Array.isArray(r.source)){if(r.source[MOUNT])return r.source[MOUNT];let k=Object.keys(r.source);return k.length?r.source[k[0]]:null;}if(Array.isArray(r.source))return r.source.find(s=>String(s.listenurl||"").includes(MOUNT))||r.source[0];return r.source;}
+async function fetchStats(){let urls=[STATS+"?t="+Date.now(),"https://allorigins.win"+encodeURIComponent(STATS+"?t="+Date.now())];for(let u of urls){try{let res=await fetch(u,{cache:"no-store"});if(!res.ok)continue;let j=await res.json();let s=getSrc(j);if(s)return s;}catch(e){}}return null;}
+async function updateInfo(){let s=await fetchStats();if(!s){if(!cur)track.textContent="Tropical Flow Radio TV - En Vivo";listeners.textContent="En línea";return;}let m=s.metadata||{};let title=(s["display-title"]||s.display_title||m.song||m.title||s.title||s.server_name||"Tropical Flow Radio TV").trim();if(title){if(cur&&cur!==title)addHist(cur);cur=title;track.textContent=title;}let n=s.listeners;listeners.textContent=(n!==undefined&&n!==""&&!isNaN(n))?`${n} oyentes`:"En línea";if(s.bitrate)quality.textContent=`${s.bitrate} kbps`;}
+updateInfo();setInterval(updateInfo,12000);
+let ctx=null,srcNode=null,filters=[],gain=null,ready=false,failed=false,keep=false,pausedByUser=false,timer=null,attempts=0;
+const BANDS=[{id:"eq60",v:"v60",f:60,t:"lowshelf"},{id:"eq250",v:"v250",f:250,t:"peaking"},{id:"eq1000",v:"v1000",f:1000,t:"peaking"},{id:"eq4000",v:"v4000",f:4000,t:"peaking"},{id:"eq12000",v:"v12000",f:12000,t:"highshelf"}];
+const vol=document.getElementById("vol"),volTxt=document.getElementById("volTxt");
+function updVol(){let v=Math.max(0,Math.min(100,Number(vol.value||85)))/100;if(gain&&ctx)gain.gain.setTargetAtTime(v,ctx.currentTime,.025);else{try{audio.volume=v;}catch(e){}}volTxt.textContent=Math.round(v*100)+"%";}
+function makeGraph(){if(ready)return true;if(failed)return false;try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error("no");audio.crossOrigin="anonymous";ctx=new AC();srcNode=ctx.createMediaElementSource(audio);let prev=srcNode;filters=BANDS.map(b=>{let f=ctx.createBiquadFilter();f.type=b.t;f.frequency.value=b.f;f.Q.value=1;f.gain.value=0;prev.connect(f);prev=f;return f;});gain=ctx.createGain();gain.gain.value=Number(vol.value||85)/100;prev.connect(gain);gain.connect(ctx.destination);ready=true;updAll();updVol();document.getElementById("eqBadge").textContent="5 BANDAS · ACTIVO";return true;}catch(e){failed=true;document.getElementById("eqBadge").textContent="MODO DIRECTO";return false;}}
+function updBand(i){let b=BANDS[i],s=document.getElementById(b.id),d=document.getElementById(b.v);if(!s)return;let val=Number(s.value);if(filters[i]&&ctx)filters[i].gain.setTargetAtTime(val,ctx.currentTime,.015);if(d)d.textContent=(val>0?"+":"")+val+" dB";}
+function updAll(){BANDS.forEach((b,i)=>{let s=document.getElementById(b.id);if(s){updBand(i);if(!s.dataset.b){s.addEventListener("input",()=>updBand(i));s.dataset.b="1";}}});}
+updAll();document.getElementById("eqReset").addEventListener("click",()=>{BANDS.forEach((b,i)=>{document.getElementById(b.id).value=0;updBand(i);});});
+async function start(){if(!audio.paused){keep=true;pausedByUser=false;return;}keep=true;pausedByUser=false;attempts=0;statusEl.textContent="Conectando con Tropical Flow Radio TV…";setLive("load","CONECTANDO");try{let ok=makeGraph();if(ok&&ctx.state==="suspended")await ctx.resume();if(!audio.src||audio.src!==STREAM){audio.src=STREAM;audio.load();}await audio.play();statusEl.textContent="¡Estás escuchando Tropical Flow Radio TV!";setLive("on","EN VIVO");setPlay(true);updateInfo();}catch(e){if(audio.crossOrigin){audio.removeAttribute("crossorigin");audio.src=STREAM;audio.load();try{await audio.play();statusEl.textContent="¡Estás escuchando Tropical Flow Radio TV!";setLive("on","EN VIVO");setPlay(true);return;}catch(e2){}}keep=false;statusEl.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo.";setLive("","DESCONECTADO");setPlay(false);}}
+function stop(){pausedByUser=true;keep=false;if(timer)clearTimeout(timer);audio.pause();setPlay(false);statusEl.textContent="Pausado. Pulsa ▶ para escuchar.";setLive("","OFFLINE");}
+playBtn.addEventListener("click",()=>audio.paused?start():stop());
+audio.addEventListener("playing",()=>{keep=true;pausedByUser=false;attempts=0;setLive("on","EN VIVO");setPlay(true);statusEl.textContent="¡Tropical Flow Radio TV está en el aire!";});
+async function resume(){if(!keep||pausedByUser||!audio.paused||!audio.src||audio.ended)return;if(attempts>=2)return;attempts++;try{if(ctx&&ctx.state==="suspended")await ctx.resume();await audio.play();}catch(e){setLive("load","TOCA ▶");statusEl.textContent="Pulsa ▶ para continuar.";}}
+audio.addEventListener("pause",()=>{if(!audio.ended)setPlay(false);if(keep&&!pausedByUser){if(timer)clearTimeout(timer);timer=setTimeout(resume,900);}});
+audio.addEventListener("waiting",()=>{setLive("load","CONECTANDO");statusEl.textContent="Conectando con la señal…";});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&keep&&audio.paused)setTimeout(resume,350);});
+audio.volume=.85;vol.addEventListener("input",updVol);vol.addEventListener("change",updVol);updVol();
+const WA="19393142657";
+async function share(){let u=location.href,t="🌴🎧 Escucha Tropical Flow Radio TV — Desde Puerto Rico 🇵🇷";if(navigator.share){try{await navigator.share({title:"Tropical Flow Radio TV",text:t,url:u});return;}catch(e){}}window.open(`https://wa.me/${WA}?text=${encodeURIComponent(t+"\n"+u)}`,"_blank");}
+function req(){let u=location.href,m="🎤 Hola Tropical Flow Radio TV 🌴📻\n\nQuiero solicitar una canción.\n\nCanción: ____\nArtista: ____\n\n🌴 Tropical Flow Radio TV 🇵🇷\n"+u;window.open(`https://wa.me/${WA}?text=${encodeURIComponent(m)}`,"_blank");}
+document.getElementById("shareBtn").addEventListener("click",share);
+document.getElementById("reqBtn").addEventListener("click",req);
+// RADIO / TV
+const btnRadio=document.getElementById("btnRadio"),btnTv=document.getElementById("btnTv"),radioScreen=document.getElementById("radioScreen"),tvBox=document.getElementById("tvBox");
+btnRadio.addEventListener("click",()=>{btnRadio.classList.add("active");btnTv.classList.remove("active");radioScreen.style.display="block";tvBox.classList.remove("on");});
+btnTv.addEventListener("click",()=>{btnTv.classList.add("active");btnRadio.classList.remove("active");radioScreen.style.display="none";tvBox.classList.add("on");});
+// CINEMA + TUNEL
+const cinema=document.getElementById("cinema"),enterBtn=document.getElementById("enterBtn"),skipBtn=document.getElementById("skipBtn"),welcome=document.getElementById("welcome"),act1=document.getElementById("act1"),act2=document.getElementById("act2"),act3=document.getElementById("act3"),reelNum=document.getElementById("reelNum"),tunnel=document.getElementById("tunnel");
+let started=false,opened=false,timers=[];
+function showAct(el){[act1,act2,act3].forEach(a=>a.classList.remove("on"));if(el)el.classList.add("on");}
+function tone(t){try{let C=window.AudioContext||window.webkitAudioContext;if(!C)return;let c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);let n=c.currentTime;if(t==="beep"){o.type="sine";o.frequency.setValueAtTime(1000,n);g.gain.setValueAtTime(.12,n);g.gain.exponentialRampToValueAtTime(.001,n+.12);o.start(n);o.stop(n+.13);}else{o.type="sawtooth";o.frequency.setValueAtTime(65,n);o.frequency.exponentialRampToValueAtTime(140,n+1.4);g.gain.setValueAtTime(.01,n);g.gain.linearRampToValueAtTime(.18,n+.6);g.gain.exponentialRampToValueAtTime(.001,n+1.8);o.start(n);o.stop(n+1.85);}}catch(e){}}
+function openCurtains(play){if(opened)return;opened=true;timers.forEach(t=>clearTimeout(t));if(skipBtn)skipBtn.style.display="none";cinema.classList.add("open");setTimeout(()=>{cinema.style.display="none";tunnel.classList.add("on");setTimeout(()=>tunnel.classList.add("portal"),2800);setTimeout(()=>tunnel.classList.add("exit"),4600);setTimeout(()=>{tunnel.classList.remove("on","portal","exit");tunnel.style.display="none";document.body.classList.add("reveal");if(play)start();},5500);},1600);}
+function startShow(){if(started)return;started=true;welcome.style.display="none";tone("boom");showAct(act1);timers.push(setTimeout(()=>{showAct(act2);reelNum.textContent="3";tone("beep");},2200));timers.push(setTimeout(()=>{reelNum.textContent="2";tone("beep");},3100));timers.push(setTimeout(()=>{reelNum.textContent="1";tone("beep");},4000));timers.push(setTimeout(()=>{showAct(act3);tone("boom");},4900));timers.push(setTimeout(()=>openCurtains(true),6200));}
+enterBtn.addEventListener("click",startShow);
+skipBtn.addEventListener("click",()=>openCurtains(true));
 </script>
 </body>
 </html>
