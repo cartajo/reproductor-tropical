@@ -84,6 +84,63 @@ body{
 @keyframes tfSatOrbit{0%{transform:translateX(-55vw) translateY(0)}50%{transform:translateX(0) translateY(25px)}100%{transform:translateX(55vw) translateY(0)}}
 .tf-sat-label{text-align:center;margin-top:2px;font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 0 8px #38bdf8;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:20px;border:1px solid rgba(56,189,248,.6)}
 /* NAVE NASA */
+  /* 🌎 PLANETA TIERRA */
+.tf-earth{
+  position:absolute; left:4%; bottom:18%;
+  width:clamp(90px,14vw,150px); height:clamp(90px,14vw,150px);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #7dd3fc, #0284c7 45%, #0c4a6e 75%, #082f49);
+  box-shadow:0 0 25px #38bdf8, 0 0 60px rgba(56,189,248,.6), inset -15px -10px 25px rgba(0,0,0,.6);
+  overflow:hidden;
+  animation:tfEarthFloat 6s ease-in-out infinite alternate;
+  z-index:3;
+}
+.tf-earth::before{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background:
+    radial-gradient(25px 18px at 30% 30%, #22c55e 60%, transparent 70%),
+    radial-gradient(30px 20px at 65% 55%, #16a34a 60%, transparent 70%),
+    radial-gradient(22px 16px at 45% 75%, #22c55e 60%, transparent 70%),
+    radial-gradient(18px 14px at 75% 25%, #4ade80 60%, transparent 70%);
+  animation:tfEarthSpin 20s linear infinite;
+}
+.tf-earth::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, transparent 60%, rgba(255,255,255,.25) 80%, transparent 100%);
+}
+@keyframes tfEarthFloat{from{transform:translateY(-8px)}to{transform:translateY(8px)}}
+@keyframes tfEarthSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.tf-earth-label{
+  position:absolute; left:4%; bottom:calc(18% - 24px);
+  width:clamp(90px,14vw,150px); text-align:center;
+  font-size:9px; font-weight:900; color:#fff;
+  background:rgba(0,0,0,.55); padding:3px 5px; border-radius:20px;
+  border:1px solid #38bdf8;
+}
+
+/* ☀️ EL SOL */
+.tf-sun{
+  position:absolute; right:3%; top:3%;
+  width:clamp(80px,12vw,130px); height:clamp(80px,12vw,130px);
+  border-radius:50%;
+  background:radial-gradient(circle, #fff7cc 0%, #fde047 30%, #f59e0b 60%, #ea580c 100%);
+  box-shadow:0 0 30px #fde047, 0 0 70px #f59e0b, 0 0 110px rgba(245,158,11,.8);
+  animation:tfSunPulse 3s ease-in-out infinite alternate;
+  z-index:3;
+}
+.tf-sun::before{
+  content:"☀️"; position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:clamp(28px,4vw,44px);
+}
+@keyframes tfSunPulse{from{transform:scale(1); box-shadow:0 0 30px #fde047, 0 0 70px #f59e0b}to{transform:scale(1.08); box-shadow:0 0 45px #fde047, 0 0 100px #f59e0b}}
+.tf-sun-label{
+  position:absolute; right:3%; top:calc(3% + clamp(80px,12vw,130px) + 6px);
+  width:clamp(80px,12vw,130px); text-align:center;
+  font-size:9px; font-weight:900; color:#fff;
+  background:rgba(0,0,0,.55); padding:3px 5px; border-radius:20px;
+  border:1px solid #f59e0b;
+}
 .tf-nasa{position:absolute;bottom:6%;left:50%;width:clamp(160px,22vw,260px);animation:tfNasaFly 32s linear infinite;filter:drop-shadow(0 0 20px rgba(255,255,255,.8));z-index:4}
 .tf-nasa svg{display:block;width:100%;height:auto}
 @keyframes tfNasaFly{0%{transform:translateX(60vw) translateY(20px)}50%{transform:translateX(0) translateY(-15px)}100%{transform:translateX(-60vw) translateY(20px)}}
@@ -236,7 +293,13 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
   <div class="ufo-craft ufo-3">
     <svg viewBox="0 0 220 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#a855f7" opacity=".75"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#1e1b4b" stroke="#c084fc" stroke-width="2"/><circle cx="45" cy="54" r="4" fill="#38bdf8"/><circle cx="88" cy="59" r="4.5" fill="#fff"/><circle cx="132" cy="59" r="4.5" fill="#fff"/><circle cx="175" cy="54" r="4" fill="#38bdf8"/></svg>
   </div>
+  <!-- 🌎 PLANETA TIERRA -->
+  <div class="tf-earth"></div>
+  <div class="tf-earth-label">🌎 TIERRA • PUERTO RICO 🇵🇷</div>
 
+  <!-- ☀️ EL SOL -->
+  <div class="tf-sun"></div>
+  <div class="tf-sun-label">☀️ SOL • TROPICAL FLOW</div>
   <!-- SATELITE CON BANDERA PR -->
   <div class="tf-satellite">
     <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
