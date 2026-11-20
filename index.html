@@ -8,16 +8,7 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;min-height:100%;width:100%;overflow-x:hidden}
-body{
-  background:#05020d;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:12px;
-  font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
-  color:#fff;
-}
+body{background:#05020d;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:12px;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:#fff}
 .cinema-intro-overlay{position:fixed;inset:0;z-index:9999;background:#04010a;display:flex;justify-content:center;align-items:center;overflow:hidden;user-select:none}
 .curtain-panel{position:absolute;top:0;bottom:0;width:51%;z-index:2;background:repeating-linear-gradient(90deg,#1a0312 0px,#4a0728 18px,#240417 36px,#5c0a33 54px,#14020d 72px);box-shadow:inset 0 0 90px rgba(0,0,0,.92);transition:transform 1.8s cubic-bezier(.77,0,.175,1)}
 .curtain-left{left:0;border-right:3px solid #d4af37;box-shadow:10px 0 40px rgba(0,0,0,.95),inset 0 0 80px rgba(0,0,0,.9)}
@@ -77,70 +68,23 @@ body{
 .ufo-3{top:34%;width:clamp(80px,7.5vw,120px);opacity:.88;filter:drop-shadow(0 0 14px rgba(168,85,247,.85));animation:ufoFlyLeft 24s linear infinite 8s}
 @keyframes ufoFlyRight{0%{transform:translate3d(-260px,0,0)}100%{transform:translate3d(calc(100vw + 260px),-8vh,0)}}
 @keyframes ufoFlyLeft{0%{transform:translate3d(calc(100vw + 260px),0,0)}100%{transform:translate3d(-260px,7vh,0)}}
-  /* SATELITE CON BANDERA PR */
+  /* 🌎 TIERRA ARREGLADA - GLOBO DEL MUNDO CLARITO */
+.tf-earth{position:absolute;left:3%;bottom:16%;width:clamp(110px,16vw,170px);text-align:center;animation:tfEarthFloat 6s ease-in-out infinite alternate;z-index:3;filter:drop-shadow(0 0 20px rgba(56,189,248,.8))}
+.tf-earth svg{width:100%;height:auto;display:block;border-radius:50%;box-shadow:0 0 25px #38bdf8,0 0 60px rgba(56,189,248,.5)}
+@keyframes tfEarthFloat{from{transform:translateY(-8px) rotate(-2deg)}to{transform:translateY(8px) rotate(2deg)}}
+.tf-earth-label{margin-top:6px;display:inline-block;font-size:10px;font-weight:900;color:#fff;background:rgba(0,0,0,.65);padding:4px 10px;border-radius:20px;border:1px solid #38bdf8}
+/* ☀️ SOL NICE */
+.tf-sun{position:absolute;right:3%;top:3%;width:clamp(80px,12vw,130px);height:clamp(80px,12vw,130px);border-radius:50%;background:radial-gradient(circle,#fff7cc 0%,#fde047 30%,#f59e0b 60%,#ea580c 100%);box-shadow:0 0 30px #fde047,0 0 70px #f59e0b,0 0 110px rgba(245,158,11,.8);animation:tfSunPulse 3s ease-in-out infinite alternate;z-index:3}
+.tf-sun::before{content:"☀️";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(28px,4vw,44px)}
+@keyframes tfSunPulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+.tf-sun-label{position:absolute;right:3%;top:calc(3% + clamp(80px,12vw,130px) + 6px);width:clamp(80px,12vw,130px);text-align:center;font-size:9px;font-weight:900;color:#fff;background:rgba(0,0,0,.55);padding:3px 5px;border-radius:20px;border:1px solid #f59e0b}
+/* 🛰️ SATELITE BANDERA PR */
 .tf-satellite{position:absolute;top:8%;left:50%;width:clamp(140px,18vw,220px);animation:tfSatOrbit 28s linear infinite;filter:drop-shadow(0 0 15px rgba(255,255,255,.7));z-index:4}
 .tf-satellite svg{display:block;width:100%;height:auto;animation:tfSatFloat 3s ease-in-out infinite alternate}
 @keyframes tfSatFloat{from{transform:translateY(-5px) rotate(-2deg)}to{transform:translateY(5px) rotate(2deg)}}
 @keyframes tfSatOrbit{0%{transform:translateX(-55vw) translateY(0)}50%{transform:translateX(0) translateY(25px)}100%{transform:translateX(55vw) translateY(0)}}
-.tf-sat-label{text-align:center;margin-top:2px;font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 0 8px #38bdf8;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:20px;border:1px solid rgba(56,189,248,.6)}
-/* NAVE NASA */
-  /* 🌎 PLANETA TIERRA */
-.tf-earth{
-  position:absolute; left:4%; bottom:18%;
-  width:clamp(90px,14vw,150px); height:clamp(90px,14vw,150px);
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #7dd3fc, #0284c7 45%, #0c4a6e 75%, #082f49);
-  box-shadow:0 0 25px #38bdf8, 0 0 60px rgba(56,189,248,.6), inset -15px -10px 25px rgba(0,0,0,.6);
-  overflow:hidden;
-  animation:tfEarthFloat 6s ease-in-out infinite alternate;
-  z-index:3;
-}
-.tf-earth::before{
-  content:""; position:absolute; inset:0; border-radius:50%;
-  background:
-    radial-gradient(25px 18px at 30% 30%, #22c55e 60%, transparent 70%),
-    radial-gradient(30px 20px at 65% 55%, #16a34a 60%, transparent 70%),
-    radial-gradient(22px 16px at 45% 75%, #22c55e 60%, transparent 70%),
-    radial-gradient(18px 14px at 75% 25%, #4ade80 60%, transparent 70%);
-  animation:tfEarthSpin 20s linear infinite;
-}
-.tf-earth::after{
-  content:""; position:absolute; inset:0; border-radius:50%;
-  background:radial-gradient(circle at 50% 50%, transparent 60%, rgba(255,255,255,.25) 80%, transparent 100%);
-}
-@keyframes tfEarthFloat{from{transform:translateY(-8px)}to{transform:translateY(8px)}}
-@keyframes tfEarthSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.tf-earth-label{
-  position:absolute; left:4%; bottom:calc(18% - 24px);
-  width:clamp(90px,14vw,150px); text-align:center;
-  font-size:9px; font-weight:900; color:#fff;
-  background:rgba(0,0,0,.55); padding:3px 5px; border-radius:20px;
-  border:1px solid #38bdf8;
-}
-
-/* ☀️ EL SOL */
-.tf-sun{
-  position:absolute; right:3%; top:3%;
-  width:clamp(80px,12vw,130px); height:clamp(80px,12vw,130px);
-  border-radius:50%;
-  background:radial-gradient(circle, #fff7cc 0%, #fde047 30%, #f59e0b 60%, #ea580c 100%);
-  box-shadow:0 0 30px #fde047, 0 0 70px #f59e0b, 0 0 110px rgba(245,158,11,.8);
-  animation:tfSunPulse 3s ease-in-out infinite alternate;
-  z-index:3;
-}
-.tf-sun::before{
-  content:"☀️"; position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:clamp(28px,4vw,44px);
-}
-@keyframes tfSunPulse{from{transform:scale(1); box-shadow:0 0 30px #fde047, 0 0 70px #f59e0b}to{transform:scale(1.08); box-shadow:0 0 45px #fde047, 0 0 100px #f59e0b}}
-.tf-sun-label{
-  position:absolute; right:3%; top:calc(3% + clamp(80px,12vw,130px) + 6px);
-  width:clamp(80px,12vw,130px); text-align:center;
-  font-size:9px; font-weight:900; color:#fff;
-  background:rgba(0,0,0,.55); padding:3px 5px; border-radius:20px;
-  border:1px solid #f59e0b;
-}
+.tf-sat-label{text-align:center;margin-top:2px;font-size:9px;font-weight:900;letter-spacing:1px;color:#fff;background:rgba(0,0,0,.55);padding:3px 6px;border-radius:20px;border:1px solid rgba(56,189,248,.6)}
+/* 🚀 NAVE NASA */
 .tf-nasa{position:absolute;bottom:6%;left:50%;width:clamp(160px,22vw,260px);animation:tfNasaFly 32s linear infinite;filter:drop-shadow(0 0 20px rgba(255,255,255,.8));z-index:4}
 .tf-nasa svg{display:block;width:100%;height:auto}
 @keyframes tfNasaFly{0%{transform:translateX(60vw) translateY(20px)}50%{transform:translateX(0) translateY(-15px)}100%{transform:translateX(-60vw) translateY(20px)}}
@@ -293,14 +237,33 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
   <div class="ufo-craft ufo-3">
     <svg viewBox="0 0 220 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="110" cy="40" rx="46" ry="24" fill="#a855f7" opacity=".75"/><ellipse cx="110" cy="54" rx="95" ry="20" fill="#1e1b4b" stroke="#c084fc" stroke-width="2"/><circle cx="45" cy="54" r="4" fill="#38bdf8"/><circle cx="88" cy="59" r="4.5" fill="#fff"/><circle cx="132" cy="59" r="4.5" fill="#fff"/><circle cx="175" cy="54" r="4" fill="#38bdf8"/></svg>
   </div>
-  <!-- 🌎 PLANETA TIERRA -->
-  <div class="tf-earth"></div>
-  <div class="tf-earth-label">🌎 TIERRA • PUERTO RICO 🇵🇷</div>
 
-  <!-- ☀️ EL SOL -->
+  <!-- 🌎 TIERRA ARREGLADA - GLOBO DEL MUNDO -->
+  <div class="tf-earth">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="96" fill="#1d4ed8"/>
+      <circle cx="100" cy="100" r="96" fill="none" stroke="#38bdf8" stroke-width="3"/>
+      <path d="M45,45 C60,35 75,40 70,60 C65,75 55,85 48,95 C40,105 35,90 38,70 C40,55 38,50 45,45 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+      <path d="M58,115 C70,110 78,120 72,140 C66,155 55,145 52,130 C50,120 52,117 58,115 Z" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+      <path d="M105,45 C120,38 135,45 132,60 C130,75 120,82 112,78 C102,72 98,55 105,45 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+      <path d="M110,90 C125,85 138,95 135,115 C132,132 118,138 110,128 C102,115 100,95 110,90 Z" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+      <path d="M145,55 C162,50 172,62 168,75 C164,88 152,85 146,72 C142,62 140,58 145,55 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+      <path d="M150,135 C162,130 170,138 166,148 C162,156 150,154 147,145 C145,138 146,136 150,135 Z" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+      <ellipse cx="70" cy="60" rx="22" ry="7" fill="white" opacity=".85"/>
+      <ellipse cx="130" cy="110" rx="25" ry="7" fill="white" opacity=".85"/>
+      <ellipse cx="85" cy="145" rx="18" ry="6" fill="white" opacity=".7"/>
+      <ellipse cx="70" cy="55" rx="30" ry="20" fill="white" opacity=".25"/>
+      <circle cx="68" cy="105" r="5" fill="#ef3340" stroke="white" stroke-width="1.5"/>
+      <text x="68" y="122" text-anchor="middle" font-size="8" font-weight="900" fill="white">PR</text>
+    </svg>
+    <div class="tf-earth-label">🌎 PLANETA TIERRA • PR 🇵🇷</div>
+  </div>
+
+  <!-- ☀️ SOL -->
   <div class="tf-sun"></div>
   <div class="tf-sun-label">☀️ SOL • TROPICAL FLOW</div>
-  <!-- SATELITE CON BANDERA PR -->
+
+  <!-- 🛰️ SATELITE CON BANDERA PR -->
   <div class="tf-satellite">
     <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
       <rect x="5" y="45" width="55" height="30" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/>
@@ -318,7 +281,7 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
     <div class="tf-sat-label">🛰️ TROPICAL FLOW • SATELITE PR 🇵🇷</div>
   </div>
 
-  <!-- NAVE NASA TROPICAL FLOW -->
+  <!-- 🚀 NAVE NASA -->
   <div class="tf-nasa">
     <svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="130" cy="55" rx="115" ry="18" fill="#e2e8f0" stroke="#fff" stroke-width="2"/>
@@ -388,198 +351,63 @@ body.tf-player-revealed .cyber-player-container{animation:tfPlayerArrival 1.35s 
 </div>
 <audio id="core-audio" preload="none"></audio>
 <script>
-function updateClock(){
-  const now=new Date();
-  document.getElementById("live-clock").textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-}
-updateClock(); setInterval(updateClock,1000);
-const flipCard=document.getElementById("flip-card");
-let isFlipped=false;
+function updateClock(){const now=new Date();document.getElementById("live-clock").textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});}
+updateClock();setInterval(updateClock,1000);
+const flipCard=document.getElementById("flip-card");let isFlipped=false;
 function toggleFlip(){isFlipped=!isFlipped;flipCard.classList.toggle("is-flipped",isFlipped);}
 let flipTimer=setInterval(toggleFlip,7000);
 document.getElementById("flip-prev").addEventListener("click",toggleFlip);
 document.getElementById("flip-next").addEventListener("click",toggleFlip);
-const CASTER_HOST="sapircast.caster.fm";
-const CASTER_PORT="16693";
-const STREAM_MOUNT="/kidAJ";
+const CASTER_HOST="sapircast.caster.fm";const CASTER_PORT="16693";const STREAM_MOUNT="/kidAJ";
 const STREAM_URL=`https://${CASTER_HOST}:${CASTER_PORT}${STREAM_MOUNT}`;
 const STATS_URL=`https://${CASTER_HOST}:${CASTER_PORT}/admin/publicstats.json`;
-const audioPlayer=document.getElementById("core-audio");
-const masterButton=document.getElementById("master-btn");
-const icon=document.getElementById("icon-svg");
-const signalDot=document.getElementById("signal-dot");
-const signalText=document.getElementById("signal-text");
-const trackName=document.getElementById("current-track-name");
-const listenerCount=document.getElementById("listener-count");
-const qualityStatus=document.getElementById("quality-status");
-const waveEq=document.getElementById("player-eq");
-const statusMessage=document.getElementById("status-message");
-const historyList=document.getElementById("history-list");
-let currentSongText=""; let historyItems=[];
+const audioPlayer=document.getElementById("core-audio");const masterButton=document.getElementById("master-btn");const icon=document.getElementById("icon-svg");const signalDot=document.getElementById("signal-dot");const signalText=document.getElementById("signal-text");const trackName=document.getElementById("current-track-name");const listenerCount=document.getElementById("listener-count");const qualityStatus=document.getElementById("quality-status");const waveEq=document.getElementById("player-eq");const statusMessage=document.getElementById("status-message");const historyList=document.getElementById("history-list");
+let currentSongText="";let historyItems=[];
 try{const s=JSON.parse(localStorage.getItem("tf_song_history")||"[]");historyItems=Array.isArray(s)?s:[];}catch(e){historyItems=[];}
-function renderHistory(){
-  historyList.innerHTML="";
-  if(historyItems.length===0){const li=document.createElement("li");li.textContent="Aún no hay historial reciente.";historyList.appendChild(li);return;}
-  historyItems.forEach(t=>{const li=document.createElement("li");li.textContent=t;historyList.appendChild(li);});
-}
+function renderHistory(){historyList.innerHTML="";if(historyItems.length===0){const li=document.createElement("li");li.textContent="Aún no hay historial reciente.";historyList.appendChild(li);return;}historyItems.forEach(t=>{const li=document.createElement("li");li.textContent=t;historyList.appendChild(li);});}
 renderHistory();
-function addToHistory(t){
-  if(!t||t==="Tropical Flow Radio TV"||historyItems[0]===t) return;
-  historyItems.unshift(t);historyItems=historyItems.slice(0,5);
-  try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}
-  renderHistory();
-}
+function addToHistory(t){if(!t||t==="Tropical Flow Radio TV"||historyItems[0]===t)return;historyItems.unshift(t);historyItems=historyItems.slice(0,5);try{localStorage.setItem("tf_song_history",JSON.stringify(historyItems));}catch(e){}renderHistory();}
 function setSignal(state,label){signalDot.classList.remove("active","connecting","error");if(state)signalDot.classList.add(state);signalText.textContent=label;}
 function setPlayingUI(playing){icon.textContent=playing?"Ⅱ":"▶";waveEq.classList.toggle("playing",playing);trackName.classList.toggle("playing",playing);}
-function extractCasterSource(raw){
-  if(!raw) return null;
-  let root=Array.isArray(raw)?(raw[1]||raw[0]):raw;
-  if(root&&root.icestats) root=root.icestats;
-  if(!root||!root.source) return null;
-  if(typeof root.source==="object"&&!Array.isArray(root.source)){
-    if(root.source[STREAM_MOUNT]) return root.source[STREAM_MOUNT];
-    const c=STREAM_MOUNT.replace("/",""); if(root.source[c]) return root.source[c];
-    const k=Object.keys(root.source); return k.length>0?root.source[k[0]]:null;
-  }
-  if(Array.isArray(root.source)){return root.source.find(s=>String(s.listenurl||s.mount||"").includes(STREAM_MOUNT))||root.source[0];}
-  return root.source;
-}
-async function fetchStatsWithFallback(){
-  const urls=[STATS_URL+"?t="+Date.now(),"https://allorigins.win"+encodeURIComponent(STATS_URL+"?t="+Date.now())];
-  for(const url of urls){try{const res=await fetch(url,{cache:"no-store"});if(!res.ok)continue;const j=await res.json();const src=extractCasterSource(j);if(src)return src;}catch(e){}}
-  return null;
-}
+function extractCasterSource(raw){if(!raw)return null;let root=Array.isArray(raw)?(raw[1]||raw[0]):raw;if(root&&root.icestats)root=root.icestats;if(!root||!root.source)return null;if(typeof root.source==="object"&&!Array.isArray(root.source)){if(root.source[STREAM_MOUNT])return root.source[STREAM_MOUNT];const c=STREAM_MOUNT.replace("/","");if(root.source[c])return root.source[c];const k=Object.keys(root.source);return k.length>0?root.source[k[0]]:null;}if(Array.isArray(root.source)){return root.source.find(s=>String(s.listenurl||s.mount||"").includes(STREAM_MOUNT))||root.source[0];}return root.source;}
+async function fetchStatsWithFallback(){const urls=[STATS_URL+"?t="+Date.now(),"https://allorigins.win"+encodeURIComponent(STATS_URL+"?t="+Date.now())];for(const url of urls){try{const res=await fetch(url,{cache:"no-store"});if(!res.ok)continue;const j=await res.json();const src=extractCasterSource(j);if(src)return src;}catch(e){}}return null;}
 function firstValidNumber(...v){for(const x of v){if(x!==undefined&&x!==null&&x!==""&&Number.isFinite(Number(x)))return Number(x);}return null;}
-async function updateStationInfo(){
-  const source=await fetchStatsWithFallback();
-  if(!source){if(!currentSongText)trackName.textContent="Tropical Flow Radio TV - En Vivo";listenerCount.textContent="En línea";return;}
-  const meta=source.metadata||{};
-  const newTitle=(source["display-title"]||source.display_title||meta.song||meta.title||source.title||source.server_name||"Tropical Flow Radio TV").trim();
-  if(newTitle){if(currentSongText&&currentSongText!==newTitle)addToHistory(currentSongText);currentSongText=newTitle;trackName.textContent=newTitle;}
-  const listeners=firstValidNumber(source.listeners,source.listener_count);
-  listenerCount.textContent=listeners!==null?`${listeners} oyentes`:"En línea";
-  if(source.bitrate) qualityStatus.textContent=`${source.bitrate} kbps`;
-}
-updateStationInfo(); let metadataTimer=setInterval(updateStationInfo,12000);
+async function updateStationInfo(){const source=await fetchStatsWithFallback();if(!source){if(!currentSongText)trackName.textContent="Tropical Flow Radio TV - En Vivo";listenerCount.textContent="En línea";return;}const meta=source.metadata||{};const newTitle=(source["display-title"]||source.display_title||meta.song||meta.title||source.title||source.server_name||"Tropical Flow Radio TV").trim();if(newTitle){if(currentSongText&&currentSongText!==newTitle)addToHistory(currentSongText);currentSongText=newTitle;trackName.textContent=newTitle;}const listeners=firstValidNumber(source.listeners,source.listener_count);listenerCount.textContent=listeners!==null?`${listeners} oyentes`:"En línea";if(source.bitrate)qualityStatus.textContent=`${source.bitrate} kbps`;}
+updateStationInfo();let metadataTimer=setInterval(updateStationInfo,12000);
 let audioContext=null,sourceNode=null,filters=[],masterGain=null,audioGraphReady=false,graphFailed=false;
 let keepStreamPlaying=false,userPausedStream=false,resumeTimer=null,resumeAttempts=0;
 const EQ_BANDS=[{id:"eq-60",valueId:"eq-value-60",frequency:60,type:"lowshelf"},{id:"eq-250",valueId:"eq-value-250",frequency:250,type:"peaking"},{id:"eq-1000",valueId:"eq-value-1000",frequency:1000,type:"peaking"},{id:"eq-4000",valueId:"eq-value-4000",frequency:4000,type:"peaking"},{id:"eq-12000",valueId:"eq-value-12000",frequency:12000,type:"highshelf"}];
 const volumeSlider=document.getElementById("volume-slider"),volumeNumber=document.getElementById("volume-number");
-function updateMasterVolume(){
-  const v=Math.max(0,Math.min(100,Number(volumeSlider?.value ?? 85)))/100;
-  if(masterGain&&audioContext){masterGain.gain.setTargetAtTime(v,audioContext.currentTime,.025);}else{try{audioPlayer.volume=v;}catch(e){}}
-  if(volumeNumber)volumeNumber.textContent=Math.round(v*100)+"%";
-}
-function createAudioGraph(){
-  if(audioGraphReady) return true; if(graphFailed) return false;
-  try{
-    const AudioCtx=window.AudioContext||window.webkitAudioContext; if(!AudioCtx) throw new Error("No Web Audio");
-    audioPlayer.crossOrigin="anonymous"; audioContext=new AudioCtx();
-    sourceNode=audioContext.createMediaElementSource(audioPlayer);
-    let prev=sourceNode;
-    filters=EQ_BANDS.map(b=>{const f=audioContext.createBiquadFilter();f.type=b.type;f.frequency.value=b.frequency;f.Q.value=1;f.gain.value=0;prev.connect(f);prev=f;return f;});
-    masterGain=audioContext.createGain(); masterGain.gain.value=Number(volumeSlider?.value ?? 85)/100;
-    prev.connect(masterGain); masterGain.connect(audioContext.destination);
-    audioGraphReady=true; updateAllEQDisplays(); updateMasterVolume();
-    document.getElementById("eq-status-badge").textContent="5 BANDAS · ACTIVO"; return true;
-  }catch(e){graphFailed=true;document.getElementById("eq-status-badge").textContent="MODO DIRECTO";return false;}
-}
-function updateEQBand(i){
-  const band=EQ_BANDS[i],slider=document.getElementById(band.id),display=document.getElementById(band.valueId);
-  if(!slider) return; const val=Number(slider.value);
-  if(filters[i]&&audioContext) filters[i].gain.setTargetAtTime(val,audioContext.currentTime,.015);
-  if(display) display.textContent=(val>0?"+":"")+val+" dB";
-}
+function updateMasterVolume(){const v=Math.max(0,Math.min(100,Number(volumeSlider?.value ?? 85)))/100;if(masterGain&&audioContext){masterGain.gain.setTargetAtTime(v,audioContext.currentTime,.025);}else{try{audioPlayer.volume=v;}catch(e){}}if(volumeNumber)volumeNumber.textContent=Math.round(v*100)+"%";}
+function createAudioGraph(){if(audioGraphReady)return true;if(graphFailed)return false;try{const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)throw new Error("No Web Audio");audioPlayer.crossOrigin="anonymous";audioContext=new AudioCtx();sourceNode=audioContext.createMediaElementSource(audioPlayer);let prev=sourceNode;filters=EQ_BANDS.map(b=>{const f=audioContext.createBiquadFilter();f.type=b.type;f.frequency.value=b.frequency;f.Q.value=1;f.gain.value=0;prev.connect(f);prev=f;return f;});masterGain=audioContext.createGain();masterGain.gain.value=Number(volumeSlider?.value ?? 85)/100;prev.connect(masterGain);masterGain.connect(audioContext.destination);audioGraphReady=true;updateAllEQDisplays();updateMasterVolume();document.getElementById("eq-status-badge").textContent="5 BANDAS · ACTIVO";return true;}catch(e){graphFailed=true;document.getElementById("eq-status-badge").textContent="MODO DIRECTO";return false;}}
+function updateEQBand(i){const band=EQ_BANDS[i],slider=document.getElementById(band.id),display=document.getElementById(band.valueId);if(!slider)return;const val=Number(slider.value);if(filters[i]&&audioContext)filters[i].gain.setTargetAtTime(val,audioContext.currentTime,.015);if(display)display.textContent=(val>0?"+":"")+val+" dB";}
 function updateAllEQDisplays(){EQ_BANDS.forEach((b,i)=>{const s=document.getElementById(b.id);if(s){updateEQBand(i);if(!s.dataset.bound){s.addEventListener("input",()=>updateEQBand(i));s.dataset.bound="1";}}});}
 function resetEQ(){EQ_BANDS.forEach((b,i)=>{const s=document.getElementById(b.id);if(s)s.value=0;updateEQBand(i);});}
-updateAllEQDisplays(); document.getElementById("eq-reset").addEventListener("click",resetEQ);
-async function startStream(){
-  if(!audioPlayer.paused){keepStreamPlaying=true;userPausedStream=false;return;}
-  keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;
-  statusMessage.textContent="Conectando con Tropical Flow Radio TV…"; setSignal("connecting","CONECTANDO");
-  try{
-    const graphOK=createAudioGraph(); if(graphOK&&audioContext.state==="suspended") await audioContext.resume();
-    if(!audioPlayer.src||audioPlayer.src!==STREAM_URL){audioPlayer.src=STREAM_URL;audioPlayer.load();}
-    await audioPlayer.play(); statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!"; setSignal("active","EN VIVO"); setPlayingUI(true); updateStationInfo();
-  }catch(err){
-    if(audioPlayer.crossOrigin){audioPlayer.removeAttribute("crossorigin");audioPlayer.src=STREAM_URL;audioPlayer.load();
-      try{await audioPlayer.play();document.getElementById("eq-status-badge").textContent="AUDIO DIRECTO";statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";setSignal("active","EN VIVO");setPlayingUI(true);return;}catch(e2){}
-    }
-    keepStreamPlaying=false; statusMessage.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo."; setSignal("error","DESCONECTADO"); setPlayingUI(false);
-  }
-}
+updateAllEQDisplays();document.getElementById("eq-reset").addEventListener("click",resetEQ);
+async function startStream(){if(!audioPlayer.paused){keepStreamPlaying=true;userPausedStream=false;return;}keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;statusMessage.textContent="Conectando con Tropical Flow Radio TV…";setSignal("connecting","CONECTANDO");try{const graphOK=createAudioGraph();if(graphOK&&audioContext.state==="suspended")await audioContext.resume();if(!audioPlayer.src||audioPlayer.src!==STREAM_URL){audioPlayer.src=STREAM_URL;audioPlayer.load();}await audioPlayer.play();statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";setSignal("active","EN VIVO");setPlayingUI(true);updateStationInfo();}catch(err){if(audioPlayer.crossOrigin){audioPlayer.removeAttribute("crossorigin");audioPlayer.src=STREAM_URL;audioPlayer.load();try{await audioPlayer.play();document.getElementById("eq-status-badge").textContent="AUDIO DIRECTO";statusMessage.textContent="¡Estás escuchando Tropical Flow Radio TV!";setSignal("active","EN VIVO");setPlayingUI(true);return;}catch(e2){}}keepStreamPlaying=false;statusMessage.textContent="No se pudo conectar. Verifica que la radio esté transmitiendo.";setSignal("error","DESCONECTADO");setPlayingUI(false);}}
 function stopStream(){userPausedStream=true;keepStreamPlaying=false;if(resumeTimer){clearTimeout(resumeTimer);resumeTimer=null;}audioPlayer.pause();setPlayingUI(false);statusMessage.textContent="Reproducción detenida. Pulsa ▶ para escuchar.";setSignal("","OFFLINE");}
 masterButton.addEventListener("click",()=>audioPlayer.paused?startStream():stopStream());
 audioPlayer.addEventListener("playing",()=>{keepStreamPlaying=true;userPausedStream=false;resumeAttempts=0;setSignal("active","EN VIVO");setPlayingUI(true);statusMessage.textContent="¡Tropical Flow Radio TV está en el aire!";});
-async function tryResumeAfterInterruption(){
-  if(!keepStreamPlaying||userPausedStream||!audioPlayer.paused||!audioPlayer.src||audioPlayer.ended) return;
-  if(resumeAttempts>=2) return; resumeAttempts++;
-  try{if(audioContext&&audioContext.state==="suspended") await audioContext.resume(); await audioPlayer.play();}
-  catch(e){setSignal("connecting","TOCA ▶ PARA REANUDAR");statusMessage.textContent="El dispositivo interrumpió el audio. Pulsa ▶ para continuar.";}
-}
+async function tryResumeAfterInterruption(){if(!keepStreamPlaying||userPausedStream||!audioPlayer.paused||!audioPlayer.src||audioPlayer.ended)return;if(resumeAttempts>=2)return;resumeAttempts++;try{if(audioContext&&audioContext.state==="suspended")await audioContext.resume();await audioPlayer.play();}catch(e){setSignal("connecting","TOCA ▶ PARA REANUDAR");statusMessage.textContent="El dispositivo interrumpió el audio. Pulsa ▶ para continuar.";}}
 audioPlayer.addEventListener("pause",()=>{if(!audioPlayer.ended)setPlayingUI(false);if(keepStreamPlaying&&!userPausedStream){if(resumeTimer)clearTimeout(resumeTimer);resumeTimer=setTimeout(tryResumeAfterInterruption,900);}});
 audioPlayer.addEventListener("ended",()=>{keepStreamPlaying=false;setPlayingUI(false);});
 audioPlayer.addEventListener("waiting",()=>{setSignal("connecting","CONECTANDO");statusMessage.textContent="Conectando con la señal…";});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&keepStreamPlaying&&audioPlayer.paused){if(resumeTimer)clearTimeout(resumeTimer);resumeTimer=setTimeout(tryResumeAfterInterruption,350);}});
 window.addEventListener("pageshow",()=>{if(keepStreamPlaying&&audioPlayer.paused)setTimeout(tryResumeAfterInterruption,350);});
-audioPlayer.volume=.85; if(volumeSlider){volumeSlider.addEventListener("input",updateMasterVolume);volumeSlider.addEventListener("change",updateMasterVolume);} updateMasterVolume();
+audioPlayer.volume=.85;if(volumeSlider){volumeSlider.addEventListener("input",updateMasterVolume);volumeSlider.addEventListener("change",updateMasterVolume);}updateMasterVolume();
 const REQUEST_WHATSAPP_NUMBER="19393142657";
-async function shareRadio(){
-  const shareUrl=window.location.href; const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";
-  if(navigator.share){try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}}
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(shareText+"\n"+shareUrl)}`; window.open(whatsappUrl,"_blank");
-}
-function requestSong(){
-  const shareUrl=window.location.href;
-  const message="🎤 Hola Tropical Flow Radio TV 🌴📻\n\nQuiero solicitar una canción.\n\nCanción: __________________\nArtista: __________________\n\n🌴 Tropical Flow Radio TV 🇵🇷\n"+shareUrl;
-  const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`; window.open(whatsappUrl,"_blank");
-}
+async function shareRadio(){const shareUrl=window.location.href;const shareText="🌴🎧 Escucha Tropical Flow Radio TV — Música y señal digital desde Puerto Rico 🇵🇷";if(navigator.share){try{await navigator.share({title:"Tropical Flow Radio TV",text:shareText,url:shareUrl});return;}catch(e){}}const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(shareText+"\n"+shareUrl)}`;window.open(whatsappUrl,"_blank");}
+function requestSong(){const shareUrl=window.location.href;const message="🎤 Hola Tropical Flow Radio TV 🌴📻\n\nQuiero solicitar una canción.\n\nCanción: __________________\nArtista: __________________\n\n🌴 Tropical Flow Radio TV 🇵🇷\n"+shareUrl;const whatsappUrl=`https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;window.open(whatsappUrl,"_blank");}
 document.getElementById("share-button").addEventListener("click",shareRadio);
 document.getElementById("request-button").addEventListener("click",requestSong);
-const cinemaIntro=document.getElementById("cinema-intro");
-const cinemaEnterBtn=document.getElementById("cinema-enter-btn");
-const skipCinemaBtn=document.getElementById("skip-cinema-btn");
-const cinemaWelcome=document.getElementById("cinema-welcome");
-const act1=document.getElementById("cinema-act-1");
-const act2=document.getElementById("cinema-act-2");
-const act3=document.getElementById("cinema-act-3");
-const reelNumber=document.getElementById("reel-number");
+const cinemaIntro=document.getElementById("cinema-intro");const cinemaEnterBtn=document.getElementById("cinema-enter-btn");const skipCinemaBtn=document.getElementById("skip-cinema-btn");const cinemaWelcome=document.getElementById("cinema-welcome");const act1=document.getElementById("cinema-act-1");const act2=document.getElementById("cinema-act-2");const act3=document.getElementById("cinema-act-3");const reelNumber=document.getElementById("reel-number");
 let sequenceStarted=false,curtainsOpened=false,cinemaTimers=[];
-function playCinemaTone(type){
-  try{
-    const Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
-    const ctx=new Ctx(),osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination); const now=ctx.currentTime;
-    if(type==="beep"){osc.type="sine";osc.frequency.setValueAtTime(1000,now);gain.gain.setValueAtTime(0.12,now);gain.gain.exponentialRampToValueAtTime(0.001,now+0.12);osc.start(now);osc.stop(now+0.13);}
-    else if(type==="boom"){osc.type="sawtooth";osc.frequency.setValueAtTime(65,now);osc.frequency.exponentialRampToValueAtTime(140,now+1.4);gain.gain.setValueAtTime(0.01,now);gain.gain.linearRampToValueAtTime(0.18,now+0.6);gain.gain.exponentialRampToValueAtTime(0.001,now+1.8);osc.start(now);osc.stop(now+1.85);}
-  }catch(e){}
-}
+function playCinemaTone(type){try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;const ctx=new Ctx(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);const now=ctx.currentTime;if(type==="beep"){osc.type="sine";osc.frequency.setValueAtTime(1000,now);gain.gain.setValueAtTime(0.12,now);gain.gain.exponentialRampToValueAtTime(0.001,now+0.12);osc.start(now);osc.stop(now+0.13);}else if(type==="boom"){osc.type="sawtooth";osc.frequency.setValueAtTime(65,now);osc.frequency.exponentialRampToValueAtTime(140,now+1.4);gain.gain.setValueAtTime(0.01,now);gain.gain.linearRampToValueAtTime(0.18,now+0.6);gain.gain.exponentialRampToValueAtTime(0.001,now+1.8);osc.start(now);osc.stop(now+1.85);}}catch(e){}}
 function showCinemaAct(el){[act1,act2,act3].forEach(a=>a.classList.remove("active"));if(el)el.classList.add("active");}
-const tfTunnelOverlay=document.getElementById("tf-tunnel-overlay");
-let tfTunnelStarted=false; let tfTunnelTimers=[];
-function startTFTunnelSequence(autoPlayAudio){
-  if(tfTunnelStarted||!tfTunnelOverlay) return; tfTunnelStarted=true;
-  tfTunnelTimers.forEach(t=>clearTimeout(t)); tfTunnelTimers=[];
-  tfTunnelOverlay.style.display=""; tfTunnelOverlay.classList.add("active");
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("portal-open");},3200));
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("exit");},5100));
-  tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.remove("active","portal-open","exit");tfTunnelOverlay.style.display="none";document.body.classList.add("tf-player-revealed");if(autoPlayAudio)startStream();},6100));
-}
-function openCurtainsAndPlay(autoPlayAudio){
-  if(curtainsOpened) return; curtainsOpened=true; cinemaTimers.forEach(t=>clearTimeout(t));
-  if(skipCinemaBtn) skipCinemaBtn.style.display="none";
-  cinemaIntro.classList.add("curtains-open");
-  setTimeout(()=>{cinemaIntro.style.display="none";startTFTunnelSequence(autoPlayAudio);},1850);
-}
-function startCinemaShow(){
-  if(sequenceStarted) return; sequenceStarted=true;
-  cinemaWelcome.style.display="none"; cinemaIntro.classList.add("lights-dimmed"); playCinemaTone("boom"); showCinemaAct(act1);
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act2);reelNumber.textContent="3";playCinemaTone("beep");},2400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="2";playCinemaTone("beep");},3400));
-  cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="1";playCinemaTone("beep");},4400));
-  cinemaTimers.push(setTimeout(()=>{showCinemaAct(act3);playCinemaTone("boom");},5400));
-  cinemaTimers.push(setTimeout(()=>{openCurtainsAndPlay(true);},6900));
-}
+const tfTunnelOverlay=document.getElementById("tf-tunnel-overlay");let tfTunnelStarted=false;let tfTunnelTimers=[];
+function startTFTunnelSequence(autoPlayAudio){if(tfTunnelStarted||!tfTunnelOverlay)return;tfTunnelStarted=true;tfTunnelTimers.forEach(t=>clearTimeout(t));tfTunnelTimers=[];tfTunnelOverlay.style.display="";tfTunnelOverlay.classList.add("active");tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("portal-open");},3200));tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.add("exit");},5100));tfTunnelTimers.push(setTimeout(()=>{tfTunnelOverlay.classList.remove("active","portal-open","exit");tfTunnelOverlay.style.display="none";document.body.classList.add("tf-player-revealed");if(autoPlayAudio)startStream();},6100));}
+function openCurtainsAndPlay(autoPlayAudio){if(curtainsOpened)return;curtainsOpened=true;cinemaTimers.forEach(t=>clearTimeout(t));if(skipCinemaBtn)skipCinemaBtn.style.display="none";cinemaIntro.classList.add("curtains-open");setTimeout(()=>{cinemaIntro.style.display="none";startTFTunnelSequence(autoPlayAudio);},1850);}
+function startCinemaShow(){if(sequenceStarted)return;sequenceStarted=true;cinemaWelcome.style.display="none";cinemaIntro.classList.add("lights-dimmed");playCinemaTone("boom");showCinemaAct(act1);cinemaTimers.push(setTimeout(()=>{showCinemaAct(act2);reelNumber.textContent="3";playCinemaTone("beep");},2400));cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="2";playCinemaTone("beep");},3400));cinemaTimers.push(setTimeout(()=>{reelNumber.textContent="1";playCinemaTone("beep");},4400));cinemaTimers.push(setTimeout(()=>{showCinemaAct(act3);playCinemaTone("boom");},5400));cinemaTimers.push(setTimeout(()=>{openCurtainsAndPlay(true);},6900));}
 cinemaEnterBtn.addEventListener("click",startCinemaShow);
 skipCinemaBtn.addEventListener("click",()=>openCurtainsAndPlay(true));
 window.addEventListener("beforeunload",()=>{clearInterval(flipTimer);clearInterval(metadataTimer);});
